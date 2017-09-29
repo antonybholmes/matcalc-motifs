@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+	<setting name="motifs.genome.remote-url" value="http://156.145.14.157:8080/genome/api/v1/hg19/" />
+	<setting name="dna.remote-url" value="http://156.145.14.157:8080/dna/api/v2/hg19/" />
+	<setting name="motifs.motifsdb.remote-url" value="http://156.145.14.157:8080/motifs/api/v1/" />
+</settings>

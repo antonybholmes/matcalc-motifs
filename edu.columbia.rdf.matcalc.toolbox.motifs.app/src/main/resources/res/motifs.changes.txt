@@ -1,0 +1,54 @@
+VERSION 9 (04/02/15)
+
+  * Boolean searching.
+  * Improved search dialog.
+  
+  
+VERSION 7 (04/02/15)
+
+  * Boolean searching.
+  * Improved search dialog.
+  
+  
+VERSION 6 (04/01/15)
+
+  * UI improvements.
+  
+  
+VERSION 5 (03/20/15)
+
+  * Write fasta by regions.
+  
+  
+VERSION 4 (01/25/15)
+
+  * UI redesign.
+ 
+ 
+VERSION 4 (01/20/15)
+
+  * Use group model to control where to search for motifs.
+  
+  
+VERSION 3 (01/20/15)
+
+  * Support for gene TSS with asymmetric search regions that adjust
+    according to the orientation of the gene.
+  * Support for hierarchical motif database.
+  * Show 5' and 3' motif strands.
+  * Show motif max score.
+  * Score filtering.
+  * Enrichment now produces the motif match tables.
+  
+  
+VERSION 2 (12/10/14)
+
+  * Support for creating search regions from locations using web
+    DNA API.
+  * Support for creating custom motifs.
+    
+
+VERSION 1 (11/10/14)
+
+  * Added filter button to samples list to make it easier to filter by
+    search category.
