@@ -11,8 +11,8 @@ import org.jebtk.bioinformatics.genomic.ChromosomeSizes;
 import org.jebtk.bioinformatics.genomic.GenomeAssembly;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
-import org.jebtk.math.matrix.AnnotatableMatrix;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.statistics.HistBin;
 import org.jebtk.math.statistics.Statistics;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
@@ -20,7 +20,7 @@ import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 public class GCBackgroundTask extends SwingWorker<Void, Void> {
 
 	private static final int MAX_ATTEMPTS = 10000;
-	private AnnotationMatrix mNewModel = null;
+	private DataFrame mNewModel = null;
 	private GenomeAssembly mAssembly;
 
 	private ChromosomeSizes mChrSizes;
@@ -63,7 +63,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
 		return null;
 	}
 
-	private AnnotationMatrix motifs(String genome) throws Exception {
+	private DataFrame motifs(String genome) throws Exception {
 		MotifsModule.LOG.info("Searching for motifs in foreground regions...");
 
 		List<SearchSequence> foregroundSequences = 
@@ -255,8 +255,8 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
 
 		}
 
-		AnnotationMatrix ret = 
-				AnnotatableMatrix.createTextMatrix(backgroundSequences.size(), 2);
+		DataFrame ret = 
+				DataFrame.createTextMatrix(backgroundSequences.size(), 2);
 
 		ret.setColumnNames("DNA Location", "DNA sequence");
 

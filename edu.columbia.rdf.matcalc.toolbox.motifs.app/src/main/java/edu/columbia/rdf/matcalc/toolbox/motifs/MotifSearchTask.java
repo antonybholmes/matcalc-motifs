@@ -11,14 +11,14 @@ import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Region;
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.core.text.Formatter;
-import org.jebtk.math.matrix.AnnotatableMatrix;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.dialog.ModernMessageDialog;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 
 public class MotifSearchTask extends SwingWorker<Void, Void> {
 
-	private AnnotationMatrix mNewModel;
+	private DataFrame mNewModel;
 	private List<Motif> mMotifs;
 	private double mThreshold;
 	private MainMatCalcWindow mParent;
@@ -60,8 +60,8 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 		}
 	}
 
-	private AnnotationMatrix motifs() throws IOException {
-		AnnotationMatrix m = mParent.getCurrentMatrix();
+	private DataFrame motifs() throws IOException {
+		DataFrame m = mParent.getCurrentMatrix();
 
 		List<SearchSequence> sequences = MotifsModule.matrixToSequences(m);
 		
@@ -82,8 +82,8 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 				mThreshold);
 	}
 	
-	private static AnnotationMatrix createMotifsTable(List<Motif> motifs,
-			AnnotationMatrix matrix,
+	private static DataFrame createMotifsTable(List<Motif> motifs,
+			DataFrame matrix,
 			List<SearchSequence> sequences,
 			List<SearchSequence> revCompSeqs,
 			double threshold) throws IOException {
@@ -257,10 +257,10 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 			}
 		}
 
-		AnnotationMatrix ret = 
-				AnnotatableMatrix.createAnnotatableMatrix(searchResults.size(), matrix.getColumnCount() + 10);
+		DataFrame ret = 
+				DataFrame.createDataFrame(searchResults.size(), matrix.getColumnCount() + 10);
 		
-		AnnotationMatrix.copyColumnNames(matrix, ret);
+		DataFrame.copyColumnNames(matrix, ret);
 		
 		int c = matrix.getColumnCount();
 		

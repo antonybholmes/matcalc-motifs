@@ -8,8 +8,8 @@ import javax.swing.SwingWorker;
 
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.core.Mathematics;
-import org.jebtk.math.matrix.AnnotatableMatrix;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.statistics.Hypergeometric;
 import org.jebtk.math.statistics.Statistics;
 import org.jebtk.modern.dialog.ModernMessageDialog;
@@ -17,7 +17,7 @@ import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 
 public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
 
-	private AnnotationMatrix mNewModel = null;
+	private DataFrame mNewModel = null;
 	private List<Motif> mMotifs;
 	private double mMinSensitivity;
 	private double mMinSpecificity;
@@ -86,7 +86,7 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
 		return null;
 	}
 
-	private AnnotationMatrix motifs() {
+	private DataFrame motifs() {
 		System.err.println("Search for motifs in foreground regions...");
 
 		List<SearchSequence> foregroundSequences = 
@@ -103,7 +103,7 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
 				backgroundSequences);
 	}
 
-	public static AnnotationMatrix enrichmentMotifs(double threshold,
+	public static DataFrame enrichmentMotifs(double threshold,
 			double minSpecificity,
 			double minSensitivity,
 			List<Motif> motifs,
@@ -263,8 +263,8 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
 			results.get(i).q = Mathematics.bound(q, 0, 1);
 		}
 
-		AnnotationMatrix matrix = 
-				AnnotatableMatrix.createAnnotatableMatrix(results.size(), 12);
+		DataFrame matrix = 
+				DataFrame.createDataFrame(results.size(), 12);
 
 		// The header
 		matrix.setColumnName(0, "Motif Name (threshold=" + Double.toString(threshold) + ")");

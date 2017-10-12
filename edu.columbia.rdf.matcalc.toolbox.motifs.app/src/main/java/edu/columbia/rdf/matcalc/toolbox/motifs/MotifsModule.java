@@ -37,7 +37,7 @@ import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.PathUtils;
 import org.jebtk.core.settings.SettingsService;
 import org.jebtk.core.text.Join;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.UIService;
 import org.jebtk.modern.contentpane.CloseableHTab;
@@ -239,7 +239,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 	}
 
 	@Override
-	public AnnotationMatrix autoOpenFile(final MainMatCalcWindow window,
+	public DataFrame autoOpenFile(final MainMatCalcWindow window,
 			final Path file,
 			FileType type, 
 			int headers,
@@ -264,13 +264,13 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 			}
 		}
 
-		AnnotationMatrix m = mWindow.getCurrentMatrix();
+		DataFrame m = mWindow.getCurrentMatrix();
 
-		int locCol = AnnotationMatrix.findColumn(m, "Motif Location");
-		int scoreCol = AnnotationMatrix.findColumn(m, "Score");
-		int strandCol = AnnotationMatrix.findColumn(m, "Strand");
-		int nameCol = AnnotationMatrix.findColumn(m, "Motif Name");
-		int idCol = AnnotationMatrix.findColumn(m, "Motif ID");
+		int locCol = DataFrame.findColumn(m, "Motif Location");
+		int scoreCol = DataFrame.findColumn(m, "Score");
+		int strandCol = DataFrame.findColumn(m, "Strand");
+		int nameCol = DataFrame.findColumn(m, "Motif Name");
+		int idCol = DataFrame.findColumn(m, "Motif ID");
 
 		BufferedWriter writer = FileUtils.newBufferedWriter(file);
 
@@ -308,10 +308,10 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
 		int c = -1;
 		
-		AnnotationMatrix m = mWindow.getCurrentMatrix();
+		DataFrame m = mWindow.getCurrentMatrix();
 
 		if (m != null) {
-			c = AnnotationMatrix.findColumn(m, "Motif ID");
+			c = DataFrame.findColumn(m, "Motif ID");
 		}
 
 		JFrame window;
@@ -446,7 +446,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 		task.doInBackground();
 	}
 
-	public static List<SearchSequence> matrixToSequences(AnnotationMatrix m) {
+	public static List<SearchSequence> matrixToSequences(DataFrame m) {
 		int dnaLocationColumn = -1;
 		int chrCol = -1;
 		int startCol = -1;

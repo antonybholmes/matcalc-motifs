@@ -12,14 +12,14 @@ import org.jebtk.bioinformatics.genomic.GenomeAssembly;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
 import org.jebtk.bioinformatics.motifs.Motif;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.statistics.HistBin;
 import org.jebtk.math.statistics.Statistics;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 
 public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
 
-	private AnnotationMatrix mNewModel = null;
+	private DataFrame mNewModel = null;
 	private List<Motif> mMotifs;
 	private double mMinSensitivity;
 	private double mMinSpecificity;
@@ -77,7 +77,7 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
 		return null;
 	}
 
-	private AnnotationMatrix motifs() throws Exception {
+	private DataFrame motifs() throws Exception {
 		System.err.println("Searching for motifs in foreground regions...");
 
 		List<SearchSequence> foregroundSequences = 
