@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -16,8 +14,6 @@ import javax.swing.JFrame;
 
 import org.jebtk.bioinformatics.dna.GenomeAssemblyLocal;
 import org.jebtk.bioinformatics.dna.GenomeAssemblyWeb;
-import org.jebtk.bioinformatics.dna.Sequence;
-import org.jebtk.bioinformatics.genomic.Chromosome;
 import org.jebtk.bioinformatics.genomic.ChromosomeSizesService;
 import org.jebtk.bioinformatics.genomic.GenomeAssembly;
 import org.jebtk.bioinformatics.genomic.GenomeAssemblyService;
@@ -33,10 +29,16 @@ import org.jebtk.bioinformatics.ui.groups.GroupsModel;
 import org.jebtk.bioinformatics.ui.groups.GroupsPanel;
 import org.jebtk.core.Resources;
 import org.jebtk.core.collections.CollectionUtils;
+import org.jebtk.core.collections.UniqueArrayList;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.PathUtils;
 import org.jebtk.core.settings.SettingsService;
 import org.jebtk.core.text.Join;
+import org.jebtk.graphplot.figure.Axes;
+import org.jebtk.graphplot.figure.Figure;
+import org.jebtk.graphplot.figure.GridLocation;
+import org.jebtk.graphplot.figure.Plot;
+import org.jebtk.graphplot.figure.SubFigure;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.UIService;
@@ -47,6 +49,7 @@ import org.jebtk.modern.dialog.ModernDialogStatus;
 import org.jebtk.modern.dialog.ModernMessageDialog;
 import org.jebtk.modern.event.ModernClickEvent;
 import org.jebtk.modern.event.ModernClickListener;
+import org.jebtk.modern.graphics.icons.RunVectorIcon;
 import org.jebtk.modern.graphics.icons.SaveVectorIcon;
 import org.jebtk.modern.graphics.icons.SearchVectorIcon;
 import org.jebtk.modern.help.GuiAppInfo;
@@ -61,8 +64,12 @@ import org.slf4j.LoggerFactory;
 
 import edu.columbia.rdf.matcalc.FileType;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
+import edu.columbia.rdf.matcalc.figure.graph2d.Graph2dWindow;
 import edu.columbia.rdf.matcalc.toolbox.CalcModule;
 import edu.columbia.rdf.matcalc.toolbox.motifs.app.MotifsInfo;
+import edu.columbia.rdf.matcalc.toolbox.motifs.plot.BarBoxLayer;
+import edu.columbia.rdf.matcalc.toolbox.motifs.plot.MotifLayer;
+import edu.columbia.rdf.matcalc.toolbox.motifs.plot.TextLayer;
 import edu.columbia.rdf.matcalc.toolbox.motifs.seqlogo.MainSeqLogoWindow;
 import edu.columbia.rdf.matcalc.toolbox.motifs.seqlogo.SeqLogoIcon;
 
@@ -76,12 +83,14 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
 	private static final Path DATABASE_DIR = 
 			PathUtils.getPath("res/modules/motifs/database");
-	
+
 	private static final Path RES_DIR = PathUtils.getPath("res/modules/dna");
-	
-	
+
+
 	private static final Set<GuiFileExtFilter> FILE_TYPES_SET =
 			new TreeSet<GuiFileExtFilter>();
+
+	private static final int MAX_MUTATIONS_PLOT = 50;
 
 	private MainMatCalcWindow mWindow;
 
@@ -99,7 +108,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 				e.printStackTrace();
 			}
 		}
-		
+
 		GenomeAssemblyService.getInstance().add(new GenomeAssemblyLocal(RES_DIR));
 
 		FILE_TYPES_SET.add(new MotifGuiFileFilter());
@@ -197,6 +206,13 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 				"Browse sequence logos.");
 		button.addClickListener(this);
 		ribbon.getToolbar("DNA").getSection("Motifs").add(button);
+
+		button = new RibbonLargeButton("Plot", 
+				UIService.getInstance().loadIcon(RunVectorIcon.class, 24),
+				"Plot", 
+				"Plot motifs.");
+		button.addClickListener(this);
+		ribbon.getToolbar("DNA").getSection("Motifs").add(button);
 	}
 
 	@Override
@@ -233,6 +249,8 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+		} else if (e.getMessage().equals("Plot")) {
+			plot();
 		} else {
 			// do nothing
 		}
@@ -307,7 +325,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 		// we extract some motif names and default to showing those first.
 
 		int c = -1;
-		
+
 		DataFrame m = mWindow.getCurrentMatrix();
 
 		if (m != null) {
@@ -446,98 +464,51 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 		task.doInBackground();
 	}
 
-	public static List<SearchSequence> matrixToSequences(DataFrame m) {
-		int dnaLocationColumn = -1;
-		int chrCol = -1;
-		int startCol = -1;
-		int endCol = -1;
-		int idCol = -1;
+	private void plot() {
+		DataFrame m = mWindow.getCurrentMatrix();
 
-		// Find a column refering to a genomic location
-		for (int i = 0; i < m.getColumnCount(); ++i) {
-			if (GenomicRegion.isGenomicRegion(m.getText(0, i))) {
-				dnaLocationColumn = i;
-				break;
-			}
+		int mutationCol = DataFrame.findColumn(m, "Mutation");
+
+		List<String> mutations = new UniqueArrayList<String>();
+
+		for (int i = 0; i < m.getRowCount(); ++i) {
+			mutations.add(m.getText(i, mutationCol));
 		}
 
-		// If this is not found test whether we have chr, start and end columns
-		if (dnaLocationColumn == -1) {
-			for (int i = 0; i < m.getColumnCount(); ++i) {
-				if (Chromosome.isChr(m.getText(0, i))) {
-					chrCol = i;
-					break;
-				}
-			}
+		int dnaCol = DataFrame.findColumn(m, "DNA Sequence");
 
-			if (chrCol != -1) {
-				startCol = chrCol + 1;
-				endCol = chrCol + 2;
-			}
-		}
-		
-		// Last resort pick the first column as an id
-		if (chrCol == -1) {
-			idCol = 0;
-		}
+		String dna = m.getText(0, dnaCol);
 
-		int dnaColumn = -1;
+		int l = dna.length();
 
-		for (int i = 0; i < m.getColumnCount(); ++i) {
-			if (isDna(m.getText(0, i))) {
-				dnaColumn = i;
-				break;
-			}
-		}
 
-		if (dnaColumn == -1) {
-			return Collections.emptyList();
-		}
+		Figure figure = Figure.createRowFigure();
 
-		List<SearchSequence> sequences = 
-				new ArrayList<SearchSequence>(m.getRowCount());
+		for (int i = mutations.size() - MAX_MUTATIONS_PLOT - 1; i < mutations.size(); ++i) {
+			String mutation = mutations.get(i);
+			
+			SubFigure subFigure = figure.newSubFigure();
 
-		if (dnaLocationColumn != -1) {
-			for (int i = 0; i < m.getRowCount(); ++i) {
-				GenomicRegion region = GenomicRegion.parse(m.getText(i, dnaLocationColumn));
-				String dna = m.getText(i, dnaColumn);
-				
-				sequences.add(new SearchSequence(region, Sequence.create(dna)));
-			}
-		} else if (dnaLocationColumn != -1){
-			for (int i = 0; i < m.getRowCount(); ++i) {
-				GenomicRegion region = GenomicRegion.create(Chromosome.parse(m.getText(i, chrCol)), 
-						(int)m.getValue(i, startCol), 
-						(int)m.getValue(i, endCol));
-				
-				String dna = m.getText(i, dnaColumn);
-				
-				sequences.add(new SearchSequence(region, Sequence.create(dna)));
-			}
-		} else {
-			for (int i = 0; i < m.getRowCount(); ++i) {
-				String id = m.getText(i, idCol);
-				
-				String dna = m.getText(i, dnaColumn);
-				
-				sequences.add(new SearchSequence(id, Sequence.create(dna)));
-			}
+			Axes axes = subFigure.currentAxes();
+			axes.setInternalSize(2000, 200);
+			axes.setMargins(150, 100, 100, 200);
+
+			Plot plot = axes.currentPlot();
+			plot.setMatrix(m);
+
+			plot.addChild(new BarBoxLayer());
+			plot.addChild(new MotifLayer(mutation));
+			plot.addChild(new TextLayer(mutation));
+
+			axes.getX1Axis().setLimitsAuto(0, l);
+			axes.getY1Axis().setLimitsAuto(0, 1);
+			axes.getY1Axis().setVisible(false);
+			axes.getTitle().setText(mutation);
+			axes.getTitle().setPosition(GridLocation.E);
 		}
 
-		return sequences;
+		Graph2dWindow window = new Graph2dWindow(mWindow, figure);
+		window.setVisible(true);
 	}
-
-	/**
-	 * The DNA sequence must be at least 10 bp long to be considered useful.
-	 * This is to stop short labels in columns such as 'a' from being
-	 * misinterpreted as DNA.
-	 * 
-	 * @param text
-	 * @return
-	 */
-	private static boolean isDna(String text) {
-		return Sequence.DNA_REGEX.matcher(text).matches() && text.length() > 10;
-	}
-
 
 }

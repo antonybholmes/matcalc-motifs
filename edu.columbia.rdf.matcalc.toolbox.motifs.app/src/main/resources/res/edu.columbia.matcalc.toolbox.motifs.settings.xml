@@ -22,6 +22,9 @@
 	<setting name="motifs.help.type" value="web" />
 	<setting name="motifs.help.url" value="https://bitbucket.org/lab_rdf/matcalc/wiki/Motifs" />
 	
+	<setting name="motifs.plot.bar.background.color" value="#cccccc" />
+	<setting name="motifs.plot.bar.border.color" value="#c0c0c0" />
+	
 	<setting name="seqlogo.help.type" value="web" />
 	<setting name="seqlogo.help.url" value="https://bitbucket.org/lab_rdf/matcalc/wiki/SeqLogo" />
 	

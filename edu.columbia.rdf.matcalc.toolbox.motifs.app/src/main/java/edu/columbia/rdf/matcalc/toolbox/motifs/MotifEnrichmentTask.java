@@ -9,11 +9,13 @@ import javax.swing.SwingWorker;
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.core.Mathematics;
 import org.jebtk.math.matrix.DataFrame;
-import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.statistics.Hypergeometric;
 import org.jebtk.math.statistics.Statistics;
 import org.jebtk.modern.dialog.ModernMessageDialog;
+
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
+import edu.columbia.rdf.matcalc.bio.SearchSequence;
+import edu.columbia.rdf.matcalc.bio.SequenceUtils;
 
 public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
 
@@ -90,10 +92,10 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
 		System.err.println("Search for motifs in foreground regions...");
 
 		List<SearchSequence> foregroundSequences = 
-				MotifsModule.matrixToSequences(mForegroundGroup.getCurrentMatrix());
+				SequenceUtils.matrixToSequences(mForegroundGroup.getCurrentMatrix());
 
 		List<SearchSequence> backgroundSequences = 
-				MotifsModule.matrixToSequences(mBackgroundGroup.getCurrentMatrix());
+				SequenceUtils.matrixToSequences(mBackgroundGroup.getCurrentMatrix());
 
 		return enrichmentMotifs(mThreshold,
 				mMinSpecificity,

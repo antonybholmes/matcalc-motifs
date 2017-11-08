@@ -15,7 +15,10 @@ import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.statistics.HistBin;
 import org.jebtk.math.statistics.Statistics;
+
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
+import edu.columbia.rdf.matcalc.bio.SearchSequence;
+import edu.columbia.rdf.matcalc.bio.SequenceUtils;
 
 public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
 
@@ -81,7 +84,7 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
 		System.err.println("Searching for motifs in foreground regions...");
 
 		List<SearchSequence> foregroundSequences = 
-				MotifsModule.matrixToSequences(mForegroundSeqWindow.getCurrentMatrix());
+				SequenceUtils.matrixToSequences(mForegroundSeqWindow.getCurrentMatrix());
 
 
 		//
@@ -128,7 +131,7 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
 		for (int i = 0; i < foregroundSequences.size(); ++i) {
 			GenomicRegion r = foregroundSequences.get(i).getRegion();
 			
-			foregroundGapped.addFeature(r, foregroundSequences.get(i));
+			foregroundGapped.add(r, foregroundSequences.get(i));
 		}
 
 		int sequenceLength = foregroundSequences.get(0).getDna().length();

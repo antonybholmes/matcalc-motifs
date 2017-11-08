@@ -14,13 +14,14 @@ import org.jebtk.bioinformatics.genomic.GenesDb;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
 import org.jebtk.bioinformatics.motifs.Motif;
+import org.jebtk.bioinformatics.ui.groups.Group;
 import org.jebtk.core.Mathematics;
 import org.jebtk.core.collections.CollectionUtils;
 import org.jebtk.core.collections.DefaultHashMap;
 import org.jebtk.core.collections.DefaultHashMapCreator;
+import org.jebtk.core.collections.IterMap;
 import org.jebtk.core.collections.TreeSetCreator;
 import org.jebtk.core.io.PathUtils;
-import org.jebtk.bioinformatics.ui.groups.Group;
 
 
 
@@ -741,8 +742,8 @@ public class MotifSearch {
 		 */
 	}
 
-	public static Map<Integer, Map<Integer, Set<Integer>>> mapTriplets(byte[][] seqs) {
-		Map<Integer, Map<Integer, Set<Integer>>> ret =
+	public static IterMap<Integer, IterMap<Integer, Set<Integer>>> mapTriplets(byte[][] seqs) {
+		IterMap<Integer, IterMap<Integer, Set<Integer>>> ret =
 				DefaultHashMap.create(new DefaultHashMapCreator<Integer, Set<Integer>>(new TreeSetCreator<Integer>()));
 
 		for (int i = 0; i < seqs.length; ++i) {

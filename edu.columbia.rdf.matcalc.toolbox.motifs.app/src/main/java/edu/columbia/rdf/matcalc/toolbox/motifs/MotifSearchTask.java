@@ -12,9 +12,12 @@ import org.jebtk.bioinformatics.genomic.Region;
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.core.text.Formatter;
 import org.jebtk.math.matrix.DataFrame;
-import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.dialog.ModernMessageDialog;
+
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
+import edu.columbia.rdf.matcalc.bio.SearchSequence;
+import edu.columbia.rdf.matcalc.bio.SearchSequenceType;
+import edu.columbia.rdf.matcalc.bio.SequenceUtils;
 
 public class MotifSearchTask extends SwingWorker<Void, Void> {
 
@@ -22,7 +25,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 	private List<Motif> mMotifs;
 	private double mThreshold;
 	private MainMatCalcWindow mParent;
-	
+
 	public static class SearchResult {
 		public SearchRegion region;
 		public Motif motif;
@@ -55,7 +58,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 	public void done() {
 		if (mNewModel != null) {
 			mParent.addToHistory("Motif Search", mNewModel);
-			
+
 			//MainMatCalc.main("Motif Search", mNewModel);
 		}
 	}
@@ -63,12 +66,12 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 	private DataFrame motifs() throws IOException {
 		DataFrame m = mParent.getCurrentMatrix();
 
-		List<SearchSequence> sequences = MotifsModule.matrixToSequences(m);
-		
+		List<SearchSequence> sequences = SequenceUtils.matrixToSequences(m);
+
 		if (sequences.size() == 0) {
 			ModernMessageDialog.createWarningDialog(mParent, 
 					"There are no suitable DNA sequences in the table.");
-			
+
 			return null;
 		}
 
@@ -81,7 +84,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 				revCompSeqs,
 				mThreshold);
 	}
-	
+
 	private static DataFrame createMotifsTable(List<Motif> motifs,
 			DataFrame matrix,
 			List<SearchSequence> sequences,
@@ -124,7 +127,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 		cell.setCellValue("Offset From Reference");
 		cell = row.createCell(c++);
 		cell.setCellValue("Motif Location");
-		*/
+		 */
 
 
 		// Use a buffer that can accommodate all scores regardless of
@@ -136,28 +139,30 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 		// lets keep all motifs for the moment
 
 		List<SearchResult> searchResults = new ArrayList<SearchResult>();
-		
-		for (Motif motif : motifs) {
-			double t = threshold * MotifSearch.getMaxScore(motif);
 
-			int w = motif.getBaseCount();
+		// add up to the 
+		for (int i = 0; i < sequences.size(); ++i) {
+			SearchSequence s = sequences.get(i);
 
-			double bgscore = motif.getBgPwm(); //Mathematics.repeatArray(m.getBgPwm(), n);
+			char[] seq = s.getDna().toArray();
+			//char[] revCompSeq = revCompSeqs.get(i).getArray();
 
-			double[][] pwm = motif.getPwm();
-			
-			// add up to the 
-			for (int i = 0; i < sequences.size(); ++i) {
-				SearchSequence s = sequences.get(i);
-				
-				char[] seq = s.getDna().toArray();
-				//char[] revCompSeq = revCompSeqs.get(i).getArray();
-				
-				byte[] iSeq = s.getDna().toIndex();
-				byte[] iRevCompSeq = revCompSeqs.get(i).getDna().toIndex();
+			byte[] iSeq = s.getDna().toIndex();
+			byte[] iRevCompSeq = revCompSeqs.get(i).getDna().toIndex();
 
-				int n = seq.length;
-				
+			int n = seq.length;
+
+			for (Motif motif : motifs) {
+				double t = threshold * MotifSearch.getMaxScore(motif);
+
+				int w = motif.getBaseCount();
+
+				double bgscore = motif.getBgPwm(); //Mathematics.repeatArray(m.getBgPwm(), n);
+
+				double[][] pwm = motif.getPwm();
+
+
+
 				//SearchRegion region = searchRegions.get(i);
 
 				MotifSearch.search(iSeq, 
@@ -190,29 +195,29 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 					//		motifStart - region.getReferencePoint().getStart();
 
 					Region motifLocation = null;
-					
+
 					if (s.getType() == SearchSequenceType.GENOMIC) {
 						GenomicRegion r = s.getRegion();
-						
+
 						motifLocation = new GenomicRegion(r.getChr(),
-							r.getStart() + site.getOffset(),
-							r.getStart() + site.getOffset() + site.getSequence().length() - 1);
+								r.getStart() + site.getOffset(),
+								r.getStart() + site.getOffset() + site.getSequence().length() - 1);
 					} else {
 						motifLocation = new Region(site.getOffset(), 
 								site.getOffset() + site.getSequence().length() - 1);
 					}
-					
+
 					SearchResult sr = new SearchResult();
-					
+
 					//sr.region = region;
 					sr.index = i;
 					sr.motif = motif;
 					sr.site = site;
 					//sr.offset = offsetFromReference;
 					sr.motifLocation = motifLocation;
-					
+
 					searchResults.add(sr);
-					
+
 					/*
 					cell = row.createCell(c++);
 					cell.setCellValue(region.getName());
@@ -252,18 +257,18 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 					//cell.setCellValue(showSequence.getBases());
 
 					++r;
-					*/
+					 */
 				}
 			}
 		}
 
 		DataFrame ret = 
 				DataFrame.createDataFrame(searchResults.size(), matrix.getColumnCount() + 10);
-		
+
 		DataFrame.copyColumnNames(matrix, ret);
-		
+
 		int c = matrix.getColumnCount();
-		
+
 		//ret.setColumnName(0, "Feature");
 		//ret.setColumnName(1, "Feature Strand");
 		//ret.setColumnName(2, "Feature Region");
@@ -282,10 +287,10 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 		ret.setColumnName(c++, "Max Score");
 		ret.setColumnName(c++, "Offset From Reference");
 		//ret.setColumnName(16, "Motif Location");
-		
+
 
 		int r = 0;
-		
+
 		for (SearchResult sr : searchResults) {
 			//ret.set(r, 0, sr.region.getName());
 			//ret.set(r, 1, Character.toString(sr.region.getStrand()));
@@ -294,9 +299,9 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 			//ret.set(r, 4, sr.region.getExt5p());
 			//ret.set(r, 5, sr.region.getExt3p());
 			//ret.set(r, 6, sr.region.getSearchRegion().toString());
-			
+
 			ret.copyRow(matrix, sr.index, r);
-			
+
 			c = matrix.getColumnCount();
 			ret.set(r, c++, sr.motif.getName());
 			ret.set(r, c++, sr.motif.getId());
@@ -308,12 +313,12 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 			ret.set(r, c++, Formatter.decimal().dp(2).format(sr.site.getScore()));
 			ret.set(r, c++, Formatter.decimal().dp(2).format(MotifSearch.getMaxScore(sr.motif)));
 			ret.set(r, c++, sr.site.getOffset());
-			
+
 			++r;
 		}
-		
+
 		System.err.println("matrix " + ret.getRowCount());
-		
+
 		return ret;
 	}
 }

@@ -1,0 +1,81 @@
+package edu.columbia.rdf.matcalc.toolbox.motifs.plot;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+
+import org.jebtk.graphplot.figure.Axes;
+import org.jebtk.graphplot.figure.Figure;
+import org.jebtk.graphplot.figure.Plot;
+import org.jebtk.graphplot.figure.PlotLayer;
+import org.jebtk.graphplot.figure.SubFigure;
+import org.jebtk.math.matrix.DataFrame;
+import org.jebtk.modern.graphics.DrawingContext;
+import org.jebtk.modern.graphics.ImageUtils;
+import org.jebtk.modern.widget.ModernWidget;
+
+public class TextLayer extends PlotLayer {
+	private static final long serialVersionUID = 1L;
+
+	private double ROTATION = Math.toRadians(-90);
+
+	private String mSearchId;
+
+	public TextLayer(String searchId) {
+		super("Text");
+		
+		mSearchId = searchId;
+	}
+
+	@Override
+	public void plotLayer(Graphics2D g2,
+			DrawingContext context,
+			Figure figure,
+			SubFigure subFigure,
+			Axes axes,
+			Plot plot, 
+			DataFrame m) {
+
+		int nameCol = DataFrame.findColumn(m, "Motif Name");
+		//int motifCol = DataFrame.findColumn(m, "5 Sequence");
+		int offsetCol = DataFrame.findColumn(m, "Offset From Reference");
+		int strandCol = DataFrame.findColumn(m, "Strand");
+		int mutationCol = DataFrame.findColumn(m, "Mutation");
+
+
+		int lineHeight = ModernWidget.getStringHeight(g2) / 2;
+		
+		int y = axes.toPlotY1(0.7);
+		
+		g2.setColor(Color.BLACK);
+		
+		for (int i = 0; i < m.getRowCount(); ++i) {
+			String id = m.getText(i, mutationCol);
+			
+			if (!id.equals(mSearchId)) {
+				continue;
+			}
+			
+			String name = m.getText(i, nameCol);
+			int offset = (int)m.getValue(i, offsetCol);
+			String strand = m.getText(i, strandCol);
+			
+			if (!strand.equals("+")) {
+				continue;
+			}
+			
+			Graphics2D g2Text = ImageUtils.createAAGraphics(g2);
+
+			try {
+				int x = axes.toPlotX1(offset);
+
+				g2Text.translate(x, y);
+				g2Text.rotate(ROTATION);
+
+				g2Text.drawString(name, 0, lineHeight);
+
+			} finally {
+				g2Text.dispose();
+			}
+		}
+	}		
+}
