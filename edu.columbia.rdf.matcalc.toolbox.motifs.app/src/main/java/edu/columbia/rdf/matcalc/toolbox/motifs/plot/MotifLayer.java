@@ -47,10 +47,10 @@ public class MotifLayer extends PlotLayer {
 		//int nameCol = DataFrame.findColumn(m, "Motif Name");
 		int motifCol = DataFrame.findColumn(m, "5 Sequence");
 		int offsetCol = DataFrame.findColumn(m, "Offset From Reference");
-		int strandCol = DataFrame.findColumn(m, "Strand");
+		//int strandCol = DataFrame.findColumn(m, "Strand");
 
 
-		for (int i = 0; i < m.getRowCount(); ++i) {
+		for (int i = 0; i < m.getRows(); ++i) {
 			String id = m.getText(i, mutationCol);
 			
 			if (!id.equals(mSearchId)) {
@@ -59,11 +59,12 @@ public class MotifLayer extends PlotLayer {
 			
 			int offset = (int)m.getValue(i, offsetCol);
 			String motif = m.getText(i, motifCol);
-			String strand = m.getText(i, strandCol);
 			
-			if (!strand.equals("+")) {
-				continue;
-			}
+			//String strand = m.getText(i, strandCol);
+			
+			//if (!strand.equals("+")) {
+			//	continue;
+			//}
 
 			int x1 = axes.toPlotX1(offset);
 			int x2 = axes.toPlotX1(offset + motif.length());

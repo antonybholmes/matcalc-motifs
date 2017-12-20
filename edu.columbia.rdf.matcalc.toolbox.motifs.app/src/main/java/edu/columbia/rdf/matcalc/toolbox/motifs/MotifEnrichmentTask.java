@@ -79,10 +79,11 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
 
 		mNewModel.setName("Motif Enrichment");
 
-		if (mNewModel != null && mNewModel.getRowCount() > 0) {
+		if (mNewModel != null && mNewModel.getRows() > 0) {
 			mParent.openMatrix(mNewModel);
 		} else {
-			ModernMessageDialog.createWarningDialog(mParent, "There were no enriched motifs.");
+			ModernMessageDialog.createWarningDialog(mParent, 
+					"There were no enriched motifs.");
 		}
 
 		return null;

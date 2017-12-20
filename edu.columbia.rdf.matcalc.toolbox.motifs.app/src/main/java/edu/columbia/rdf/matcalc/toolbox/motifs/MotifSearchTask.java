@@ -56,11 +56,14 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 
 	@Override
 	public void done() {
-		if (mNewModel != null) {
-			mParent.addToHistory("Motif Search", mNewModel);
+		if (mNewModel == null) {
+			ModernMessageDialog.createWarningDialog(mParent, 
+					"No motifs were found.");
 
-			//MainMatCalc.main("Motif Search", mNewModel);
+			return;
 		}
+		
+		mParent.addToHistory("Motif Search", mNewModel);
 	}
 
 	private DataFrame motifs() throws IOException {
@@ -261,13 +264,17 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 				}
 			}
 		}
+		
+		if (searchResults.size() == 0) {
+			return null;
+		}
 
 		DataFrame ret = 
-				DataFrame.createDataFrame(searchResults.size(), matrix.getColumnCount() + 10);
+				DataFrame.createDataFrame(searchResults.size(), matrix.getCols() + 10);
 
 		DataFrame.copyColumnNames(matrix, ret);
 
-		int c = matrix.getColumnCount();
+		int c = matrix.getCols();
 
 		//ret.setColumnName(0, "Feature");
 		//ret.setColumnName(1, "Feature Strand");
@@ -302,7 +309,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 
 			ret.copyRow(matrix, sr.index, r);
 
-			c = matrix.getColumnCount();
+			c = matrix.getCols();
 			ret.set(r, c++, sr.motif.getName());
 			ret.set(r, c++, sr.motif.getId());
 			ret.set(r, c++, sr.motif.getDatabase());
@@ -317,7 +324,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 			++r;
 		}
 
-		System.err.println("matrix " + ret.getRowCount());
+		System.err.println("matrix " + ret.getRows());
 
 		return ret;
 	}

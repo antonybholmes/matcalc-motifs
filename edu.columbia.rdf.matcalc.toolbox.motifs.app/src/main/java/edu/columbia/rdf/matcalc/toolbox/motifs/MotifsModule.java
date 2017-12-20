@@ -12,7 +12,6 @@ import java.util.TreeSet;
 
 import javax.swing.JFrame;
 
-import org.jebtk.bioinformatics.dna.GenomeAssemblyLocal;
 import org.jebtk.bioinformatics.dna.GenomeAssemblyWeb;
 import org.jebtk.bioinformatics.genomic.ChromosomeSizesService;
 import org.jebtk.bioinformatics.genomic.GenomeAssembly;
@@ -21,17 +20,18 @@ import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.bioinformatics.motifs.MotifsDataSourceService;
 import org.jebtk.bioinformatics.motifs.MotifsFs;
+import org.jebtk.bioinformatics.motifs.MotifsPwtFs;
 import org.jebtk.bioinformatics.motifs.MotifsXmlFs;
 import org.jebtk.bioinformatics.ui.external.ucsc.BedGuiFileFilter;
 import org.jebtk.bioinformatics.ui.filters.MotifGuiFileFilter;
 import org.jebtk.bioinformatics.ui.filters.MotifPwmGuiFileFilter;
 import org.jebtk.bioinformatics.ui.groups.GroupsModel;
 import org.jebtk.bioinformatics.ui.groups.GroupsPanel;
+import org.jebtk.core.AppService;
 import org.jebtk.core.Resources;
 import org.jebtk.core.collections.CollectionUtils;
 import org.jebtk.core.collections.UniqueArrayList;
 import org.jebtk.core.io.FileUtils;
-import org.jebtk.core.io.PathUtils;
 import org.jebtk.core.settings.SettingsService;
 import org.jebtk.core.text.Join;
 import org.jebtk.graphplot.figure.Axes;
@@ -78,14 +78,15 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 	public static final Logger LOG = 
 			LoggerFactory.getLogger(MotifsModule.class);
 
+	private static final Path RES_DIR = AppService.MOD_DIR.resolve("motifs");
+
+	
 	private static final Path CHR_SIZE_FILE = 
-			PathUtils.getPath("res/modules/motifs/ucsc_chromosome_sizes_hg19.txt.gz");
+			RES_DIR.resolve("ucsc_chromosome_sizes_hg19.txt.gz");
 
-	private static final Path DATABASE_DIR = 
-			PathUtils.getPath("res/modules/motifs/database");
+	private static final Path DATABASE_DIR = RES_DIR.resolve("database");
 
-	private static final Path RES_DIR = PathUtils.getPath("res/modules/dna");
-
+	
 
 	private static final Set<GuiFileExtFilter> FILE_TYPES_SET =
 			new TreeSet<GuiFileExtFilter>();
@@ -109,7 +110,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 			}
 		}
 
-		GenomeAssemblyService.getInstance().add(new GenomeAssemblyLocal(RES_DIR));
+		//GenomeAssemblyService.getInstance().add(new GenomeAssemblyFS(RES_DIR));
 
 		FILE_TYPES_SET.add(new MotifGuiFileFilter());
 		FILE_TYPES_SET.add(new MotifPwmGuiFileFilter());
@@ -125,6 +126,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
 		MotifsDataSourceService.getInstance().addDataSource(new MotifsFs(DATABASE_DIR));
 		MotifsDataSourceService.getInstance().addDataSource(new MotifsXmlFs(DATABASE_DIR));
+		MotifsDataSourceService.getInstance().addDataSource(new MotifsPwtFs(DATABASE_DIR));
 	}
 
 	@Override
@@ -296,7 +298,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 			writer.write("track name=\"Motifs\" description=\"Motifs\"");
 			writer.newLine();
 
-			for (int i = 0; i < m.getRowCount(); ++i) {
+			for (int i = 0; i < m.getRows(); ++i) {
 				GenomicRegion r = GenomicRegion.parse(m.getText(i, locCol));
 				double score = m.getValue(i, scoreCol);
 				char strand = m.getText(i, strandCol).charAt(0);
@@ -471,7 +473,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
 		List<String> mutations = new UniqueArrayList<String>();
 
-		for (int i = 0; i < m.getRowCount(); ++i) {
+		for (int i = 0; i < m.getRows(); ++i) {
 			mutations.add(m.getText(i, mutationCol));
 		}
 
@@ -484,7 +486,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
 		Figure figure = Figure.createRowFigure();
 
-		for (int i = mutations.size() - MAX_MUTATIONS_PLOT - 1; i < mutations.size(); ++i) {
+		for (int i = Math.max(0, mutations.size() - MAX_MUTATIONS_PLOT - 1); i < mutations.size(); ++i) {
 			String mutation = mutations.get(i);
 			
 			SubFigure subFigure = figure.newSubFigure();

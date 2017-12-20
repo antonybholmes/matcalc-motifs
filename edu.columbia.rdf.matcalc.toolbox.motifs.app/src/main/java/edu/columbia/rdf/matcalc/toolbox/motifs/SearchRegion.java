@@ -145,7 +145,7 @@ public class SearchRegion {
 		return new SearchRegion(gene.getSymbol() + " (" + gene.getRefSeq() + ")", 
 				gene.getTss(), 
 				gene.getTss(), 
-				gene.getRegion().getStrand(),
+				gene.getStrand(),
 				ext5p,
 				ext3p);
 	}

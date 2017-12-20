@@ -29,7 +29,7 @@ import org.jebtk.core.io.PathUtils;
 public class MotifSearch {
 	private static final double ROUNDING_ERROR = 1E-10;
 
-	public static final int BUFFER_SIZE = 100000;
+	public static final int BUFFER_SIZE = 500000;
 
 	public static final double[] FG = new double[BUFFER_SIZE];
 

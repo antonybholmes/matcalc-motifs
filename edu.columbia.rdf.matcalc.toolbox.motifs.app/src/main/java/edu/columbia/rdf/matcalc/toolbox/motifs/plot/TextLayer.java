@@ -36,19 +36,19 @@ public class TextLayer extends PlotLayer {
 			DataFrame m) {
 
 		int nameCol = DataFrame.findColumn(m, "Motif Name");
-		//int motifCol = DataFrame.findColumn(m, "5 Sequence");
+		int motifCol = DataFrame.findColumn(m, "5 Sequence");
 		int offsetCol = DataFrame.findColumn(m, "Offset From Reference");
-		int strandCol = DataFrame.findColumn(m, "Strand");
+		//int strandCol = DataFrame.findColumn(m, "Strand");
 		int mutationCol = DataFrame.findColumn(m, "Mutation");
 
 
-		int lineHeight = ModernWidget.getStringHeight(g2) / 2;
+		int lineHeight = g2.getFontMetrics().getAscent() / 2; //ModernWidget.getStringHeight(g2) / 2;
 		
 		int y = axes.toPlotY1(0.7);
 		
 		g2.setColor(Color.BLACK);
 		
-		for (int i = 0; i < m.getRowCount(); ++i) {
+		for (int i = 0; i < m.getRows(); ++i) {
 			String id = m.getText(i, mutationCol);
 			
 			if (!id.equals(mSearchId)) {
@@ -56,18 +56,24 @@ public class TextLayer extends PlotLayer {
 			}
 			
 			String name = m.getText(i, nameCol);
-			int offset = (int)m.getValue(i, offsetCol);
-			String strand = m.getText(i, strandCol);
+			String motif = m.getText(i, motifCol);
 			
-			if (!strand.equals("+")) {
-				continue;
-			}
+			int offset = (int)m.getValue(i, offsetCol);
+			
+			int x1 = axes.toPlotX1(offset);
+			int x2 = axes.toPlotX1(offset + motif.length());
+			
+			int x = (x1 + x2) / 2;
+			
+			//String strand = m.getText(i, strandCol);
+			
+			//if (!strand.equals("+")) {
+			//	continue;
+			//}
 			
 			Graphics2D g2Text = ImageUtils.createAAGraphics(g2);
 
 			try {
-				int x = axes.toPlotX1(offset);
-
 				g2Text.translate(x, y);
 				g2Text.rotate(ROTATION);
 
