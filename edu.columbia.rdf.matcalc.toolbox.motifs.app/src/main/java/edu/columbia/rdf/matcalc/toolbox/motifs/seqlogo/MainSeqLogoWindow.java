@@ -1,6 +1,5 @@
 package edu.columbia.rdf.matcalc.toolbox.motifs.seqlogo;
 
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -60,7 +59,6 @@ import org.jebtk.modern.zoom.ZoomModel;
 import org.jebtk.modern.zoom.ZoomRibbonSection;
 import org.xml.sax.SAXException;
 
-
 /**
  * Window for showing 2D graphs such as a scatter plot.
  * 
@@ -68,402 +66,390 @@ import org.xml.sax.SAXException;
  *
  */
 public class MainSeqLogoWindow extends ModernRibbonWindow implements ModernClickListener {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private OpenRibbonPanel mOpenPanel = new OpenRibbonPanel();
+  private OpenRibbonPanel mOpenPanel = new OpenRibbonPanel();
 
-	private SaveAsRibbonPanel mSaveAsPanel = new SaveAsRibbonPanel();
+  private SaveAsRibbonPanel mSaveAsPanel = new SaveAsRibbonPanel();
 
-	protected ZoomModel mZoomModel = new ZoomModel();
+  protected ZoomModel mZoomModel = new ZoomModel();
 
-	protected ColorMapModel mColorMapModel = 
-			new ColorMapModel();
+  protected ColorMapModel mColorMapModel = new ColorMapModel();
 
-	protected MatrixGroupModel mGroupsModel = 
-			new MatrixGroupModel();
+  protected MatrixGroupModel mGroupsModel = new MatrixGroupModel();
 
-	private SeqLogosCanvas mFigure = new SeqLogosCanvas(); //new PeaksCanvas(mBedGraphsModel, mGenomicModel);
+  private SeqLogosCanvas mFigure = new SeqLogosCanvas(); // new PeaksCanvas(mBedGraphsModel, mGenomicModel);
 
-	private MotifModel mMotifModel = new MotifModel();
+  private MotifModel mMotifModel = new MotifModel();
 
-	private FormatPanel mFormatPanel;
+  private FormatPanel mFormatPanel;
 
-	private Path mFile;
+  private Path mFile;
 
-	private MotifsTreePanel mMotifsPanel;
+  private MotifsTreePanel mMotifsPanel;
 
-	//private ModernCheckBox mButtonRevComp;
+  // private ModernCheckBox mButtonRevComp;
 
-	private MotifViewModel mViewModel = new MotifViewModel();
+  private MotifViewModel mViewModel = new MotifViewModel();
 
-	private class MotifEvents implements ModernSelectionListener {
+  private class MotifEvents implements ModernSelectionListener {
 
-		@Override
-		public void selectionChanged(ChangeEvent e) {
-			openMotifs();
-		}
+    @Override
+    public void selectionChanged(ChangeEvent e) {
+      openMotifs();
+    }
 
-	}
+  }
 
-	private class MotifViewEvents implements ChangeListener {
+  private class MotifViewEvents implements ChangeListener {
 
-		@Override
-		public void changed(ChangeEvent e) {
-			openMotifs();
-		}
-	}
+    @Override
+    public void changed(ChangeEvent e) {
+      openMotifs();
+    }
+  }
 
-	private class ExportCallBack implements DialogEventListener {
-		private Path mFile;
-		private Path mPwd;
+  private class ExportCallBack implements DialogEventListener {
+    private Path mFile;
+    private Path mPwd;
 
-		public ExportCallBack(Path file, Path pwd) {
-			mFile = file;
-			mPwd = pwd;
-		}
+    public ExportCallBack(Path file, Path pwd) {
+      mFile = file;
+      mPwd = pwd;
+    }
 
-		@Override
-		public void statusChanged(DialogEvent e) {
-			if (e.getStatus() == ModernDialogStatus.OK) {
-				try {	
-					save(mFile);
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			} else {
-				try {
-					export(mPwd);
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
-	}
+    @Override
+    public void statusChanged(DialogEvent e) {
+      if (e.getStatus() == ModernDialogStatus.OK) {
+        try {
+          save(mFile);
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      } else {
+        try {
+          export(mPwd);
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    }
+  }
 
-	public MainSeqLogoWindow() {
-		super(new SeqLogoInfo());
-		
-		init();
-	}
+  public MainSeqLogoWindow() {
+    super(new SeqLogoInfo());
 
-	public MainSeqLogoWindow(Path file) {
-		this();
+    init();
+  }
 
-		try {
-			openFile(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public MainSeqLogoWindow(Collection<String> names) {
-		this();
+  public MainSeqLogoWindow(Path file) {
+    this();
 
-		mMotifsPanel.search(names);
-	}
+    try {
+      openFile(file);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
-	public void init() {
-		mMotifsPanel = new MotifsTreePanel(this, mMotifModel);
+  public MainSeqLogoWindow(Collection<String> names) {
+    this();
 
-		createRibbon();
+    mMotifsPanel.search(names);
+  }
 
-		createUi();
+  public void init() {
+    mMotifsPanel = new MotifsTreePanel(this, mMotifModel);
 
-		mMotifModel.addSelectionListener(new MotifEvents());
+    createRibbon();
 
-		//mButtonRevComp.addClickListener(new RevCompEvents());
+    createUi();
 
-		mViewModel.addChangeListener(new MotifViewEvents());
+    mMotifModel.addSelectionListener(new MotifEvents());
 
-		setSize(1280, 720);
+    // mButtonRevComp.addClickListener(new RevCompEvents());
 
-		UI.centerWindowToScreen(this);
-	}
+    mViewModel.addChangeListener(new MotifViewEvents());
 
-	public final void createRibbon() {
-		//RibbongetRibbonMenu() getRibbonMenu() = new RibbongetRibbonMenu()(0);
-		RibbonMenuItem menuItem;
+    setSize(1280, 720);
 
-		menuItem = new RibbonMenuItem(UI.MENU_OPEN);
-		getRibbonMenu().addTabbedMenuItem(menuItem, mOpenPanel);
+    UI.centerWindowToScreen(this);
+  }
 
-		menuItem = new RibbonMenuItem(UI.MENU_SAVE_AS);
-		getRibbonMenu().addTabbedMenuItem(menuItem, mSaveAsPanel);
+  public final void createRibbon() {
+    // RibbongetRibbonMenu() getRibbonMenu() = new RibbongetRibbonMenu()(0);
+    RibbonMenuItem menuItem;
 
-		menuItem = new RibbonMenuItem(UI.MENU_EXIT);
-		getRibbonMenu().addTabbedMenuItem(menuItem);
+    menuItem = new RibbonMenuItem(UI.MENU_OPEN);
+    getRibbonMenu().addTabbedMenuItem(menuItem, mOpenPanel);
 
-		getRibbonMenu().addSeparator();
+    menuItem = new RibbonMenuItem(UI.MENU_SAVE_AS);
+    getRibbonMenu().addTabbedMenuItem(menuItem, mSaveAsPanel);
 
-		menuItem = new RibbonMenuItem(UI.MENU_INFO);
-		getRibbonMenu().addTabbedMenuItem(menuItem, 
-				new RibbonPanelProductInfo(getAppInfo()));
-		//getRibbonMenu().addTabbedMenuItem(menuItem);
+    menuItem = new RibbonMenuItem(UI.MENU_EXIT);
+    getRibbonMenu().addTabbedMenuItem(menuItem);
 
-		menuItem = new RibbonMenuItem(UI.MENU_OPTIONS);
-		getRibbonMenu().addTabbedMenuItem(menuItem, new ModernOptionsRibbonPanel(getAppInfo()));
+    getRibbonMenu().addSeparator();
 
+    menuItem = new RibbonMenuItem(UI.MENU_INFO);
+    getRibbonMenu().addTabbedMenuItem(menuItem, new RibbonPanelProductInfo(getAppInfo()));
+    // getRibbonMenu().addTabbedMenuItem(menuItem);
 
-		getRibbonMenu().setDefaultIndex(0);
+    menuItem = new RibbonMenuItem(UI.MENU_OPTIONS);
+    getRibbonMenu().addTabbedMenuItem(menuItem, new ModernOptionsRibbonPanel(getAppInfo()));
 
-		getRibbonMenu().addClickListener(this);
+    getRibbonMenu().setDefaultIndex(0);
 
+    getRibbonMenu().addClickListener(this);
 
-		ModernClickWidget button;
+    ModernClickWidget button;
 
-		//Ribbon2 ribbon = new Ribbon2();
-		getRibbon().setHelpButtonEnabled(getAppInfo());
+    // Ribbon2 ribbon = new Ribbon2();
+    getRibbon().setHelpButtonEnabled(getAppInfo());
 
-		button = new QuickAccessButton(UIService.getInstance().loadIcon(QuickOpenVectorIcon.class, 16));
-		button.setClickMessage(UI.MENU_OPEN);
-		button.setToolTip(new ModernToolTip("Open", 
-				"Open peak files."));
-		button.addClickListener(this);
-		addQuickAccessButton(button);
+    button = new QuickAccessButton(UIService.getInstance().loadIcon(QuickOpenVectorIcon.class, 16));
+    button.setClickMessage(UI.MENU_OPEN);
+    button.setToolTip(new ModernToolTip("Open", "Open peak files."));
+    button.addClickListener(this);
+    addQuickAccessButton(button);
 
-		button = new QuickAccessButton(UIService.getInstance().loadIcon(QuickSaveVectorIcon.class, 16));
-		button.setClickMessage(UI.MENU_SAVE);
-		button.setToolTip(new ModernToolTip("Save", 
-				"Save the current image."));
-		button.addClickListener(this);
-		addQuickAccessButton(button);
+    button = new QuickAccessButton(UIService.getInstance().loadIcon(QuickSaveVectorIcon.class, 16));
+    button.setClickMessage(UI.MENU_SAVE);
+    button.setToolTip(new ModernToolTip("Save", "Save the current image."));
+    button.addClickListener(this);
+    addQuickAccessButton(button);
 
+    // home
+    // RibbonToolbar toolbar = new RibbonToolbar(getRibbon(), "Plot");
 
+    // RibbonSection toolbarContainer = new RibbonSection("Options");
 
-		// home
-		//RibbonToolbar toolbar = new RibbonToolbar(getRibbon(), "Plot");
+    // mButtonRevComp = new RibbonLargeCheckButtonIconText2("Reverse Complement",
+    // UIResources.getInstance().loadIcon("reverse_complement", 24),
+    // "Reverse Complement",
+    // "Reverse complement motifs.");
 
-		//RibbonSection toolbarContainer = new RibbonSection("Options");
+    // Ui.setSize(mButtonRevComp, Ribbon2.MEDIUM_TEXT_BUTTON_SIZE);
 
-		//mButtonRevComp = new RibbonLargeCheckButtonIconText2("Reverse Complement", 
-		//		UIResources.getInstance().loadIcon("reverse_complement", 24),
-		//		"Reverse Complement",
-		//		"Reverse complement motifs.");
+    getRibbon().getToolbar("Plot").add(new MotifViewRibbonSection(getRibbon(), mViewModel));
 
-		//Ui.setSize(mButtonRevComp, Ribbon2.MEDIUM_TEXT_BUTTON_SIZE);
+    // mButtonRevComp = new ModernCheckBox("Reverse Complement");
+    // toolbarContainer.add(new RibbonStripContainer(mButtonRevComp));
+    // toolbar.add(toolbarContainer);
 
-		getRibbon().getToolbar("Plot").add(new MotifViewRibbonSection(getRibbon(), mViewModel));
+    BaseColorRibbonSection baseColorRibbon = new BaseColorRibbonSection(this);
 
-		//mButtonRevComp = new ModernCheckBox("Reverse Complement");
-		//toolbarContainer.add(new RibbonStripContainer(mButtonRevComp));
-		//toolbar.add(toolbarContainer);
-		
-		BaseColorRibbonSection baseColorRibbon = new BaseColorRibbonSection(this);
-		
-		baseColorRibbon.addClickListener(new ModernClickListener(){
+    baseColorRibbon.addClickListener(new ModernClickListener() {
 
-			@Override
-			public void clicked(ModernClickEvent e) {
-				openMotifs();
-			}});
-		
-		getRibbon().getToolbar("Plot").add(baseColorRibbon);
+      @Override
+      public void clicked(ModernClickEvent e) {
+        openMotifs();
+      }
+    });
 
-		//toolbarSection = new PlotSizeRibbonSection(mCanvas.getGraphSpace().getLayoutProperties());
-		//toolbar.add(toolbarSection);
+    getRibbon().getToolbar("Plot").add(baseColorRibbon);
 
-		//ZoomRibbonSection zoomSection = 
-		//		new ZoomRibbonSection(this, zoomModel, ribbon);
+    // toolbarSection = new
+    // PlotSizeRibbonSection(mCanvas.getGraphSpace().getLayoutProperties());
+    // toolbar.add(toolbarSection);
 
-		//toolbar.add(zoomSection);
+    // ZoomRibbonSection zoomSection =
+    // new ZoomRibbonSection(this, zoomModel, ribbon);
 
-		//LegendRibbonSection legendSection =
-		//		new LegendRibbonSection(mCanvas.getGraphProperties().getLegend());
+    // toolbar.add(zoomSection);
 
-		//toolbar.add(legendSection);
+    // LegendRibbonSection legendSection =
+    // new LegendRibbonSection(mCanvas.getGraphProperties().getLegend());
 
+    // toolbar.add(legendSection);
 
+    // getRibbon().addToolbar(toolbar);
 
-		//getRibbon().addToolbar(toolbar);
+    getRibbon().getToolbar("View").add(new ZoomRibbonSection(this, mZoomModel));
 
-		getRibbon().getToolbar("View").add(new ZoomRibbonSection(this, mZoomModel));
+    // setRibbon(ribbon, getRibbonMenu());
 
-		//setRibbon(ribbon, getRibbonMenu());
+    getRibbon().setSelectedIndex(1);
+  }
 
-		getRibbon().setSelectedIndex(1);
-	}
+  public final void createUi() {
 
-	public final void createUi() {
+    // ImageCanvas imageCanvas = new ImageCanvas(mCanvas);
 
-		//ImageCanvas imageCanvas = new ImageCanvas(mCanvas);
+    // ZoomCanvas zoomCanvas = new ZoomCanvas(canvas);
 
-		//ZoomCanvas zoomCanvas = new ZoomCanvas(canvas);
+    ModernPlotCanvas canvas = new FigurePanel(mFigure);
 
-		ModernPlotCanvas canvas = new FigurePanel(mFigure);
-		
-		canvas.setZoomModel(mZoomModel);
+    canvas.setZoomModel(mZoomModel);
 
-		ModernScrollPane scrollPane = new ModernScrollPane(canvas);
-		
-		scrollPane.getVScrollBar().setScroller(new FixedIncScroller(200));
+    ModernScrollPane scrollPane = new ModernScrollPane(canvas);
 
-		ModernPanel panel = new ModernPanel(scrollPane, ModernWidget.BORDER);
+    scrollPane.getVScrollBar().setScroller(new FixedIncScroller(200));
 
-		setCard(panel);
+    ModernPanel panel = new ModernPanel(scrollPane, ModernWidget.BORDER);
 
-		mStatusBar.addRight(new ModernStatusZoomSlider(mZoomModel));
-		
-		addMotifPanel();
-	}
+    setCard(panel);
 
-	private void addMotifPanel() {
-		if (getTabsPane().getModel().getLeftTabs().containsTab("Motifs")) {
-			return;
-		}
+    mStatusBar.addRight(new ModernStatusZoomSlider(mZoomModel));
 
-		mMotifsPanel.setBorder(ModernPanel.DOUBLE_BORDER);
+    addMotifPanel();
+  }
 
-		getTabsPane().addLeftTab("Motifs", 
-				new HTab("Motifs", mMotifsPanel), 250, 200, 500);
-	}
+  private void addMotifPanel() {
+    if (getTabsPane().getModel().getLeftTabs().containsTab("Motifs")) {
+      return;
+    }
 
-	private void addFormatPane() {
-		if (getTabsPane().getModel().getRightTabs().containsTab("Format Plot")) {
-			return;
-		}
+    mMotifsPanel.setBorder(ModernPanel.DOUBLE_BORDER);
 
-		getTabsPane().addRightTab("Format Plot", 
-				new CloseableHTab("Format Plot", mFormatPanel, getTabsPane()), 300, 200, 500);
+    getTabsPane().addLeftTab("Motifs", new HTab("Motifs", mMotifsPanel), 250, 200, 500);
+  }
 
-	}
+  private void addFormatPane() {
+    if (getTabsPane().getModel().getRightTabs().containsTab("Format Plot")) {
+      return;
+    }
 
-	@Override
-	public final void clicked(ModernClickEvent e) {
-		if (e.getMessage().equals(UI.MENU_OPEN) ||
-				e.getMessage().equals(UI.MENU_BROWSE) ||
-				e.getMessage().startsWith("Other...")) {
-			try {
-				browseForFile();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			} catch (SAXException e1) {
-				e1.printStackTrace();
-			} catch (ParserConfigurationException e1) {
-				e1.printStackTrace();
-			}
-		} else if (e.getMessage().equals(OpenRibbonPanel.FILE_SELECTED)) {
-			try {
-				openFile(mOpenPanel.getSelectedFile());
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		} else if (e.getMessage().equals(OpenRibbonPanel.DIRECTORY_SELECTED)) {
-			try {
-				browseForFile(mOpenPanel.getSelectedDirectory());
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			} catch (SAXException e1) {
-				e1.printStackTrace();
-			} catch (ParserConfigurationException e1) {
-				e1.printStackTrace();
-			}
-		} else if (e.getMessage().equals(UI.MENU_SAVE)) {
-			try {
-				export();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			} catch (TranscoderException e1) {
-				e1.printStackTrace();
-			}
-		} else if (e.getMessage().equals(SaveAsRibbonPanel.DIRECTORY_SELECTED)) {
-			try {
-				export(mSaveAsPanel.getSelectedDirectory());
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			} catch (TranscoderException e1) {
-				e1.printStackTrace();
-			}
-		} else if (e.getMessage().equals("Format Plot")) {
-			addFormatPane();
-		} else if (e.getMessage().equals(UI.MENU_ABOUT)) {
-			ModernAboutDialog.show(this, getAppInfo());
-		} else if (e.getMessage().equals(UI.MENU_EXIT)) {
-			close();
-		} else {
+    getTabsPane().addRightTab("Format Plot", new CloseableHTab("Format Plot", mFormatPanel, getTabsPane()), 300, 200,
+        500);
 
-		}
-	}
+  }
 
-	private void browseForFile() throws IOException, SAXException, ParserConfigurationException {
-		browseForFile(RecentFilesService.getInstance().getPwd());
-	}
+  @Override
+  public final void clicked(ModernClickEvent e) {
+    if (e.getMessage().equals(UI.MENU_OPEN) || e.getMessage().equals(UI.MENU_BROWSE)
+        || e.getMessage().startsWith("Other...")) {
+      try {
+        browseForFile();
+      } catch (IOException e1) {
+        e1.printStackTrace();
+      } catch (SAXException e1) {
+        e1.printStackTrace();
+      } catch (ParserConfigurationException e1) {
+        e1.printStackTrace();
+      }
+    } else if (e.getMessage().equals(OpenRibbonPanel.FILE_SELECTED)) {
+      try {
+        openFile(mOpenPanel.getSelectedFile());
+      } catch (IOException e1) {
+        e1.printStackTrace();
+      }
+    } else if (e.getMessage().equals(OpenRibbonPanel.DIRECTORY_SELECTED)) {
+      try {
+        browseForFile(mOpenPanel.getSelectedDirectory());
+      } catch (IOException e1) {
+        e1.printStackTrace();
+      } catch (SAXException e1) {
+        e1.printStackTrace();
+      } catch (ParserConfigurationException e1) {
+        e1.printStackTrace();
+      }
+    } else if (e.getMessage().equals(UI.MENU_SAVE)) {
+      try {
+        export();
+      } catch (IOException e1) {
+        e1.printStackTrace();
+      } catch (TranscoderException e1) {
+        e1.printStackTrace();
+      }
+    } else if (e.getMessage().equals(SaveAsRibbonPanel.DIRECTORY_SELECTED)) {
+      try {
+        export(mSaveAsPanel.getSelectedDirectory());
+      } catch (IOException e1) {
+        e1.printStackTrace();
+      } catch (TranscoderException e1) {
+        e1.printStackTrace();
+      }
+    } else if (e.getMessage().equals("Format Plot")) {
+      addFormatPane();
+    } else if (e.getMessage().equals(UI.MENU_ABOUT)) {
+      ModernAboutDialog.show(this, getAppInfo());
+    } else if (e.getMessage().equals(UI.MENU_EXIT)) {
+      close();
+    } else {
 
-	private void browseForFile(Path workingDirectory) throws IOException, SAXException, ParserConfigurationException {
-		openFile(BioInfDialog.openMotifFile(this, workingDirectory));
-	}
+    }
+  }
 
-	public void openFile(Path file) throws IOException {
-		if (file == null) {
-			return;
-		}
+  private void browseForFile() throws IOException, SAXException, ParserConfigurationException {
+    browseForFile(RecentFilesService.getInstance().getPwd());
+  }
 
-		if (mFile != null) {
-			// We have already opened a file so create a new
-			// window
+  private void browseForFile(Path workingDirectory) throws IOException, SAXException, ParserConfigurationException {
+    openFile(BioInfDialog.openMotifFile(this, workingDirectory));
+  }
 
-			MainSeqLogoWindow window = new MainSeqLogoWindow(file);
+  public void openFile(Path file) throws IOException {
+    if (file == null) {
+      return;
+    }
 
-			window.setVisible(true);
-		} else {
+    if (mFile != null) {
+      // We have already opened a file so create a new
+      // window
 
-			if (PathUtils.getFileExt(file).equals("motif")) {
-				Motif motif = Motif.parseMotif(file);
+      MainSeqLogoWindow window = new MainSeqLogoWindow(file);
 
-				openMotif(motif);
-			} else if (PathUtils.getFileExt(file).equals("pwm")) {
-				Motif motif = Motif.parsePwmMotif(file);
+      window.setVisible(true);
+    } else {
 
-				openMotif(motif);
-			} else {
-				// do nothing
-			}
+      if (PathUtils.getFileExt(file).equals("motif")) {
+        Motif motif = Motif.parseMotif(file);
 
-			RecentFilesService.getInstance().add(file);
+        openMotif(motif);
+      } else if (PathUtils.getFileExt(file).equals("pwm")) {
+        Motif motif = Motif.parsePwmMotif(file);
 
-			mFile = file;
-		}
-	}
+        openMotif(motif);
+      } else {
+        // do nothing
+      }
 
-	private void openMotifs() {
-		openMotifs(mMotifModel.getItems());
-	}
+      RecentFilesService.getInstance().add(file);
 
-	private void openMotif(Motif motif) {
-		openMotifs(CollectionUtils.asList(motif));
-	}
+      mFile = file;
+    }
+  }
 
-	private void openMotifs(List<Motif> motifs) {
-		if (mViewModel.getRevComp()) {
-			mFigure.setMotifs(Motif.reverseComplement(motifs), mViewModel.get());
-		} else {
-			mFigure.setMotifs(motifs, mViewModel.get());
-		}
+  private void openMotifs() {
+    openMotifs(mMotifModel.getItems());
+  }
 
-		//System.err.println("open motif " + motifs.get(0).getName());
-	}
+  private void openMotif(Motif motif) {
+    openMotifs(CollectionUtils.asList(motif));
+  }
 
+  private void openMotifs(List<Motif> motifs) {
+    if (mViewModel.getRevComp()) {
+      mFigure.setMotifs(Motif.reverseComplement(motifs), mViewModel.get());
+    } else {
+      mFigure.setMotifs(motifs, mViewModel.get());
+    }
 
-	private void export() throws IOException, TranscoderException {
-		export(RecentFilesService.getInstance().getPwd());
-	}
+    // System.err.println("open motif " + motifs.get(0).getName());
+  }
 
-	private void export(Path pwd) throws IOException, TranscoderException {
-		Path file = Image.saveFile(this, pwd);
+  private void export() throws IOException, TranscoderException {
+    export(RecentFilesService.getInstance().getPwd());
+  }
 
-		if (file == null) {
-			return;
-		}
+  private void export(Path pwd) throws IOException, TranscoderException {
+    Path file = Image.saveFile(this, pwd);
 
-		if (FileUtils.exists(file)) {
-			ModernMessageDialog.createFileReplaceDialog(this, file, new ExportCallBack(file, pwd));
-		} else {
-			save(file);
-		}
-	}
+    if (file == null) {
+      return;
+    }
 
-	private void save(Path file) throws IOException, TranscoderException {
-		Image.write(mFigure, file);
+    if (FileUtils.exists(file)) {
+      ModernMessageDialog.createFileReplaceDialog(this, file, new ExportCallBack(file, pwd));
+    } else {
+      save(file);
+    }
+  }
 
-		ModernMessageDialog.createFileSavedDialog(this, file);
-	}
+  private void save(Path file) throws IOException, TranscoderException {
+    Image.write(mFigure, file);
+
+    ModernMessageDialog.createFileSavedDialog(this, file);
+  }
 }

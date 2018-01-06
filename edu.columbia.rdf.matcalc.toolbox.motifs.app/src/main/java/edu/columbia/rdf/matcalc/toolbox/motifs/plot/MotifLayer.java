@@ -14,74 +14,68 @@ import org.jebtk.modern.graphics.DrawingContext;
 
 public class MotifLayer extends PlotLayer {
 
-	private static final long serialVersionUID = 1L;
-	private String mSearchId;
+  private static final long serialVersionUID = 1L;
+  private String mSearchId;
 
-	public MotifLayer(String searchId) {
-		super("Bar Box");
-		
-		mSearchId = searchId;
-	}
+  public MotifLayer(String searchId) {
+    super("Bar Box");
 
-	@Override
-	public void plotLayer(Graphics2D g2,
-			DrawingContext context,
-			Figure figure,
-			SubFigure subFigure,
-			Axes axes,
-			Plot plot, 
-			DataFrame m) {
+    mSearchId = searchId;
+  }
 
-		//int dnaCol = DataFrame.findColumn(m, "DNA Sequence");
-		int mutationCol = DataFrame.findColumn(m, "Mutation");
+  @Override
+  public void plotLayer(Graphics2D g2, DrawingContext context, Figure figure, SubFigure subFigure, Axes axes, Plot plot,
+      DataFrame m) {
 
-		//String dna = m.getText(0, dnaCol);
+    // int dnaCol = DataFrame.findColumn(m, "DNA Sequence");
+    int mutationCol = DataFrame.findColumn(m, "Mutation");
 
-		//int l = dna.length();
+    // String dna = m.getText(0, dnaCol);
 
+    // int l = dna.length();
 
+    int y1 = axes.toPlotY1(0.6);
+    int y2 = axes.toPlotY1(0.4);
 
-		int y1 = axes.toPlotY1(0.6);
-		int y2 = axes.toPlotY1(0.4);
+    // int nameCol = DataFrame.findColumn(m, "Motif Name");
+    int motifCol = DataFrame.findColumn(m, "5 Sequence");
+    int offsetCol = DataFrame.findColumn(m, "Offset From Reference");
+    // int strandCol = DataFrame.findColumn(m, "Strand");
 
-		//int nameCol = DataFrame.findColumn(m, "Motif Name");
-		int motifCol = DataFrame.findColumn(m, "5 Sequence");
-		int offsetCol = DataFrame.findColumn(m, "Offset From Reference");
-		//int strandCol = DataFrame.findColumn(m, "Strand");
+    for (int i = 0; i < m.getRows(); ++i) {
+      String id = m.getText(i, mutationCol);
 
+      if (!id.equals(mSearchId)) {
+        continue;
+      }
 
-		for (int i = 0; i < m.getRows(); ++i) {
-			String id = m.getText(i, mutationCol);
-			
-			if (!id.equals(mSearchId)) {
-				continue;
-			}
-			
-			int offset = (int)m.getValue(i, offsetCol);
-			String motif = m.getText(i, motifCol);
-			
-			//String strand = m.getText(i, strandCol);
-			
-			//if (!strand.equals("+")) {
-			//	continue;
-			//}
+      int offset = (int) m.getValue(i, offsetCol);
+      String motif = m.getText(i, motifCol);
 
-			int x1 = axes.toPlotX1(offset);
-			int x2 = axes.toPlotX1(offset + motif.length());
+      // String strand = m.getText(i, strandCol);
 
-			//int h = SettingsService.getInstance().getAsInt("mutplot.plot.protein.height");
+      // if (!strand.equals("+")) {
+      // continue;
+      // }
 
-			//int y = PLOT_OFFSET.y + internalPlotSize.height - FEATURE_BLOCK_HEIGHT + (FEATURE_BLOCK_HEIGHT - h) / 2;
+      int x1 = axes.toPlotX1(offset);
+      int x2 = axes.toPlotX1(offset + motif.length());
 
-			g2.setColor(ColorUtils.tint(Color.RED, 0.5)); //ColorUtils.decodeHtmlColor(mProperty.getChildByPath("background/color").getValue()));
+      // int h =
+      // SettingsService.getInstance().getAsInt("mutplot.plot.protein.height");
 
-			//g2.fillRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
-			g2.fillRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
+      // int y = PLOT_OFFSET.y + internalPlotSize.height - FEATURE_BLOCK_HEIGHT +
+      // (FEATURE_BLOCK_HEIGHT - h) / 2;
 
-			g2.setColor(Color.RED);
+      g2.setColor(ColorUtils.tint(Color.RED, 0.5)); // ColorUtils.decodeHtmlColor(mProperty.getChildByPath("background/color").getValue()));
 
-			//g2.drawRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
-			g2.drawRect(x1, y1, x2 - x1, y2 - y1);
-		}
-	}		
+      // g2.fillRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
+      g2.fillRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
+
+      g2.setColor(Color.RED);
+
+      // g2.drawRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
+      g2.drawRect(x1, y1, x2 - x1, y2 - y1);
+    }
+  }
 }

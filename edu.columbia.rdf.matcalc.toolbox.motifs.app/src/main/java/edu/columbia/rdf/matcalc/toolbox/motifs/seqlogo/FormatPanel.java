@@ -15,57 +15,54 @@ import org.jebtk.modern.widget.ModernWidget;
 import org.jebtk.modern.window.ModernWindow;
 import edu.columbia.rdf.matcalc.figure.AxisControl;
 
-
 public class FormatPanel extends ModernWidget {
-	private static final long serialVersionUID = 1L;
-	
-	public FormatPanel(ModernWindow parent, Axes gp) {
-		
-		TabsModel groupTabsModel = new TabsModel();
-		TextTabs groupTabs = new TextTabs(groupTabsModel);
-		
+  private static final long serialVersionUID = 1L;
 
-		ModernCollapsePane rightPanel;
+  public FormatPanel(ModernWindow parent, Axes gp) {
 
-		Box box;
-		
-		Component element;
+    TabsModel groupTabsModel = new TabsModel();
+    TextTabs groupTabs = new TextTabs(groupTabsModel);
 
-		//
-		// Heat map
-		//
-		
-		
-		rightPanel = new ModernCollapsePane();
+    ModernCollapsePane rightPanel;
 
-		box = Box.createVerticalBox();
-		
-		element = new AxisControl(parent, gp.getX1Axis(), true);
+    Box box;
 
-		box.add(element);
-		
-		box.add(createVGap());
-		
-		rightPanel.addTab("X Axis", box, true);
-		
-		box = Box.createVerticalBox();
-		
-		element = new AxisControl(parent, gp.getY1Axis(), true);
+    Component element;
 
-		box.add(element);
-		
-		box.add(createVGap());
-		
-		rightPanel.addTab("Y Axis", box, true);
+    //
+    // Heat map
+    //
 
-		groupTabsModel.addTab("Axes", new ModernScrollPane(rightPanel));
+    rightPanel = new ModernCollapsePane();
 
-		add(groupTabs, BorderLayout.PAGE_START);
-		
-		TabsViewPanel viewPanel = new TabsViewPanel(groupTabsModel);
-		viewPanel.setBorder(BORDER);
-		add(viewPanel, BorderLayout.CENTER);
+    box = Box.createVerticalBox();
 
-		groupTabsModel.changeTab(0);
-	}
+    element = new AxisControl(parent, gp.getX1Axis(), true);
+
+    box.add(element);
+
+    box.add(createVGap());
+
+    rightPanel.addTab("X Axis", box, true);
+
+    box = Box.createVerticalBox();
+
+    element = new AxisControl(parent, gp.getY1Axis(), true);
+
+    box.add(element);
+
+    box.add(createVGap());
+
+    rightPanel.addTab("Y Axis", box, true);
+
+    groupTabsModel.addTab("Axes", new ModernScrollPane(rightPanel));
+
+    add(groupTabs, BorderLayout.PAGE_START);
+
+    TabsViewPanel viewPanel = new TabsViewPanel(groupTabsModel);
+    viewPanel.setBorder(BORDER);
+    add(viewPanel, BorderLayout.CENTER);
+
+    groupTabsModel.changeTab(0);
+  }
 }

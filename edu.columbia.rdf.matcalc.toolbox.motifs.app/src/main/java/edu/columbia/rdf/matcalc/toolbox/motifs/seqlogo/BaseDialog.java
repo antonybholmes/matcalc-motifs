@@ -22,116 +22,111 @@ import org.jebtk.modern.window.WindowWidgetFocusEvents;
  *
  */
 public class BaseDialog extends ModernDialogHelpWindow {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private ColorSwatchButton mColorAButton;
+  private ColorSwatchButton mColorAButton;
 
-	private ColorSwatchButton mColorCButton;
+  private ColorSwatchButton mColorCButton;
 
-	private ColorSwatchButton mColorGButton;
+  private ColorSwatchButton mColorGButton;
 
-	private ColorSwatchButton mColorTButton;
+  private ColorSwatchButton mColorTButton;
 
-	private ColorSwatchButton mColorNButton;
+  private ColorSwatchButton mColorNButton;
 
-	
-	public BaseDialog(ModernWindow parent) {
-		super(parent, "org.matcalc.toolbox.bio.motifs.seqlogo.dna-bases.help.url");
-		
-		setTitle("DNA Bases");
+  public BaseDialog(ModernWindow parent) {
+    super(parent, "org.matcalc.toolbox.bio.motifs.seqlogo.dna-bases.help.url");
 
-		setup();
+    setTitle("DNA Bases");
 
-		createUi();
-	}
+    setup();
 
-	private void setup() {
-		addWindowListener(new WindowWidgetFocusEvents(mOkButton));
-		
-		setSize(400, 380);
-		
-		UI.centerWindowToScreen(this);
-	}
+    createUi();
+  }
 
-	private final void createUi() {
-		mColorAButton = new ColorSwatchButton(mParent, 
-				DnaService.getInstance().getBaseAColor());
-		
-		mColorCButton = new ColorSwatchButton(mParent, 
-				DnaService.getInstance().getBaseCColor());
-		
-		mColorGButton = new ColorSwatchButton(mParent, 
-				DnaService.getInstance().getBaseGColor());
-		
-		mColorTButton = new ColorSwatchButton(mParent, 
-				DnaService.getInstance().getBaseTColor());
-		
-		mColorNButton = new ColorSwatchButton(mParent, 
-				DnaService.getInstance().getBaseNColor());
-		
-		VBox box = VBox.create();
-		
-		sectionHeader("Base Color", box);
-		
-		box.add(new HExpandBox("A", mColorAButton));
-		box.add(UI.createVGap(5));
-		box.add(new HExpandBox("C", mColorCButton));
-		box.add(UI.createVGap(5));
-		box.add(new HExpandBox("G", mColorGButton));
-		box.add(UI.createVGap(5));
-		box.add(new HExpandBox("T", mColorTButton));
-		box.add(UI.createVGap(5));
-		box.add(new HExpandBox("N", mColorNButton));
-		box.add(UI.createVGap(40));
-		
-		ModernButton button = new ModernDialogFlatButton("Defaults");
-		button.addClickListener(new ModernClickListener() {
+  private void setup() {
+    addWindowListener(new WindowWidgetFocusEvents(mOkButton));
 
-			@Override
-			public void clicked(ModernClickEvent e) {
-				resetToDefaults();
-			}});
-		
-		box.add(button);
-		
-		setDialogCardContent(box);
-	}
-	
-	/**
-	 * Reset the colors to their defaults.
-	 */
-	private void resetToDefaults() {
-		ModernDialogStatus status = ModernMessageDialog.createOkCancelWarningDialog(mParent, 
-				"The base colors will be reset to their default values.");
-		
-		if (status == ModernDialogStatus.OK) {
-			DnaService.getInstance().resetToDefaults();
-		
-			setColors();
-		}
-	}
-	
-	/**
-	 * Change the button color.
-	 */
-	private void setColors() {
-		mColorAButton.setSelectedColor(DnaService.getInstance().getBaseAColor());
-		mColorCButton.setSelectedColor(DnaService.getInstance().getBaseCColor());
-		mColorGButton.setSelectedColor(DnaService.getInstance().getBaseGColor());
-		mColorTButton.setSelectedColor(DnaService.getInstance().getBaseTColor());
-		mColorNButton.setSelectedColor(DnaService.getInstance().getBaseNColor());
-	}
+    setSize(400, 380);
 
-	@Override
-	public final void clicked(ModernClickEvent e) {
-		if (e.getMessage().equals(UI.BUTTON_OK)) {
-			DnaService.getInstance().setBaseAColor(mColorAButton.getSelectedColor());
-			DnaService.getInstance().setBaseCColor(mColorCButton.getSelectedColor());
-			DnaService.getInstance().setBaseGColor(mColorGButton.getSelectedColor());
-			DnaService.getInstance().setBaseTColor(mColorTButton.getSelectedColor());
-			DnaService.getInstance().setBaseNColor(mColorNButton.getSelectedColor());
-		}
-		
-		super.clicked(e);
-	}
+    UI.centerWindowToScreen(this);
+  }
+
+  private final void createUi() {
+    mColorAButton = new ColorSwatchButton(mParent, DnaService.getInstance().getBaseAColor());
+
+    mColorCButton = new ColorSwatchButton(mParent, DnaService.getInstance().getBaseCColor());
+
+    mColorGButton = new ColorSwatchButton(mParent, DnaService.getInstance().getBaseGColor());
+
+    mColorTButton = new ColorSwatchButton(mParent, DnaService.getInstance().getBaseTColor());
+
+    mColorNButton = new ColorSwatchButton(mParent, DnaService.getInstance().getBaseNColor());
+
+    VBox box = VBox.create();
+
+    sectionHeader("Base Color", box);
+
+    box.add(new HExpandBox("A", mColorAButton));
+    box.add(UI.createVGap(5));
+    box.add(new HExpandBox("C", mColorCButton));
+    box.add(UI.createVGap(5));
+    box.add(new HExpandBox("G", mColorGButton));
+    box.add(UI.createVGap(5));
+    box.add(new HExpandBox("T", mColorTButton));
+    box.add(UI.createVGap(5));
+    box.add(new HExpandBox("N", mColorNButton));
+    box.add(UI.createVGap(40));
+
+    ModernButton button = new ModernDialogFlatButton("Defaults");
+    button.addClickListener(new ModernClickListener() {
+
+      @Override
+      public void clicked(ModernClickEvent e) {
+        resetToDefaults();
+      }
+    });
+
+    box.add(button);
+
+    setDialogCardContent(box);
+  }
+
+  /**
+   * Reset the colors to their defaults.
+   */
+  private void resetToDefaults() {
+    ModernDialogStatus status = ModernMessageDialog.createOkCancelWarningDialog(mParent,
+        "The base colors will be reset to their default values.");
+
+    if (status == ModernDialogStatus.OK) {
+      DnaService.getInstance().resetToDefaults();
+
+      setColors();
+    }
+  }
+
+  /**
+   * Change the button color.
+   */
+  private void setColors() {
+    mColorAButton.setSelectedColor(DnaService.getInstance().getBaseAColor());
+    mColorCButton.setSelectedColor(DnaService.getInstance().getBaseCColor());
+    mColorGButton.setSelectedColor(DnaService.getInstance().getBaseGColor());
+    mColorTButton.setSelectedColor(DnaService.getInstance().getBaseTColor());
+    mColorNButton.setSelectedColor(DnaService.getInstance().getBaseNColor());
+  }
+
+  @Override
+  public final void clicked(ModernClickEvent e) {
+    if (e.getMessage().equals(UI.BUTTON_OK)) {
+      DnaService.getInstance().setBaseAColor(mColorAButton.getSelectedColor());
+      DnaService.getInstance().setBaseCColor(mColorCButton.getSelectedColor());
+      DnaService.getInstance().setBaseGColor(mColorGButton.getSelectedColor());
+      DnaService.getInstance().setBaseTColor(mColorTButton.getSelectedColor());
+      DnaService.getInstance().setBaseNColor(mColorNButton.getSelectedColor());
+    }
+
+    super.clicked(e);
+  }
 }

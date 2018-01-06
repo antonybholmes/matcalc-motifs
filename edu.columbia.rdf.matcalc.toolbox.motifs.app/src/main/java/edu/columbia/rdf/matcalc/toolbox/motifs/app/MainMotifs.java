@@ -18,21 +18,18 @@ import org.xml.sax.SAXException;
 import edu.columbia.rdf.matcalc.bio.BioModuleLoader;
 import edu.columbia.rdf.matcalc.toolbox.motifs.MotifsModule;
 
-
-
-
 public class MainMotifs {
-	public static final void main(String[] args) throws FontFormatException, IOException, SAXException, ParserConfigurationException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-		AppService.getInstance().setAppInfo("motifs");
-		
-		ThemeService.getInstance().setTheme(ColorTheme.PURPLE);
-		
-		
-		GuiAppInfo info = new MotifsInfo();
-		
-		
-		ModuleLoader ml = new BioModuleLoader().addModule(MotifsModule.class);
-		
-		MainMatCalc.main(info, ml);
-	}
+  public static final void main(String[] args)
+      throws FontFormatException, IOException, SAXException, ParserConfigurationException, ClassNotFoundException,
+      InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    AppService.getInstance().setAppInfo("motifs");
+
+    ThemeService.getInstance().setTheme(ColorTheme.PURPLE);
+
+    GuiAppInfo info = new MotifsInfo();
+
+    ModuleLoader ml = new BioModuleLoader().addModule(MotifsModule.class);
+
+    MainMatCalc.main(info, ml);
+  }
 }

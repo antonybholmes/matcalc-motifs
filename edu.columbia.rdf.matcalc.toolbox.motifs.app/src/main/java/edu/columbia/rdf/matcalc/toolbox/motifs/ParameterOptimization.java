@@ -28,330 +28,248 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 public class ParameterOptimization {
-	private static final Logger LOG = 
-			LoggerFactory.getLogger(ParameterOptimization.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ParameterOptimization.class);
 
-	public static void search(Motif motif,
-			Group foregroundGroup,
-			Group backgroundGroup,
-			int ext5p,
-			int ext3p,
-			String genome,
-			GenomeAssembly assembly,
-			GenesDb genesDb,
-			Path file) throws IOException, ParseException {
-		boolean mainVariants = false;
-		boolean peakWidths = false;
+  public static void search(Motif motif, Group foregroundGroup, Group backgroundGroup, int ext5p, int ext3p,
+      String genome, GenomeAssembly assembly, GenesDb genesDb, Path file) throws IOException, ParseException {
+    boolean mainVariants = false;
+    boolean peakWidths = false;
 
-		List<SearchRegion> foregroundRegions = MotifSearch.getSearchRegions(foregroundGroup,
-				ext5p, 
-				ext3p,
-				mainVariants,
-				peakWidths,
-				genesDb);
+    List<SearchRegion> foregroundRegions = MotifSearch.getSearchRegions(foregroundGroup, ext5p, ext3p, mainVariants,
+        peakWidths, genesDb);
 
-		//System.err.println("sdf " + sortedPeaks.size() + " " + foregroundRegions.size() + " "+ mPeakCount);
-		//System.exit(0);
+    // System.err.println("sdf " + sortedPeaks.size() + " " +
+    // foregroundRegions.size() + " "+ mPeakCount);
+    // System.exit(0);
 
-		List<SequenceRegion> foregroundSequences = 
-				SearchRegion.getSequences(genome, assembly, foregroundRegions);
+    List<SequenceRegion> foregroundSequences = SearchRegion.getSequences(genome, assembly, foregroundRegions);
 
-		List<SequenceRegion> foregroundRevCompSeqs =
-				SequenceRegion.reverseComplementRegion(foregroundSequences);
+    List<SequenceRegion> foregroundRevCompSeqs = SequenceRegion.reverseComplementRegion(foregroundSequences);
 
+    List<SearchRegion> backgroundRegions = MotifSearch.getSearchRegions(backgroundGroup, ext5p, ext3p, mainVariants,
+        peakWidths, genesDb);
 
-		List<SearchRegion> backgroundRegions = MotifSearch.getSearchRegions(backgroundGroup,
-				ext5p, 
-				ext3p,
-				mainVariants,
-				peakWidths,
-				genesDb);
+    List<SequenceRegion> backgroundSequences = SearchRegion.getSequences(genome, assembly, backgroundRegions);
 
-		List<SequenceRegion> backgroundSequences = 
-				SearchRegion.getSequences(genome, assembly, backgroundRegions);
+    List<SequenceRegion> backgroundRevCompSeqs = SequenceRegion.reverseComplementRegion(backgroundSequences);
 
-		List<SequenceRegion> backgroundRevCompSeqs = 
-				SequenceRegion.reverseComplementRegion(backgroundSequences);
+    boolean[] goldStandard = MotifSearch.createGoldStandard(foregroundSequences.size(), backgroundSequences.size());
 
+    int numSequences = foregroundSequences.size() + backgroundSequences.size();
 
-		boolean[] goldStandard = 
-				MotifSearch.createGoldStandard(foregroundSequences.size(), backgroundSequences.size());
+    double[] bestScores = new double[numSequences];
 
-		int numSequences = foregroundSequences.size() + backgroundSequences.size();
+    Hypergeometric hyg = new Hypergeometric();
 
-		double[] bestScores = new double[numSequences];
+    System.err.println(motif.getName());
 
-		Hypergeometric hyg = new Hypergeometric();
+    // lets set the threshold to be at least half the max
+    // score of the motif
 
+    BufferedWriter writer = FileUtils.newBufferedWriter(file);
 
-		System.err.println(motif.getName());
+    try {
+      for (double threshold = 0; threshold < 1.1; threshold += 0.1) {
+        writer.write(Double.toString(threshold));
+        writer.newLine();
 
-		// lets set the threshold to be at least half the max
-		// score of the motif
+        // for (double minSensitivity = 0; minSensitivity < 1.1; minSensitivity += 0.1)
+        // {
+        // for (double minSpecificity = 0; minSpecificity < 1.1; minSpecificity += 0.1)
+        // {
 
-		BufferedWriter writer = FileUtils.newBufferedWriter(file);
+        double t = MotifSearch.getMaxScore(motif) * threshold;
 
-		try {
-			for (double threshold = 0; threshold < 1.1; threshold += 0.1) {
-				writer.write(Double.toString(threshold));
-				writer.newLine();
+        int w = motif.getBaseCount();
 
-				//for (double minSensitivity = 0; minSensitivity < 1.1; minSensitivity += 0.1) {
-				//	for (double minSpecificity = 0; minSpecificity < 1.1; minSpecificity += 0.1) {
+        MotifSearch.bestScores(motif, w, foregroundSequences, foregroundRevCompSeqs, t, 0, bestScores);
 
-				double t = MotifSearch.getMaxScore(motif) * threshold;
+        MotifSearch.bestScores(motif, w, backgroundSequences, backgroundRevCompSeqs, t, foregroundSequences.size(),
+            bestScores);
 
-				int w = motif.getBaseCount();
+        List<Stats> allStats = MotifSearch.enrichment(bestScores, goldStandard);
 
-				MotifSearch.bestScores(motif,
-						w, 
-						foregroundSequences, 
-						foregroundRevCompSeqs,
-						t,
-						0,
-						bestScores);
+        for (Stats stats : allStats) {
+          writer.write(Double.toString(stats.threshold));
+          writer.write(TextUtils.TAB_DELIMITER);
+          writer.write(Double.toString(stats.specificity));
+          writer.write(TextUtils.TAB_DELIMITER);
+          writer.write(Double.toString(stats.sensitivity));
+          writer.newLine();
 
-				MotifSearch.bestScores(motif,
-						w, 
-						backgroundSequences, 
-						backgroundRevCompSeqs,
-						t,
-						foregroundSequences.size(),
-						bestScores);
+          LOG.debug("tp: {}, tn: {}, fp: {}, fn: {}, n: {}", stats.truePositive, stats.trueNegative,
+              stats.falsePositive, stats.falseNegative, numSequences);
 
-				List<Stats> allStats = MotifSearch.enrichment(bestScores, 
-						goldStandard);
+          // double p = hyg.cdfTwoTail(stats.truePositive,
+          // numSequences / 2,
+          // stats.truePositive + stats.falsePositive,
+          // numSequences);
 
+          double p = hyg.cdfOneTail(stats.truePositive, foregroundSequences.size(),
+              stats.truePositive + stats.falsePositive, numSequences);
 
-				for (Stats stats : allStats) {
-					writer.write(Double.toString(stats.threshold));
-					writer.write(TextUtils.TAB_DELIMITER);
-					writer.write(Double.toString(stats.specificity));
-					writer.write(TextUtils.TAB_DELIMITER);
-					writer.write(Double.toString(stats.sensitivity));
-					writer.newLine();
+          double minusLog10P = Statistics.minusLog10P(p);
 
-					LOG.debug("tp: {}, tn: {}, fp: {}, fn: {}, n: {}", 
-							stats.truePositive, 
-							stats.trueNegative, 
-							stats.falsePositive, 
-							stats.falseNegative, 
-							numSequences);
+          LOG.debug("HygP: {} {}", p, minusLog10P);
+        }
+      }
+    } finally {
+      writer.close();
+    }
+  }
 
-					//double p = hyg.cdfTwoTail(stats.truePositive, 
-					//		numSequences / 2, 
-					//		stats.truePositive + stats.falsePositive, 
-					//		numSequences);
+  public static void search2(Motif motif, Group foregroundGroup, Group backgroundGroup, int ext5p, int ext3p,
+      String genome, GenomeAssembly assembly, GenesDb genesDb) throws IOException, ParseException {
+    boolean mainVariants = false;
+    boolean peakWidths = false;
 
-					double p = hyg.cdfOneTail(stats.truePositive, 
-							foregroundSequences.size(), 
-							stats.truePositive + stats.falsePositive, 
-							numSequences);
+    List<SearchRegion> foregroundRegions = MotifSearch.getSearchRegions(foregroundGroup, ext5p, ext3p, mainVariants,
+        peakWidths, genesDb);
 
-					double minusLog10P = Statistics.minusLog10P(p);
+    // System.err.println("sdf " + sortedPeaks.size() + " " +
+    // foregroundRegions.size() + " "+ mPeakCount);
+    // System.exit(0);
 
-					LOG.debug("HygP: {} {}", p, minusLog10P);
-				}
-			}
-		} finally {
-			writer.close();
-		}
-	}
+    List<SequenceRegion> foregroundSequences = SearchRegion.getSequences(genome, assembly, foregroundRegions);
 
-	public static void search2(Motif motif,
-			Group foregroundGroup,
-			Group backgroundGroup,
-			int ext5p,
-			int ext3p,
-			String genome,
-			GenomeAssembly assembly,
-			GenesDb genesDb) throws IOException, ParseException {
-		boolean mainVariants = false;
-		boolean peakWidths = false;
+    List<SequenceRegion> foregroundRevCompSeqs = SequenceRegion.reverseComplementRegion(foregroundSequences);
 
-		List<SearchRegion> foregroundRegions = MotifSearch.getSearchRegions(foregroundGroup,
-				ext5p, 
-				ext3p,
-				mainVariants,
-				peakWidths,
-				genesDb);
+    List<SearchRegion> backgroundRegions = MotifSearch.getSearchRegions(backgroundGroup, ext5p, ext3p, mainVariants,
+        peakWidths, genesDb);
 
-		//System.err.println("sdf " + sortedPeaks.size() + " " + foregroundRegions.size() + " "+ mPeakCount);
-		//System.exit(0);
+    List<SequenceRegion> backgroundSequences = SearchRegion.getSequences(genome, assembly, backgroundRegions);
 
-		List<SequenceRegion> foregroundSequences = 
-				SearchRegion.getSequences(genome, assembly, foregroundRegions);
+    List<SequenceRegion> backgroundRevCompSeqs = SequenceRegion.reverseComplementRegion(backgroundSequences);
 
-		List<SequenceRegion> foregroundRevCompSeqs =
-				SequenceRegion.reverseComplementRegion(foregroundSequences);
+    boolean[] goldStandard = MotifSearch.createGoldStandard(foregroundSequences.size(), backgroundSequences.size());
 
+    int ns = foregroundSequences.size() + backgroundSequences.size();
 
-		List<SearchRegion> backgroundRegions = MotifSearch.getSearchRegions(backgroundGroup,
-				ext5p, 
-				ext3p,
-				mainVariants,
-				peakWidths,
-				genesDb);
+    double[] bestScores = new double[ns];
 
-		List<SequenceRegion> backgroundSequences = 
-				SearchRegion.getSequences(genome, assembly, backgroundRegions);
+    System.err.println(motif.getName() + " " + ns);
 
-		List<SequenceRegion> backgroundRevCompSeqs = 
-				SequenceRegion.reverseComplementRegion(backgroundSequences);
+    int w = motif.getBaseCount();
 
+    // Stats minStats = new Stats();
 
-		boolean[] goldStandard = 
-				MotifSearch.createGoldStandard(foregroundSequences.size(), backgroundSequences.size());
+    Hypergeometric hyg = new Hypergeometric();
 
-		int ns = foregroundSequences.size() + backgroundSequences.size();
+    double[][] errors = Mathematics.zeros(11, 11);
 
-		double[] bestScores = new double[ns];
+    for (int t = 0; t < 11; ++t) {
+      double threshold = MotifSearch.getMaxScore(motif) * t / 10.0;
 
-		System.err.println(motif.getName() + " " + ns);
+      Stats minStats = new Stats();
 
-		int w = motif.getBaseCount();
+      System.err.println("t\t" + t);
 
-		//Stats minStats = new Stats();
+      for (int minSpec = 1; minSpec < 11; ++minSpec) {
+        double minSpecificity = minSpec / 10.0;
 
-		Hypergeometric hyg = new Hypergeometric();
+        for (int minSens = 1; minSens < 11; ++minSens) {
+          double minSensitivity = minSens / 10.0;
 
-		
-		double[][] errors = Mathematics.zeros(11, 11);
-		
-		for (int t = 0; t < 11; ++t) {
-			double threshold = MotifSearch.getMaxScore(motif) * t / 10.0;
+          MotifSearch.bestScores(motif, w, foregroundSequences, foregroundRevCompSeqs, threshold, bestScores);
 
-			Stats minStats = new Stats();
-			
-			System.err.println("t\t" + t);
-			
-			for (int minSpec = 1; minSpec < 11; ++minSpec) {
-				double minSpecificity = minSpec / 10.0;
-				
-				for (int minSens = 1; minSens < 11; ++minSens) {
-					double minSensitivity = minSens / 10.0;
+          MotifSearch.bestScores(motif, w, backgroundSequences, backgroundRevCompSeqs, threshold,
+              foregroundSequences.size(), bestScores);
 
-					MotifSearch.bestScores(motif,
-							w, 
-							foregroundSequences, 
-							foregroundRevCompSeqs,
-							threshold,
-							bestScores);
+          Stats stats = MotifSearch.enrichmentByMinError(bestScores, goldStandard, minSensitivity, minSpecificity);
 
-					MotifSearch.bestScores(motif,
-							w, 
-							backgroundSequences, 
-							backgroundRevCompSeqs,
-							threshold,
-							foregroundSequences.size(),
-							bestScores);
+          // double p = hyg.cdfTwoTail(stats.truePositive, ns / 2, stats.truePositive +
+          // stats.falsePositive, ns);
+          double p = hyg.cdfOneTail(stats.truePositive, ns / 2, stats.truePositive + stats.falsePositive, ns);
 
-					Stats stats = MotifSearch.enrichmentByMinError(bestScores, 
-							goldStandard, 
-							minSensitivity, 
-							minSpecificity);
-					
-					//double p = hyg.cdfTwoTail(stats.truePositive, ns / 2, stats.truePositive + stats.falsePositive, ns);
-					double p = hyg.cdfOneTail(stats.truePositive, ns / 2, stats.truePositive + stats.falsePositive, ns);
-					
-					
-					errors[minSens][minSpec] = -Mathematics.log10(p); //stats.error;
-					
-					if (stats.error < minStats.error) {
-					//if (p < minStats.p) {
-						minStats = stats;
-						minStats.threshold = threshold;
-						minStats.p = p;
-					}
-					
-					//LOG.debug("Test: {} {} {} {}", c, 
-					//		threshold,
-					//		minSensitivity,
-					//		minSpecificity);
-				}
-			}
-			
-			/*
-			System.err.println("threshold\t" + threshold);
-			System.err.println("p\t" + minStats.p);
-			System.err.println("error\t" + minStats.error);
-			System.err.println("specificity\t" + minStats.specificity);
-			System.err.println("sensitivity\t" + minStats.sensitivity);
-			System.err.println("tp\t" + minStats.truePositive);
-			System.err.println("fp\t" + minStats.falsePositive);
-			System.err.println("tn\t" + minStats.trueNegative);
-			System.err.println("fn\t" + minStats.falseNegative);
-			*/
-			
-			BufferedWriter writer = FileUtils.newBufferedWriter(PathUtils.getPath(Motif.sanitize(TextUtils.paste("_", motif.getId(), "error", "threshold", t) + ".txt")));
-			
-			try {
-				writer.write("Sensitivity");
-				
-				for (int i = 0; i < errors[0].length; ++i) {
-					double minSpecificity = i / 10.0;
-					
-					writer.write(TextUtils.TAB_DELIMITER);
-					writer.write(Double.toString(minSpecificity));
-				}
-				
-				writer.newLine();
-				
-				for (int i = 0; i < errors.length; ++i) {
-					double minSensitivity = i / 10.0;
-					
-					writer.write(Double.toString(minSensitivity));
-					
-					for (int j = 0; j < errors[0].length; ++j) {
-						writer.write(TextUtils.TAB_DELIMITER);
-						writer.write(Double.toString(errors[i][j]));
-					}
-					
-					writer.newLine();
-				}
-			} finally {
-				writer.close();
-			}
-		}
-		
-		/*
-		System.err.println("Best Stats");
-		System.err.println("error " + minStats.error);
-		System.err.println("threshold " + minStats.threshold);
-		System.err.println("specificity " + minStats.specificity);
-		System.err.println("sensitivity " + minStats.sensitivity);
-		System.err.println("tp " + minStats.truePositive);
-		System.err.println("fp " + minStats.falsePositive);
-		System.err.println("tn " + minStats.trueNegative);
-		System.err.println("fn " + minStats.falseNegative);
-		*/
-	}
+          errors[minSens][minSpec] = -Mathematics.log10(p); // stats.error;
 
-	public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException, ParseException {
-		int ext5p = 200;
-		int ext3p = 200;
+          if (stats.error < minStats.error) {
+            // if (p < minStats.p) {
+            minStats = stats;
+            minStats.threshold = threshold;
+            minStats.p = p;
+          }
 
-		Motif motif = 
-				Motif.parseMotif(PathUtils.getPath("/ifs/home/cancer/Lab_RDF/Personal/Antony/motifs/database/Database/RDF/bcl6bs.motif"), "test");
+          // LOG.debug("Test: {} {} {} {}", c,
+          // threshold,
+          // minSensitivity,
+          // minSpecificity);
+        }
+      }
 
-		GenesDb genesDb = new GenesWeb(SettingsService.getInstance().getSetting("motifs.genome.remote-url").getAsUrl());
+      /*
+       * System.err.println("threshold\t" + threshold); System.err.println("p\t" +
+       * minStats.p); System.err.println("error\t" + minStats.error);
+       * System.err.println("specificity\t" + minStats.specificity);
+       * System.err.println("sensitivity\t" + minStats.sensitivity);
+       * System.err.println("tp\t" + minStats.truePositive); System.err.println("fp\t"
+       * + minStats.falsePositive); System.err.println("tn\t" +
+       * minStats.trueNegative); System.err.println("fn\t" + minStats.falseNegative);
+       */
 
-		GenomeAssembly assembly = 
-				new GenomeAssemblyWeb(new URL(SettingsService.getInstance().getAsString("motifs.dna.remote-url")));
+      BufferedWriter writer = FileUtils.newBufferedWriter(
+          PathUtils.getPath(Motif.sanitize(TextUtils.paste("_", motif.getId(), "error", "threshold", t) + ".txt")));
 
-		List<Group> groups = 
-				Group.loadGroups(PathUtils.getPath("/ifs/home/cancer/Lab_RDF/Personal/Antony/motifs/groups.mgrpx"));
+      try {
+        writer.write("Sensitivity");
 
-		Group foregroundGroup = groups.get(0);
-		Group backgroundGroup = groups.get(1);
+        for (int i = 0; i < errors[0].length; ++i) {
+          double minSpecificity = i / 10.0;
 
-		search2(motif,
-				foregroundGroup,
-				backgroundGroup,
-				ext5p,
-				ext3p,
-				GenomeAssembly.HG19,
-				assembly,
-				genesDb);
-	}
+          writer.write(TextUtils.TAB_DELIMITER);
+          writer.write(Double.toString(minSpecificity));
+        }
+
+        writer.newLine();
+
+        for (int i = 0; i < errors.length; ++i) {
+          double minSensitivity = i / 10.0;
+
+          writer.write(Double.toString(minSensitivity));
+
+          for (int j = 0; j < errors[0].length; ++j) {
+            writer.write(TextUtils.TAB_DELIMITER);
+            writer.write(Double.toString(errors[i][j]));
+          }
+
+          writer.newLine();
+        }
+      } finally {
+        writer.close();
+      }
+    }
+
+    /*
+     * System.err.println("Best Stats"); System.err.println("error " +
+     * minStats.error); System.err.println("threshold " + minStats.threshold);
+     * System.err.println("specificity " + minStats.specificity);
+     * System.err.println("sensitivity " + minStats.sensitivity);
+     * System.err.println("tp " + minStats.truePositive); System.err.println("fp " +
+     * minStats.falsePositive); System.err.println("tn " + minStats.trueNegative);
+     * System.err.println("fn " + minStats.falseNegative);
+     */
+  }
+
+  public static void main(String[] args)
+      throws SAXException, IOException, ParserConfigurationException, ParseException {
+    int ext5p = 200;
+    int ext3p = 200;
+
+    Motif motif = Motif.parseMotif(
+        PathUtils.getPath("/ifs/home/cancer/Lab_RDF/Personal/Antony/motifs/database/Database/RDF/bcl6bs.motif"),
+        "test");
+
+    GenesDb genesDb = new GenesWeb(SettingsService.getInstance().getSetting("motifs.genome.remote-url").getAsUrl());
+
+    GenomeAssembly assembly = new GenomeAssemblyWeb(
+        new URL(SettingsService.getInstance().getAsString("motifs.dna.remote-url")));
+
+    List<Group> groups = Group
+        .loadGroups(PathUtils.getPath("/ifs/home/cancer/Lab_RDF/Personal/Antony/motifs/groups.mgrpx"));
+
+    Group foregroundGroup = groups.get(0);
+    Group backgroundGroup = groups.get(1);
+
+    search2(motif, foregroundGroup, backgroundGroup, ext5p, ext3p, GenomeAssembly.HG19, assembly, genesDb);
+  }
 }

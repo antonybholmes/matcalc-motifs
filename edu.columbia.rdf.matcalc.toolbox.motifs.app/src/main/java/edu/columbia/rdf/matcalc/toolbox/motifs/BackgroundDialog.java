@@ -32,115 +32,110 @@ import org.jebtk.modern.text.ModernTextField;
 import org.jebtk.modern.window.ModernWindow;
 import org.jebtk.modern.window.WindowWidgetFocusEvents;
 
-
 public class BackgroundDialog extends ModernDialogTaskWindow {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private static final Dimension NAME_FIELD_SIZE = new Dimension(300, 24);
-	
-	ModernButtonWidget mCreateButton = new RibbonPanelButton("Create", 
-			UIService.getInstance().loadIcon(RunVectorIcon.class, 32));
+  private static final Dimension NAME_FIELD_SIZE = new Dimension(300, 24);
 
-	private GroupComboBox mForegroundCombo;
+  ModernButtonWidget mCreateButton = new RibbonPanelButton("Create",
+      UIService.getInstance().loadIcon(RunVectorIcon.class, 32));
 
-	private GroupsModel mRegionsModel;
-	
-	
-	private ColorSwatchButton mColorButton;
+  private GroupComboBox mForegroundCombo;
 
-	private ModernTextField mNameField = 
-			new ModernClipboardTextField("Name");
+  private GroupsModel mRegionsModel;
 
-	private RegionsTextArea mTextArea = new RegionsTextArea();
+  private ColorSwatchButton mColorButton;
 
-	private class CreateEvents implements ModernClickListener {
+  private ModernTextField mNameField = new ModernClipboardTextField("Name");
 
-		@Override
-		public void clicked(ModernClickEvent e) {
-			createBackground();
-		}
-		
-	}
-	
-	public BackgroundDialog(ModernWindow parent, 
-			GroupsModel regionGroupsModel) {
-		super(parent);
-		
-		mRegionsModel = regionGroupsModel;
+  private RegionsTextArea mTextArea = new RegionsTextArea();
 
-		
-		setTitle("Motif Search");
+  private class CreateEvents implements ModernClickListener {
 
-		setup();
+    @Override
+    public void clicked(ModernClickEvent e) {
+      createBackground();
+    }
 
-		createUi();
-	}
+  }
 
-	private void setup() {
-		addWindowListener(new WindowWidgetFocusEvents(mOkButton));
-		
-		mCreateButton.addClickListener(new CreateEvents());
-		
-		setSize(800, 700);
-		
-		UI.centerWindowToScreen(this);
-	}
+  public BackgroundDialog(ModernWindow parent, GroupsModel regionGroupsModel) {
+    super(parent);
 
-	private final void createUi() {
-		mColorButton = new ColorSwatchButton(mParent, Color.RED);
-		mForegroundCombo = new GroupComboBox(mRegionsModel);
-		
-		ModernPanel box = new ModernPanel();
+    mRegionsModel = regionGroupsModel;
 
-		Box box2 = VBox.create();
-		
-		Box box3 = HBox.create();
-		box3.add(new ModernAutoSizeLabel("Group", 100));
-		box3.add(mForegroundCombo);
-		box2.add(box3);
-		box2.add(ModernPanel.createVGap());
-		
-		box3 = HBox.create();
-		box3.add(new ModernAutoSizeLabel("Name", 100));
-		box3.add(new ModernTextBorderPanel(mNameField, NAME_FIELD_SIZE));
-		box2.add(box3);
-		box2.add(ModernPanel.createVGap());
-		
-		box3 = HBox.create();
-		box3.add(new ModernAutoSizeLabel("Color", 100));
-		box3.add(mColorButton);
-		box2.add(box3);
-		
-		box2.setBorder(ModernPanel.RIGHT_BORDER);
-		
-		ModernPanel panel = new ModernPanel();
-		
-		panel.add(box2, BorderLayout.CENTER);
-		panel.add(mCreateButton, BorderLayout.LINE_END);
-		panel.setBorder(BorderService.getInstance().createBottomBorder(10));
-		box.add(panel, BorderLayout.PAGE_START);
-		
-		ModernScrollPane scrollPane = new ModernScrollPane(mTextArea);
-		scrollPane.setVerticalScrollBarPolicy(ScrollBarPolicy.ALWAYS);
-		
-		box.add(scrollPane, BorderLayout.CENTER);
-	
-		setDialogCardContent(box);
-	}
-	
-	private void createBackground() {
-		
-	}
-	
-	public String getName() {
-		return this.mNameField.getText();
-	}
-	
-	public Color getColor() {
-		return mColorButton.getSelectedColor();
-	}
-	
-	public List<String> getRegions() {
-		return this.mTextArea.getLines();
-	}
+    setTitle("Motif Search");
+
+    setup();
+
+    createUi();
+  }
+
+  private void setup() {
+    addWindowListener(new WindowWidgetFocusEvents(mOkButton));
+
+    mCreateButton.addClickListener(new CreateEvents());
+
+    setSize(800, 700);
+
+    UI.centerWindowToScreen(this);
+  }
+
+  private final void createUi() {
+    mColorButton = new ColorSwatchButton(mParent, Color.RED);
+    mForegroundCombo = new GroupComboBox(mRegionsModel);
+
+    ModernPanel box = new ModernPanel();
+
+    Box box2 = VBox.create();
+
+    Box box3 = HBox.create();
+    box3.add(new ModernAutoSizeLabel("Group", 100));
+    box3.add(mForegroundCombo);
+    box2.add(box3);
+    box2.add(ModernPanel.createVGap());
+
+    box3 = HBox.create();
+    box3.add(new ModernAutoSizeLabel("Name", 100));
+    box3.add(new ModernTextBorderPanel(mNameField, NAME_FIELD_SIZE));
+    box2.add(box3);
+    box2.add(ModernPanel.createVGap());
+
+    box3 = HBox.create();
+    box3.add(new ModernAutoSizeLabel("Color", 100));
+    box3.add(mColorButton);
+    box2.add(box3);
+
+    box2.setBorder(ModernPanel.RIGHT_BORDER);
+
+    ModernPanel panel = new ModernPanel();
+
+    panel.add(box2, BorderLayout.CENTER);
+    panel.add(mCreateButton, BorderLayout.LINE_END);
+    panel.setBorder(BorderService.getInstance().createBottomBorder(10));
+    box.add(panel, BorderLayout.PAGE_START);
+
+    ModernScrollPane scrollPane = new ModernScrollPane(mTextArea);
+    scrollPane.setVerticalScrollBarPolicy(ScrollBarPolicy.ALWAYS);
+
+    box.add(scrollPane, BorderLayout.CENTER);
+
+    setDialogCardContent(box);
+  }
+
+  private void createBackground() {
+
+  }
+
+  public String getName() {
+    return this.mNameField.getText();
+  }
+
+  public Color getColor() {
+    return mColorButton.getSelectedColor();
+  }
+
+  public List<String> getRegions() {
+    return this.mTextArea.getLines();
+  }
 }

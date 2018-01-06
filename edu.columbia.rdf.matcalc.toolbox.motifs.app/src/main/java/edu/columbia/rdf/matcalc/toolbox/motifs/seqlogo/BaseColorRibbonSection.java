@@ -39,8 +39,6 @@ import org.jebtk.modern.ribbon.RibbonSection;
 import org.jebtk.modern.window.ModernRibbonWindow;
 import org.jebtk.modern.window.ModernWindow;
 
-
-
 /**
  * Allows user to select a color map.
  *
@@ -49,142 +47,140 @@ import org.jebtk.modern.window.ModernWindow;
  */
 public class BaseColorRibbonSection extends RibbonSection {
 
-	/**
-	 * The constant serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
+  /**
+   * The constant serialVersionUID.
+   */
+  private static final long serialVersionUID = 1L;
 
-	private BaseButton mColorAButton;
-	
-	private BaseButton mColorCButton;
-	
-	private BaseButton mColorGButton;
-	
-	private BaseButton mColorTButton;
-	
-	private BaseButton mColorNButton;
+  private BaseButton mColorAButton;
 
-	private RibbonLargeButton mDefaultsButton;
+  private BaseButton mColorCButton;
 
-	private ModernWindow mParent;
-	
-	
-	/**
-	 * Instantiates a new genomic region ribbon section.
-	 *
-	 * @param model the model
-	 * @param genomeModel the genome model
-	 * @param sizes the sizes
-	 * @param genes the genes
-	 */
-	public BaseColorRibbonSection(ModernRibbonWindow parent) {
-		super(parent.getRibbon(), "Base Color");
-		
-		mParent = parent;
-		
-		mColorAButton = new BaseButton(parent, 
-				DnaService.getInstance().getBaseAColor(), 
-				"A");
-		
-		mColorCButton = new BaseButton(parent, 
-				DnaService.getInstance().getBaseCColor(),
-				"C");
-		
-		mColorGButton = new BaseButton(parent, 
-				DnaService.getInstance().getBaseGColor(),
-				"G");
-		
-		mColorTButton = new BaseButton(parent, 
-				DnaService.getInstance().getBaseTColor(),
-				"T");
-		
-		mColorNButton = new BaseButton(parent, 
-				DnaService.getInstance().getBaseNColor(),
-				"N");
-		
-		mDefaultsButton = new RibbonLargeButton("Defaults", 
-				UIService.getInstance().loadIcon("reset", 24));
+  private BaseButton mColorGButton;
 
-		//Box box = new RibbonStripContainer();
-		
-		//box.add(new ModernAutoSizeLabel("A"));
-		//box.add(UI.createHGap(5));
-		add(mColorAButton);
-		
-		//add(UI.createHGap(10));
-		//box.add(new ModernAutoSizeLabel("C"));
-		//box.add(UI.createHGap(5));
-		add(mColorCButton);
-		
-		//add(UI.createHGap(10));
-		//box.add(new ModernAutoSizeLabel("G"));
-		//box.add(UI.createHGap(5));
-		add(mColorGButton);
-		
-		//add(UI.createHGap(10));
-		//box.add(new ModernAutoSizeLabel("T"));
-		//box.add(UI.createHGap(5));
-		add(mColorTButton);
-		
-		//add(UI.createHGap(10));
-		//box.add(new ModernAutoSizeLabel("N"));
-		//box.add(UI.createHGap(5));
-		add(mColorNButton);
-		
-		add(UI.createHGap(10));
-		add(mDefaultsButton);
-		
-		//add(box);
-		
-		mColorAButton.addClickListener(new ModernClickListener() {
-			@Override
-			public void clicked(ModernClickEvent e) {
-				DnaService.getInstance().setBaseAColor(mColorAButton.getSelectedColor());
-				fireClicked();
-			}});
-		
-		mColorCButton.addClickListener(new ModernClickListener() {
-			@Override
-			public void clicked(ModernClickEvent e) {
-				DnaService.getInstance().setBaseCColor(mColorCButton.getSelectedColor());
-				fireClicked();
-			}});
-		
-		mColorGButton.addClickListener(new ModernClickListener() {
-			@Override
-			public void clicked(ModernClickEvent e) {
-				DnaService.getInstance().setBaseGColor(mColorGButton.getSelectedColor());
-				fireClicked();
-			}});
-		
-		mColorTButton.addClickListener(new ModernClickListener() {
-			@Override
-			public void clicked(ModernClickEvent e) {
-				DnaService.getInstance().setBaseTColor(mColorTButton.getSelectedColor());
-				fireClicked();
-			}});
-		
-		mColorNButton.addClickListener(new ModernClickListener() {
-			@Override
-			public void clicked(ModernClickEvent e) {
-				DnaService.getInstance().setBaseNColor(mColorNButton.getSelectedColor());
-				fireClicked();
-			}});
-		
-		mDefaultsButton.addClickListener(new ModernClickListener() {
-			@Override
-			public void clicked(ModernClickEvent e) {
-				resetToDefaults();
-			}});
-	}
-	
-	private void resetToDefaults() {
-		ModernDialogStatus status = ModernMessageDialog.createOkCancelWarningDialog(mParent, 
-				"The base colors will be reset to their default values.");
-		
-		if (status == ModernDialogStatus.OK) {
-			DnaService.getInstance().resetToDefaults();
-			fireClicked();
-		}
-	}
+  private BaseButton mColorTButton;
+
+  private BaseButton mColorNButton;
+
+  private RibbonLargeButton mDefaultsButton;
+
+  private ModernWindow mParent;
+
+  /**
+   * Instantiates a new genomic region ribbon section.
+   *
+   * @param model
+   *          the model
+   * @param genomeModel
+   *          the genome model
+   * @param sizes
+   *          the sizes
+   * @param genes
+   *          the genes
+   */
+  public BaseColorRibbonSection(ModernRibbonWindow parent) {
+    super(parent.getRibbon(), "Base Color");
+
+    mParent = parent;
+
+    mColorAButton = new BaseButton(parent, DnaService.getInstance().getBaseAColor(), "A");
+
+    mColorCButton = new BaseButton(parent, DnaService.getInstance().getBaseCColor(), "C");
+
+    mColorGButton = new BaseButton(parent, DnaService.getInstance().getBaseGColor(), "G");
+
+    mColorTButton = new BaseButton(parent, DnaService.getInstance().getBaseTColor(), "T");
+
+    mColorNButton = new BaseButton(parent, DnaService.getInstance().getBaseNColor(), "N");
+
+    mDefaultsButton = new RibbonLargeButton("Defaults", UIService.getInstance().loadIcon("reset", 24));
+
+    // Box box = new RibbonStripContainer();
+
+    // box.add(new ModernAutoSizeLabel("A"));
+    // box.add(UI.createHGap(5));
+    add(mColorAButton);
+
+    // add(UI.createHGap(10));
+    // box.add(new ModernAutoSizeLabel("C"));
+    // box.add(UI.createHGap(5));
+    add(mColorCButton);
+
+    // add(UI.createHGap(10));
+    // box.add(new ModernAutoSizeLabel("G"));
+    // box.add(UI.createHGap(5));
+    add(mColorGButton);
+
+    // add(UI.createHGap(10));
+    // box.add(new ModernAutoSizeLabel("T"));
+    // box.add(UI.createHGap(5));
+    add(mColorTButton);
+
+    // add(UI.createHGap(10));
+    // box.add(new ModernAutoSizeLabel("N"));
+    // box.add(UI.createHGap(5));
+    add(mColorNButton);
+
+    add(UI.createHGap(10));
+    add(mDefaultsButton);
+
+    // add(box);
+
+    mColorAButton.addClickListener(new ModernClickListener() {
+      @Override
+      public void clicked(ModernClickEvent e) {
+        DnaService.getInstance().setBaseAColor(mColorAButton.getSelectedColor());
+        fireClicked();
+      }
+    });
+
+    mColorCButton.addClickListener(new ModernClickListener() {
+      @Override
+      public void clicked(ModernClickEvent e) {
+        DnaService.getInstance().setBaseCColor(mColorCButton.getSelectedColor());
+        fireClicked();
+      }
+    });
+
+    mColorGButton.addClickListener(new ModernClickListener() {
+      @Override
+      public void clicked(ModernClickEvent e) {
+        DnaService.getInstance().setBaseGColor(mColorGButton.getSelectedColor());
+        fireClicked();
+      }
+    });
+
+    mColorTButton.addClickListener(new ModernClickListener() {
+      @Override
+      public void clicked(ModernClickEvent e) {
+        DnaService.getInstance().setBaseTColor(mColorTButton.getSelectedColor());
+        fireClicked();
+      }
+    });
+
+    mColorNButton.addClickListener(new ModernClickListener() {
+      @Override
+      public void clicked(ModernClickEvent e) {
+        DnaService.getInstance().setBaseNColor(mColorNButton.getSelectedColor());
+        fireClicked();
+      }
+    });
+
+    mDefaultsButton.addClickListener(new ModernClickListener() {
+      @Override
+      public void clicked(ModernClickEvent e) {
+        resetToDefaults();
+      }
+    });
+  }
+
+  private void resetToDefaults() {
+    ModernDialogStatus status = ModernMessageDialog.createOkCancelWarningDialog(mParent,
+        "The base colors will be reset to their default values.");
+
+    if (status == ModernDialogStatus.OK) {
+      DnaService.getInstance().resetToDefaults();
+      fireClicked();
+    }
+  }
 }

@@ -19,52 +19,52 @@ import org.jebtk.modern.window.WindowWidgetFocusEvents;
  *
  */
 public class ExportMotifFastaDialog extends ModernDialogTaskWindow {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private ModernRadioButton mCheckMotifs = 
-			new ModernRadioButton("Motifs", true);
-	
-	private ModernRadioButton mCheckRegions = new ModernRadioButton("Regions");
+  private ModernRadioButton mCheckMotifs = new ModernRadioButton("Motifs", true);
 
-	public ExportMotifFastaDialog(ModernWindow parent) {
-		super(parent);
+  private ModernRadioButton mCheckRegions = new ModernRadioButton("Regions");
 
-		setTitle("Export Motifs");
+  public ExportMotifFastaDialog(ModernWindow parent) {
+    super(parent);
 
-		setup();
+    setTitle("Export Motifs");
 
-		createUi();
-	}
+    setup();
 
-	private void setup() {
-		addWindowListener(new WindowWidgetFocusEvents(mOkButton));
+    createUi();
+  }
 
-		setSize(new Dimension(320, 240));
+  private void setup() {
+    addWindowListener(new WindowWidgetFocusEvents(mOkButton));
 
-		UI.centerWindowToScreen(this);
-	}
+    setSize(new Dimension(320, 240));
 
-	private final void createUi() {
-		//this.getContentPane().add(new JLabel("Change " + getProductDetails().getProductName() + " settings", JLabel.LEFT), BorderLayout.PAGE_START);
+    UI.centerWindowToScreen(this);
+  }
 
-		Box box = VBox.create();
+  private final void createUi() {
+    // this.getContentPane().add(new JLabel("Change " +
+    // getProductDetails().getProductName() + " settings", JLabel.LEFT),
+    // BorderLayout.PAGE_START);
 
-		box.add(mCheckMotifs);
+    Box box = VBox.create();
 
-		box.add(UI.createVGap(10));
+    box.add(mCheckMotifs);
 
-		box.add(mCheckRegions);
+    box.add(UI.createVGap(10));
 
-		setDialogCardContent(box);
+    box.add(mCheckRegions);
 
+    setDialogCardContent(box);
 
-		ModernButtonGroup group = new ModernButtonGroup();
+    ModernButtonGroup group = new ModernButtonGroup();
 
-		group.add(mCheckMotifs);
-		group.add(mCheckRegions);
-	}
+    group.add(mCheckMotifs);
+    group.add(mCheckRegions);
+  }
 
-	public boolean getMotifWise() {
-		return mCheckMotifs.isSelected();
-	}
+  public boolean getMotifWise() {
+    return mCheckMotifs.isSelected();
+  }
 }

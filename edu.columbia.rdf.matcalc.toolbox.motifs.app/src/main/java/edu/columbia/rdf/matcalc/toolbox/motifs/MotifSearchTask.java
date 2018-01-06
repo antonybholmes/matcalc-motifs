@@ -21,311 +21,251 @@ import edu.columbia.rdf.matcalc.bio.SequenceUtils;
 
 public class MotifSearchTask extends SwingWorker<Void, Void> {
 
-	private DataFrame mNewModel;
-	private List<Motif> mMotifs;
-	private double mThreshold;
-	private MainMatCalcWindow mParent;
+  private DataFrame mNewModel;
+  private List<Motif> mMotifs;
+  private double mThreshold;
+  private MainMatCalcWindow mParent;
 
-	public static class SearchResult {
-		public SearchRegion region;
-		public Motif motif;
-		public BindingSite site;
-		public int offset;
-		public Region motifLocation;
-		public int index;
-	}
+  public static class SearchResult {
+    public SearchRegion region;
+    public Motif motif;
+    public BindingSite site;
+    public int offset;
+    public Region motifLocation;
+    public int index;
+  }
 
-	public MotifSearchTask(MainMatCalcWindow parent,
-			List<Motif> motifs,
-			double threshold) {
-		mParent = parent;
-		mMotifs = motifs;
-		mThreshold = threshold;
-	}
+  public MotifSearchTask(MainMatCalcWindow parent, List<Motif> motifs, double threshold) {
+    mParent = parent;
+    mMotifs = motifs;
+    mThreshold = threshold;
+  }
 
-	@Override
-	public Void doInBackground() {
-		try {
-			mNewModel = motifs();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+  @Override
+  public Void doInBackground() {
+    try {
+      mNewModel = motifs();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
-		return null;
-	}
+    return null;
+  }
 
-	@Override
-	public void done() {
-		if (mNewModel == null) {
-			ModernMessageDialog.createWarningDialog(mParent, 
-					"No motifs were found.");
+  @Override
+  public void done() {
+    if (mNewModel == null) {
+      ModernMessageDialog.createWarningDialog(mParent, "No motifs were found.");
 
-			return;
-		}
-		
-		mParent.addToHistory("Motif Search", mNewModel);
-	}
+      return;
+    }
 
-	private DataFrame motifs() throws IOException {
-		DataFrame m = mParent.getCurrentMatrix();
+    mParent.addToHistory("Motif Search", mNewModel);
+  }
 
-		List<SearchSequence> sequences = SequenceUtils.matrixToSequences(m);
+  private DataFrame motifs() throws IOException {
+    DataFrame m = mParent.getCurrentMatrix();
 
-		if (sequences.size() == 0) {
-			ModernMessageDialog.createWarningDialog(mParent, 
-					"There are no suitable DNA sequences in the table.");
+    List<SearchSequence> sequences = SequenceUtils.matrixToSequences(m);
 
-			return null;
-		}
+    if (sequences.size() == 0) {
+      ModernMessageDialog.createWarningDialog(mParent, "There are no suitable DNA sequences in the table.");
 
-		List<SearchSequence> revCompSeqs =
-				SearchSequence.reverseComplement(sequences);
+      return null;
+    }
 
-		return createMotifsTable(mMotifs, 
-				m,
-				sequences,
-				revCompSeqs,
-				mThreshold);
-	}
+    List<SearchSequence> revCompSeqs = SearchSequence.reverseComplement(sequences);
 
-	private static DataFrame createMotifsTable(List<Motif> motifs,
-			DataFrame matrix,
-			List<SearchSequence> sequences,
-			List<SearchSequence> revCompSeqs,
-			double threshold) throws IOException {
+    return createMotifsTable(mMotifs, m, sequences, revCompSeqs, mThreshold);
+  }
 
-		/*
-		// The header
-		cell = row.createCell(c++);
-		cell.setCellValue("Feature");
-		cell = row.createCell(c++);
-		cell.setCellValue("Feature Strand");
-		cell = row.createCell(c++);
-		cell.setCellValue("Feature Region");
-		cell = row.createCell(c++);
-		cell.setCellValue("Reference Location");
-		cell = row.createCell(c++);
-		cell.setCellValue("5' Offset");
-		cell = row.createCell(c++);
-		cell.setCellValue("3' Offset");
-		cell = row.createCell(c++);
-		cell.setCellValue("Search Region");
-		cell = row.createCell(c++);
-		cell.setCellValue("Motif Name");
-		cell = row.createCell(c++);
-		cell.setCellValue("Motif ID");
-		cell = row.createCell(c++);
-		cell.setCellValue("Motif Database");
-		cell = row.createCell(c++);
-		cell.setCellValue("5' Sequence");
-		cell = row.createCell(c++);
-		cell.setCellValue("3' Sequence");
-		cell = row.createCell(c++);
-		cell.setCellValue("Score");
-		cell = row.createCell(c++);
-		cell.setCellValue("Max Score");
-		cell = row.createCell(c++);
-		cell.setCellValue("Strand");
-		cell = row.createCell(c++);
-		cell.setCellValue("Offset From Reference");
-		cell = row.createCell(c++);
-		cell.setCellValue("Motif Location");
-		 */
+  private static DataFrame createMotifsTable(List<Motif> motifs, DataFrame matrix, List<SearchSequence> sequences,
+      List<SearchSequence> revCompSeqs, double threshold) throws IOException {
 
+    /*
+     * // The header cell = row.createCell(c++); cell.setCellValue("Feature"); cell
+     * = row.createCell(c++); cell.setCellValue("Feature Strand"); cell =
+     * row.createCell(c++); cell.setCellValue("Feature Region"); cell =
+     * row.createCell(c++); cell.setCellValue("Reference Location"); cell =
+     * row.createCell(c++); cell.setCellValue("5' Offset"); cell =
+     * row.createCell(c++); cell.setCellValue("3' Offset"); cell =
+     * row.createCell(c++); cell.setCellValue("Search Region"); cell =
+     * row.createCell(c++); cell.setCellValue("Motif Name"); cell =
+     * row.createCell(c++); cell.setCellValue("Motif ID"); cell =
+     * row.createCell(c++); cell.setCellValue("Motif Database"); cell =
+     * row.createCell(c++); cell.setCellValue("5' Sequence"); cell =
+     * row.createCell(c++); cell.setCellValue("3' Sequence"); cell =
+     * row.createCell(c++); cell.setCellValue("Score"); cell = row.createCell(c++);
+     * cell.setCellValue("Max Score"); cell = row.createCell(c++);
+     * cell.setCellValue("Strand"); cell = row.createCell(c++);
+     * cell.setCellValue("Offset From Reference"); cell = row.createCell(c++);
+     * cell.setCellValue("Motif Location");
+     */
 
-		// Use a buffer that can accommodate all scores regardless of
-		// of sequence length. 4096 should cover most instances
+    // Use a buffer that can accommodate all scores regardless of
+    // of sequence length. 4096 should cover most instances
 
-		double[] llkrf = new double[MotifSearch.BUFFER_SIZE];
-		double[] llkrr = new double[MotifSearch.BUFFER_SIZE];
+    double[] llkrf = new double[MotifSearch.BUFFER_SIZE];
+    double[] llkrr = new double[MotifSearch.BUFFER_SIZE];
 
-		// lets keep all motifs for the moment
+    // lets keep all motifs for the moment
 
-		List<SearchResult> searchResults = new ArrayList<SearchResult>();
+    List<SearchResult> searchResults = new ArrayList<SearchResult>();
 
-		// add up to the 
-		for (int i = 0; i < sequences.size(); ++i) {
-			SearchSequence s = sequences.get(i);
+    // add up to the
+    for (int i = 0; i < sequences.size(); ++i) {
+      SearchSequence s = sequences.get(i);
 
-			char[] seq = s.getDna().toArray();
-			//char[] revCompSeq = revCompSeqs.get(i).getArray();
+      char[] seq = s.getDna().toArray();
+      // char[] revCompSeq = revCompSeqs.get(i).getArray();
 
-			byte[] iSeq = s.getDna().toIndex();
-			byte[] iRevCompSeq = revCompSeqs.get(i).getDna().toIndex();
+      byte[] iSeq = s.getDna().toIndex();
+      byte[] iRevCompSeq = revCompSeqs.get(i).getDna().toIndex();
 
-			int n = seq.length;
+      int n = seq.length;
 
-			for (Motif motif : motifs) {
-				double t = threshold * MotifSearch.getMaxScore(motif);
+      for (Motif motif : motifs) {
+        double t = threshold * MotifSearch.getMaxScore(motif);
 
-				int w = motif.getBaseCount();
+        int w = motif.getBaseCount();
 
-				double bgscore = motif.getBgPwm(); //Mathematics.repeatArray(m.getBgPwm(), n);
+        double bgscore = motif.getBgPwm(); // Mathematics.repeatArray(m.getBgPwm(), n);
 
-				double[][] pwm = motif.getPwm();
+        double[][] pwm = motif.getPwm();
 
+        // SearchRegion region = searchRegions.get(i);
 
+        MotifSearch.search(iSeq, iRevCompSeq, n, pwm, bgscore, w, t, llkrf, llkrr);
 
-				//SearchRegion region = searchRegions.get(i);
+        List<BindingSite> sites = MotifSearch.getBindingSites(seq, n, w, llkrf, llkrr);
 
-				MotifSearch.search(iSeq, 
-						iRevCompSeq,
-						n,
-						pwm, 
-						bgscore,
-						w,
-						t,
-						llkrf, 
-						llkrr);
+        sites = BindingSite.sortByScore(sites);
 
-				List<BindingSite> sites = 
-						MotifSearch.getBindingSites(seq, n, w, llkrf, llkrr);
+        for (BindingSite site : sites) {
+          // Sequence showSequence = MotifSearch.showScores(sequence,
+          // site,
+          // n);
 
-				sites = BindingSite.sortByScore(sites);
+          // The genomic location of the motif start
 
-				for (BindingSite site : sites) {
-					//Sequence showSequence = MotifSearch.showScores(sequence, 
-					//		site,
-					//		n);
+          // int motifStart =
+          // region.getSearchRegion().getStart() + site.getOffset();
 
-					// The genomic location of the motif start
+          // The offset from the reference/mid point
+          // int offsetFromReference =
+          // motifStart - region.getReferencePoint().getStart();
 
-					//int motifStart = 
-					//		region.getSearchRegion().getStart() + site.getOffset();
+          Region motifLocation = null;
 
-					// The offset from the reference/mid point
-					//int offsetFromReference = 
-					//		motifStart - region.getReferencePoint().getStart();
+          if (s.getType() == SearchSequenceType.GENOMIC) {
+            GenomicRegion r = s.getRegion();
 
-					Region motifLocation = null;
+            motifLocation = new GenomicRegion(r.getChr(), r.getStart() + site.getOffset(),
+                r.getStart() + site.getOffset() + site.getSequence().length() - 1);
+          } else {
+            motifLocation = new Region(site.getOffset(), site.getOffset() + site.getSequence().length() - 1);
+          }
 
-					if (s.getType() == SearchSequenceType.GENOMIC) {
-						GenomicRegion r = s.getRegion();
+          SearchResult sr = new SearchResult();
 
-						motifLocation = new GenomicRegion(r.getChr(),
-								r.getStart() + site.getOffset(),
-								r.getStart() + site.getOffset() + site.getSequence().length() - 1);
-					} else {
-						motifLocation = new Region(site.getOffset(), 
-								site.getOffset() + site.getSequence().length() - 1);
-					}
+          // sr.region = region;
+          sr.index = i;
+          sr.motif = motif;
+          sr.site = site;
+          // sr.offset = offsetFromReference;
+          sr.motifLocation = motifLocation;
 
-					SearchResult sr = new SearchResult();
+          searchResults.add(sr);
 
-					//sr.region = region;
-					sr.index = i;
-					sr.motif = motif;
-					sr.site = site;
-					//sr.offset = offsetFromReference;
-					sr.motifLocation = motifLocation;
+          /*
+           * cell = row.createCell(c++); cell.setCellValue(region.getName()); cell =
+           * row.createCell(c++);
+           * cell.setCellValue(Character.toString(region.getStrand())); cell =
+           * row.createCell(c++); cell.setCellValue(region.getRegion().toString()); cell =
+           * row.createCell(c++);
+           * cell.setCellValue(region.getReferencePoint().toString()); cell =
+           * row.createCell(c++); cell.setCellValue(region.getExt5p()); cell =
+           * row.createCell(c++); cell.setCellValue(region.getExt3p()); cell =
+           * row.createCell(c++); cell.setCellValue(region.getSearchRegion().toString());
+           * cell = row.createCell(c++); cell.setCellValue(m.getName()); cell =
+           * row.createCell(c++); cell.setCellValue(m.getId()); cell =
+           * row.createCell(c++); cell.setCellValue(m.getDatabase()); cell =
+           * row.createCell(c++); cell.setCellValue(site.getSequence()); cell =
+           * row.createCell(c++);
+           * cell.setCellValue(Sequence.reverseComplement(site.getSequence())); cell =
+           * row.createCell(c++); cell.setCellValue(TextUtils.format2DP(site.getScore()));
+           * cell = row.createCell(c++);
+           * cell.setCellValue(TextUtils.format2DP(MotifSearch.getMaxScore(m))); cell =
+           * row.createCell(c++); cell.setCellValue(Character.toString(site.getStrand()));
+           * cell = row.createCell(c++); cell.setCellValue(offsetFromReference); cell =
+           * row.createCell(c++); cell.setCellValue(motifLocation.toString()); //cell =
+           * row.createCell(15); //cell.setCellValue(showSequence.getBases());
+           * 
+           * ++r;
+           */
+        }
+      }
+    }
 
-					searchResults.add(sr);
+    if (searchResults.size() == 0) {
+      return null;
+    }
 
-					/*
-					cell = row.createCell(c++);
-					cell.setCellValue(region.getName());
-					cell = row.createCell(c++);
-					cell.setCellValue(Character.toString(region.getStrand()));
-					cell = row.createCell(c++);
-					cell.setCellValue(region.getRegion().toString());
-					cell = row.createCell(c++);
-					cell.setCellValue(region.getReferencePoint().toString());
-					cell = row.createCell(c++);
-					cell.setCellValue(region.getExt5p());
-					cell = row.createCell(c++);
-					cell.setCellValue(region.getExt3p());
-					cell = row.createCell(c++);
-					cell.setCellValue(region.getSearchRegion().toString());
-					cell = row.createCell(c++);
-					cell.setCellValue(m.getName());
-					cell = row.createCell(c++);
-					cell.setCellValue(m.getId());
-					cell = row.createCell(c++);
-					cell.setCellValue(m.getDatabase());
-					cell = row.createCell(c++);
-					cell.setCellValue(site.getSequence());
-					cell = row.createCell(c++);
-					cell.setCellValue(Sequence.reverseComplement(site.getSequence()));
-					cell = row.createCell(c++);
-					cell.setCellValue(TextUtils.format2DP(site.getScore()));
-					cell = row.createCell(c++);
-					cell.setCellValue(TextUtils.format2DP(MotifSearch.getMaxScore(m)));
-					cell = row.createCell(c++);
-					cell.setCellValue(Character.toString(site.getStrand()));
-					cell = row.createCell(c++);
-					cell.setCellValue(offsetFromReference);
-					cell = row.createCell(c++);
-					cell.setCellValue(motifLocation.toString());
-					//cell = row.createCell(15);
-					//cell.setCellValue(showSequence.getBases());
+    DataFrame ret = DataFrame.createDataFrame(searchResults.size(), matrix.getCols() + 10);
 
-					++r;
-					 */
-				}
-			}
-		}
-		
-		if (searchResults.size() == 0) {
-			return null;
-		}
+    DataFrame.copyColumnNames(matrix, ret);
 
-		DataFrame ret = 
-				DataFrame.createDataFrame(searchResults.size(), matrix.getCols() + 10);
+    int c = matrix.getCols();
 
-		DataFrame.copyColumnNames(matrix, ret);
+    // ret.setColumnName(0, "Feature");
+    // ret.setColumnName(1, "Feature Strand");
+    // ret.setColumnName(2, "Feature Region");
+    // ret.setColumnName(3, "Reference Location");
+    // ret.setColumnName(4, "5' Offset");
+    // ret.setColumnName(5, "3' Offset");
+    // ret.setColumnName(6, "Search Region");
+    ret.setColumnName(c++, "Motif Name");
+    ret.setColumnName(c++, "Motif ID");
+    ret.setColumnName(c++, "Motif Database");
+    ret.setColumnName(c++, "5' Sequence");
+    ret.setColumnName(c++, "3' Sequence");
+    ret.setColumnName(c++, "Motif Location");
+    ret.setColumnName(c++, "Strand");
+    ret.setColumnName(c++, "Score");
+    ret.setColumnName(c++, "Max Score");
+    ret.setColumnName(c++, "Offset From Reference");
+    // ret.setColumnName(16, "Motif Location");
 
-		int c = matrix.getCols();
+    int r = 0;
 
-		//ret.setColumnName(0, "Feature");
-		//ret.setColumnName(1, "Feature Strand");
-		//ret.setColumnName(2, "Feature Region");
-		//ret.setColumnName(3, "Reference Location");
-		//ret.setColumnName(4, "5' Offset");
-		//ret.setColumnName(5, "3' Offset");
-		//ret.setColumnName(6, "Search Region");
-		ret.setColumnName(c++, "Motif Name");
-		ret.setColumnName(c++, "Motif ID");
-		ret.setColumnName(c++, "Motif Database");
-		ret.setColumnName(c++, "5' Sequence");
-		ret.setColumnName(c++, "3' Sequence");
-		ret.setColumnName(c++, "Motif Location");
-		ret.setColumnName(c++, "Strand");
-		ret.setColumnName(c++, "Score");
-		ret.setColumnName(c++, "Max Score");
-		ret.setColumnName(c++, "Offset From Reference");
-		//ret.setColumnName(16, "Motif Location");
+    for (SearchResult sr : searchResults) {
+      // ret.set(r, 0, sr.region.getName());
+      // ret.set(r, 1, Character.toString(sr.region.getStrand()));
+      // ret.set(r, 2, sr.region.getRegion().toString());
+      // ret.set(r, 3, sr.region.getReferencePoint().toString());
+      // ret.set(r, 4, sr.region.getExt5p());
+      // ret.set(r, 5, sr.region.getExt3p());
+      // ret.set(r, 6, sr.region.getSearchRegion().toString());
 
+      ret.copyRow(matrix, sr.index, r);
 
-		int r = 0;
+      c = matrix.getCols();
+      ret.set(r, c++, sr.motif.getName());
+      ret.set(r, c++, sr.motif.getId());
+      ret.set(r, c++, sr.motif.getDatabase());
+      ret.set(r, c++, sr.site.getSequence());
+      ret.set(r, c++, Sequence.reverseComplement(sr.site.getSequence()));
+      ret.set(r, c++, sr.motifLocation.toString());
+      ret.set(r, c++, Character.toString(sr.site.getStrand()));
+      ret.set(r, c++, Formatter.decimal().dp(2).format(sr.site.getScore()));
+      ret.set(r, c++, Formatter.decimal().dp(2).format(MotifSearch.getMaxScore(sr.motif)));
+      ret.set(r, c++, sr.site.getOffset());
 
-		for (SearchResult sr : searchResults) {
-			//ret.set(r, 0, sr.region.getName());
-			//ret.set(r, 1, Character.toString(sr.region.getStrand()));
-			//ret.set(r, 2, sr.region.getRegion().toString());
-			//ret.set(r, 3, sr.region.getReferencePoint().toString());
-			//ret.set(r, 4, sr.region.getExt5p());
-			//ret.set(r, 5, sr.region.getExt3p());
-			//ret.set(r, 6, sr.region.getSearchRegion().toString());
+      ++r;
+    }
 
-			ret.copyRow(matrix, sr.index, r);
+    System.err.println("matrix " + ret.getRows());
 
-			c = matrix.getCols();
-			ret.set(r, c++, sr.motif.getName());
-			ret.set(r, c++, sr.motif.getId());
-			ret.set(r, c++, sr.motif.getDatabase());
-			ret.set(r, c++, sr.site.getSequence());
-			ret.set(r, c++, Sequence.reverseComplement(sr.site.getSequence()));
-			ret.set(r, c++, sr.motifLocation.toString());
-			ret.set(r, c++, Character.toString(sr.site.getStrand()));
-			ret.set(r, c++, Formatter.decimal().dp(2).format(sr.site.getScore()));
-			ret.set(r, c++, Formatter.decimal().dp(2).format(MotifSearch.getMaxScore(sr.motif)));
-			ret.set(r, c++, sr.site.getOffset());
-
-			++r;
-		}
-
-		System.err.println("matrix " + ret.getRows());
-
-		return ret;
-	}
+    return ret;
+  }
 }

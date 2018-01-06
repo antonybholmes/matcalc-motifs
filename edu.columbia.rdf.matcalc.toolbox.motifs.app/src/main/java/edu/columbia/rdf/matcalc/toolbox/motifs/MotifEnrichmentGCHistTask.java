@@ -22,189 +22,172 @@ import edu.columbia.rdf.matcalc.bio.SequenceUtils;
 
 public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
 
-	private DataFrame mNewModel = null;
-	private List<Motif> mMotifs;
-	private double mMinSensitivity;
-	private double mMinSpecificity;
-	private double mThreshold;
-	private MainMatCalcWindow mForegroundSeqWindow;
-	private GenomeAssembly mAssembly;
-	private List<SearchSequence> mBackgroundSequences;
-	private ChromosomeSizes mChrSizes;
-	private MainMatCalcWindow mParent;
-	private String mGenome;
+  private DataFrame mNewModel = null;
+  private List<Motif> mMotifs;
+  private double mMinSensitivity;
+  private double mMinSpecificity;
+  private double mThreshold;
+  private MainMatCalcWindow mForegroundSeqWindow;
+  private GenomeAssembly mAssembly;
+  private List<SearchSequence> mBackgroundSequences;
+  private ChromosomeSizes mChrSizes;
+  private MainMatCalcWindow mParent;
+  private String mGenome;
 
-	/**
-	 * Create a new Enrichment task.
-	 * 
-	 * @param parent
-	 * @param statusModel
-	 * @param motifs
-	 * @param peaks
-	 * @param extension
-	 * @param minSensitivity
-	 * @param minSpecificity
-	 */
-	public MotifEnrichmentGCHistTask(MainMatCalcWindow parent,
-			String genome,
-			GenomeAssembly assembly,
-			ChromosomeSizes chrSizes,
-			List<Motif> motifs,
-			MainMatCalcWindow foregroundSeqWindow,
-			double threshold,
-			double minSensitivity,
-			double minSpecificity) {
-		mParent = parent;
-		mGenome = genome;
-		mAssembly = assembly;
-		mChrSizes = chrSizes;
-		mMotifs = motifs;
-		mForegroundSeqWindow = foregroundSeqWindow;
-		mThreshold = threshold;
-		mMinSensitivity = minSensitivity;
-		mMinSpecificity = minSpecificity;
-	}
+  /**
+   * Create a new Enrichment task.
+   * 
+   * @param parent
+   * @param statusModel
+   * @param motifs
+   * @param peaks
+   * @param extension
+   * @param minSensitivity
+   * @param minSpecificity
+   */
+  public MotifEnrichmentGCHistTask(MainMatCalcWindow parent, String genome, GenomeAssembly assembly,
+      ChromosomeSizes chrSizes, List<Motif> motifs, MainMatCalcWindow foregroundSeqWindow, double threshold,
+      double minSensitivity, double minSpecificity) {
+    mParent = parent;
+    mGenome = genome;
+    mAssembly = assembly;
+    mChrSizes = chrSizes;
+    mMotifs = motifs;
+    mForegroundSeqWindow = foregroundSeqWindow;
+    mThreshold = threshold;
+    mMinSensitivity = minSensitivity;
+    mMinSpecificity = minSpecificity;
+  }
 
-	@Override
-	public Void doInBackground() {
-		try {
-			mNewModel = motifs();
-			
-			mNewModel.setName("Motif Enrichment");
-			
-			mParent.openMatrix(mNewModel);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+  @Override
+  public Void doInBackground() {
+    try {
+      mNewModel = motifs();
 
-		return null;
-	}
+      mNewModel.setName("Motif Enrichment");
 
-	private DataFrame motifs() throws Exception {
-		System.err.println("Searching for motifs in foreground regions...");
+      mParent.openMatrix(mNewModel);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
-		List<SearchSequence> foregroundSequences = 
-				SequenceUtils.matrixToSequences(mForegroundSeqWindow.getCurrentMatrix());
+    return null;
+  }
 
+  private DataFrame motifs() throws Exception {
+    System.err.println("Searching for motifs in foreground regions...");
 
-		//
-		// Determine the GC content of the sequences
-		//
+    List<SearchSequence> foregroundSequences = SequenceUtils.matrixToSequences(mForegroundSeqWindow.getCurrentMatrix());
 
-		System.err.println("Assessing GC content in foreground...");
+    //
+    // Determine the GC content of the sequences
+    //
 
-		List<Double> gcs = new ArrayList<Double>();
+    System.err.println("Assessing GC content in foreground...");
 
-		for (SearchSequence sr : foregroundSequences) {
-			double gc = Sequence.gcContent(sr.getDna());
+    List<Double> gcs = new ArrayList<Double>();
 
-			gcs.add(gc);
-		}
+    for (SearchSequence sr : foregroundSequences) {
+      double gc = Sequence.gcContent(sr.getDna());
 
-		//
-		// Bin GC into histogram
-		//
+      gcs.add(gc);
+    }
 
-		System.err.println("Creating GC distribution...");
+    //
+    // Bin GC into histogram
+    //
 
-		double d = 0.05;
+    System.err.println("Creating GC distribution...");
 
-		List<HistBin> gcHist = Statistics.histogram(gcs, 0, 1, d);
+    double d = 0.05;
 
-		for (int i = 0; i < gcHist.size(); ++i) {
-			MotifsModule.LOG.info("GC {} {} {}", i, i * d, gcHist.get(i).getCount());
-		}
+    List<HistBin> gcHist = Statistics.histogram(gcs, 0, 1, d);
 
+    for (int i = 0; i < gcHist.size(); ++i) {
+      MotifsModule.LOG.info("GC {} {} {}", i, i * d, gcHist.get(i).getCount());
+    }
 
-		//
-		// Now to make a random dist of sequences to match the gc
-		// content of our foreground sequnces.
-		//
+    //
+    // Now to make a random dist of sequences to match the gc
+    // content of our foreground sequnces.
+    //
 
+    MotifsModule.LOG.info("Creating GC matched distribution of random sequences...");
 
-		MotifsModule.LOG.info("Creating GC matched distribution of random sequences...");
+    // Index foreground reads
+    BinaryGapSearch<SearchSequence> foregroundGapped = new BinaryGapSearch<SearchSequence>();
 
-		// Index foreground reads
-		BinaryGapSearch<SearchSequence> foregroundGapped =
-				new BinaryGapSearch<SearchSequence>();
+    for (int i = 0; i < foregroundSequences.size(); ++i) {
+      GenomicRegion r = foregroundSequences.get(i).getRegion();
 
-		for (int i = 0; i < foregroundSequences.size(); ++i) {
-			GenomicRegion r = foregroundSequences.get(i).getRegion();
-			
-			foregroundGapped.add(r, foregroundSequences.get(i));
-		}
+      foregroundGapped.add(r, foregroundSequences.get(i));
+    }
 
-		int sequenceLength = foregroundSequences.get(0).getDna().length();
+    int sequenceLength = foregroundSequences.get(0).getDna().length();
 
-		mBackgroundSequences = new ArrayList<SearchSequence>();
+    mBackgroundSequences = new ArrayList<SearchSequence>();
 
-		for (int i = 0; i < gcHist.size(); ++i) {
-			if (gcHist.get(i).getCount() == 0) {
-				continue;
-			}
+    for (int i = 0; i < gcHist.size(); ++i) {
+      if (gcHist.get(i).getCount() == 0) {
+        continue;
+      }
 
-			int j = 0;
-			
-			MotifsModule.LOG.info("GC {} {}", i, gcHist.get(i).getCount());
+      int j = 0;
 
-			while (j < gcHist.get(i).getCount()) {
-				// Get a random sequence
-				SequenceRegion rs = 
-						Sequence.getRandomSequence(mGenome, mAssembly, mChrSizes, sequenceLength);
+      MotifsModule.LOG.info("GC {} {}", i, gcHist.get(i).getCount());
 
-				//
-				// Make sure random sequence does not overlap the
-				// foreground sequences
-				//
+      while (j < gcHist.get(i).getCount()) {
+        // Get a random sequence
+        SequenceRegion rs = Sequence.getRandomSequence(mGenome, mAssembly, mChrSizes, sequenceLength);
 
-				List<SearchSequence> checkSequences = 
-						foregroundGapped.getClosestFeatures(rs);
+        //
+        // Make sure random sequence does not overlap the
+        // foreground sequences
+        //
 
+        List<SearchSequence> checkSequences = foregroundGapped.getClosestFeatures(rs);
 
-				if (checkSequences != null) {
-					boolean overlap = false;
+        if (checkSequences != null) {
+          boolean overlap = false;
 
-					for (SearchSequence region : checkSequences) {
-						if (GenomicRegion.overlap(region.getRegion(), rs) != null) {
-							overlap = true;
-							break;
-						}
-					}
+          for (SearchSequence region : checkSequences) {
+            if (GenomicRegion.overlap(region.getRegion(), rs) != null) {
+              overlap = true;
+              break;
+            }
+          }
 
-					if (overlap) {
-						continue;
-					}
-				}
+          if (overlap) {
+            continue;
+          }
+        }
 
-				//
-				// Match the GC content to the current bin we are
-				// trying to replicate with random sequences. Keep
-				// sampling until we get enough sequences.
-				//
+        //
+        // Match the GC content to the current bin we are
+        // trying to replicate with random sequences. Keep
+        // sampling until we get enough sequences.
+        //
 
-				double gc = Sequence.gcContent(rs.getSequence());
-				
-				//MotifsModule.LOG.info("gc {} {}", gc, (int)(gc / d));
+        double gc = Sequence.gcContent(rs.getSequence());
 
-				int bin = (int)(gc / d);
+        // MotifsModule.LOG.info("gc {} {}", gc, (int)(gc / d));
 
-				if (bin != i) {
-					continue;
-				}
+        int bin = (int) (gc / d);
 
-				mBackgroundSequences.add(new SearchSequence(rs, rs.getSequence()));
+        if (bin != i) {
+          continue;
+        }
 
-				//LOG.info("GC {} {} {} {} {} {}", gc, bin, i, j, gcHist.get(i), mBackgroundSequences.size());
+        mBackgroundSequences.add(new SearchSequence(rs, rs.getSequence()));
 
-				++j;
-			}
-		}
+        // LOG.info("GC {} {} {} {} {} {}", gc, bin, i, j, gcHist.get(i),
+        // mBackgroundSequences.size());
 
-		return MotifEnrichmentTask.enrichmentMotifs(mThreshold,
-				mMinSpecificity,
-				mMinSensitivity,
-				mMotifs,
-				foregroundSequences,
-				mBackgroundSequences);
-	}
+        ++j;
+      }
+    }
+
+    return MotifEnrichmentTask.enrichmentMotifs(mThreshold, mMinSpecificity, mMinSensitivity, mMotifs,
+        foregroundSequences, mBackgroundSequences);
+  }
 }

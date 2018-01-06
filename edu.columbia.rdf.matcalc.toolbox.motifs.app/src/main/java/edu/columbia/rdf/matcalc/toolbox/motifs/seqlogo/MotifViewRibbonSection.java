@@ -11,8 +11,6 @@ import org.jebtk.modern.ribbon.RibbonLargeRadioButton;
 import org.jebtk.modern.ribbon.RibbonSection;
 import org.jebtk.modern.widget.ModernTwoStateWidget;
 
-
-
 /**
  * Allows user to select the resolution to view sequences
  *
@@ -20,69 +18,64 @@ import org.jebtk.modern.widget.ModernTwoStateWidget;
  *
  */
 public class MotifViewRibbonSection extends RibbonSection implements ModernClickListener {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private RibbonLargeRadioButton mPButton = 
-			new RibbonLargeRadioButton("Probability");
-	
-	private RibbonLargeRadioButton mBitsButton = 
-			new RibbonLargeRadioButton("Bits");
-	
-	private ModernTwoStateWidget mButtonRevComp = 
-			new ModernCheckSwitch("Reverse Complement");
-	
-	private MotifViewModel mModel;
+  private RibbonLargeRadioButton mPButton = new RibbonLargeRadioButton("Probability");
 
-	public MotifViewRibbonSection(Ribbon ribbon, MotifViewModel model) {
-		super(ribbon, "Style");
-		
-		mModel = model;
-		
-		mPButton.setToolTip("Probabilities", 
-				"Show sequence logo scores as probabilities.");
-		add(mPButton);
-		
-		mBitsButton.setToolTip("Bits", 
-				"Show sequence logo scores as bits.");
-		add(mBitsButton);
-		
-		add(UI.createHGap(5));
-		
-		add(mButtonRevComp);
-		
-		ModernButtonGroup group = new ModernButtonGroup();
+  private RibbonLargeRadioButton mBitsButton = new RibbonLargeRadioButton("Bits");
 
-		group.add(mPButton);
-		group.add(mBitsButton);
+  private ModernTwoStateWidget mButtonRevComp = new ModernCheckSwitch("Reverse Complement");
 
-		mPButton.addClickListener(this);
-		mBitsButton.addClickListener(this);
-		mButtonRevComp.addClickListener(this);
+  private MotifViewModel mModel;
 
-		switch(mModel.get()) {
-		case BITS:
-			mBitsButton.setSelected(true);
-			break;
-		default:
-			mPButton.setSelected(true);
-			break;
-		}
-	}
-	
-	private void change(ModernClickEvent e) {
-		if (mPButton.isSelected()) {
-			mModel.update(MotifView.P);
-		} else if (mBitsButton.isSelected()) {
-			mModel.update(MotifView.BITS);
-		} else {
-			
-		}
-		
-		mModel.setRevComp(mButtonRevComp.isSelected());
-	}
+  public MotifViewRibbonSection(Ribbon ribbon, MotifViewModel model) {
+    super(ribbon, "Style");
 
-	@Override
-	public void clicked(ModernClickEvent e) {
-		change(e);
-	}
+    mModel = model;
+
+    mPButton.setToolTip("Probabilities", "Show sequence logo scores as probabilities.");
+    add(mPButton);
+
+    mBitsButton.setToolTip("Bits", "Show sequence logo scores as bits.");
+    add(mBitsButton);
+
+    add(UI.createHGap(5));
+
+    add(mButtonRevComp);
+
+    ModernButtonGroup group = new ModernButtonGroup();
+
+    group.add(mPButton);
+    group.add(mBitsButton);
+
+    mPButton.addClickListener(this);
+    mBitsButton.addClickListener(this);
+    mButtonRevComp.addClickListener(this);
+
+    switch (mModel.get()) {
+    case BITS:
+      mBitsButton.setSelected(true);
+      break;
+    default:
+      mPButton.setSelected(true);
+      break;
+    }
+  }
+
+  private void change(ModernClickEvent e) {
+    if (mPButton.isSelected()) {
+      mModel.update(MotifView.P);
+    } else if (mBitsButton.isSelected()) {
+      mModel.update(MotifView.BITS);
+    } else {
+
+    }
+
+    mModel.setRevComp(mButtonRevComp.isSelected());
+  }
+
+  @Override
+  public void clicked(ModernClickEvent e) {
+    change(e);
+  }
 }

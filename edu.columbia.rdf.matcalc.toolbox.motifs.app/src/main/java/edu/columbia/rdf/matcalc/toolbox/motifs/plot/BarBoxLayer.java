@@ -13,45 +13,42 @@ import org.jebtk.modern.graphics.DrawingContext;
 
 public class BarBoxLayer extends PlotLayer {
 
-	private static final long serialVersionUID = 1L;
-	
-	public BarBoxLayer() {
-		super("Bar Box");
-	}
+  private static final long serialVersionUID = 1L;
 
-	@Override
-	public void plotLayer(Graphics2D g2,
-			DrawingContext context,
-			Figure figure,
-			SubFigure subFigure,
-			Axes axes,
-			Plot plot, 
-			DataFrame m) {
+  public BarBoxLayer() {
+    super("Bar Box");
+  }
 
-		int dnaCol = DataFrame.findColumn(m, "DNA Sequence");
-		
-		String dna = m.getText(0, dnaCol);
-		
-		int l = dna.length();
-		
-		int x1 = axes.toPlotX1(0);
-		int x2 = axes.toPlotX1(l);
+  @Override
+  public void plotLayer(Graphics2D g2, DrawingContext context, Figure figure, SubFigure subFigure, Axes axes, Plot plot,
+      DataFrame m) {
 
-		int y1 = axes.toPlotY1(0.55);
-		int y2 = axes.toPlotY1(0.45);
+    int dnaCol = DataFrame.findColumn(m, "DNA Sequence");
 
-		//int h = SettingsService.getInstance().getAsInt("mutplot.plot.protein.height");
+    String dna = m.getText(0, dnaCol);
 
-		//int y = PLOT_OFFSET.y + internalPlotSize.height - FEATURE_BLOCK_HEIGHT + (FEATURE_BLOCK_HEIGHT - h) / 2;
+    int l = dna.length();
 
-		g2.setColor(SettingsService.getInstance().getAsColor("motifs.plot.bar.background.color")); //ColorUtils.decodeHtmlColor(mProperty.getChildByPath("background/color").getValue()));
+    int x1 = axes.toPlotX1(0);
+    int x2 = axes.toPlotX1(l);
 
-		//g2.fillRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
-		g2.fillRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
+    int y1 = axes.toPlotY1(0.55);
+    int y2 = axes.toPlotY1(0.45);
 
-		g2.setColor(SettingsService.getInstance().getAsColor("motifs.plot.bar.border.color"));
+    // int h =
+    // SettingsService.getInstance().getAsInt("mutplot.plot.protein.height");
 
-		//g2.drawRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
-		g2.drawRect(x1, y1, x2 - x1, y2 - y1);
-	}		
+    // int y = PLOT_OFFSET.y + internalPlotSize.height - FEATURE_BLOCK_HEIGHT +
+    // (FEATURE_BLOCK_HEIGHT - h) / 2;
+
+    g2.setColor(SettingsService.getInstance().getAsColor("motifs.plot.bar.background.color")); // ColorUtils.decodeHtmlColor(mProperty.getChildByPath("background/color").getValue()));
+
+    // g2.fillRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
+    g2.fillRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
+
+    g2.setColor(SettingsService.getInstance().getAsColor("motifs.plot.bar.border.color"));
+
+    // g2.drawRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
+    g2.drawRect(x1, y1, x2 - x1, y2 - y1);
+  }
 }
