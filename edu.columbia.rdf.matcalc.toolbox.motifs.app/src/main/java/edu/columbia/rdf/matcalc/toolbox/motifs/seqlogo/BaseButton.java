@@ -22,10 +22,8 @@ public class BaseButton extends RibbonLargeColorSwatchButton {
   /**
    * Instantiates a new color swatch button.
    *
-   * @param parent
-   *          the parent
-   * @param color
-   *          the color
+   * @param parent the parent
+   * @param color the color
    */
   public BaseButton(ModernWindow parent, Color color, String base) {
     super(parent, color);

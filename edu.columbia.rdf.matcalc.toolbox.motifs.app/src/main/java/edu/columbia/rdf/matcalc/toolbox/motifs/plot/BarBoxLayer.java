@@ -20,7 +20,12 @@ public class BarBoxLayer extends PlotLayer {
   }
 
   @Override
-  public void plotLayer(Graphics2D g2, DrawingContext context, Figure figure, SubFigure subFigure, Axes axes, Plot plot,
+  public void plotLayer(Graphics2D g2,
+      DrawingContext context,
+      Figure figure,
+      SubFigure subFigure,
+      Axes axes,
+      Plot plot,
       DataFrame m) {
 
     int dnaCol = DataFrame.findColumn(m, "DNA Sequence");
@@ -41,12 +46,14 @@ public class BarBoxLayer extends PlotLayer {
     // int y = PLOT_OFFSET.y + internalPlotSize.height - FEATURE_BLOCK_HEIGHT +
     // (FEATURE_BLOCK_HEIGHT - h) / 2;
 
-    g2.setColor(SettingsService.getInstance().getAsColor("motifs.plot.bar.background.color")); // ColorUtils.decodeHtmlColor(mProperty.getChildByPath("background/color").getValue()));
+    g2.setColor(SettingsService.getInstance()
+        .getAsColor("motifs.plot.bar.background.color")); // ColorUtils.decodeHtmlColor(mProperty.getChildByPath("background/color").getValue()));
 
     // g2.fillRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
     g2.fillRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
 
-    g2.setColor(SettingsService.getInstance().getAsColor("motifs.plot.bar.border.color"));
+    g2.setColor(SettingsService.getInstance()
+        .getAsColor("motifs.plot.bar.border.color"));
 
     // g2.drawRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
     g2.drawRect(x1, y1, x2 - x1, y2 - y1);

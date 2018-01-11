@@ -9,7 +9,8 @@ public class SeqLogoInfo extends GuiAppInfo {
   public SeqLogoInfo() {
     super("SeqLogo", new AppVersion(5), "Copyright (C) 2016 Antony Holmes",
         UIService.getInstance().loadIcon(SeqLogoIcon.class, 32),
-        UIService.getInstance().loadIcon(SeqLogoIcon.class, 128), "View motifs graphically.");
+        UIService.getInstance().loadIcon(SeqLogoIcon.class, 128),
+        "View motifs graphically.");
   }
 
 }

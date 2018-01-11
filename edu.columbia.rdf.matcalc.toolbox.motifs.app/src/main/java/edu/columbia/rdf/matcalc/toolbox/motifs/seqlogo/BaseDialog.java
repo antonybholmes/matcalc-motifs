@@ -53,15 +53,20 @@ public class BaseDialog extends ModernDialogHelpWindow {
   }
 
   private final void createUi() {
-    mColorAButton = new ColorSwatchButton(mParent, DnaService.getInstance().getBaseAColor());
+    mColorAButton = new ColorSwatchButton(mParent,
+        DnaService.getInstance().getBaseAColor());
 
-    mColorCButton = new ColorSwatchButton(mParent, DnaService.getInstance().getBaseCColor());
+    mColorCButton = new ColorSwatchButton(mParent,
+        DnaService.getInstance().getBaseCColor());
 
-    mColorGButton = new ColorSwatchButton(mParent, DnaService.getInstance().getBaseGColor());
+    mColorGButton = new ColorSwatchButton(mParent,
+        DnaService.getInstance().getBaseGColor());
 
-    mColorTButton = new ColorSwatchButton(mParent, DnaService.getInstance().getBaseTColor());
+    mColorTButton = new ColorSwatchButton(mParent,
+        DnaService.getInstance().getBaseTColor());
 
-    mColorNButton = new ColorSwatchButton(mParent, DnaService.getInstance().getBaseNColor());
+    mColorNButton = new ColorSwatchButton(mParent,
+        DnaService.getInstance().getBaseNColor());
 
     VBox box = VBox.create();
 
@@ -96,7 +101,8 @@ public class BaseDialog extends ModernDialogHelpWindow {
    * Reset the colors to their defaults.
    */
   private void resetToDefaults() {
-    ModernDialogStatus status = ModernMessageDialog.createOkCancelWarningDialog(mParent,
+    ModernDialogStatus status = ModernMessageDialog.createOkCancelWarningDialog(
+        mParent,
         "The base colors will be reset to their default values.");
 
     if (status == ModernDialogStatus.OK) {

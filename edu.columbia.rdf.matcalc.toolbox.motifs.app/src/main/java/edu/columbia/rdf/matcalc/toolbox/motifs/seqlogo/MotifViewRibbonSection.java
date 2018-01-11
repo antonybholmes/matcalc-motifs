@@ -17,14 +17,18 @@ import org.jebtk.modern.widget.ModernTwoStateWidget;
  * @author Antony Holmes Holmes
  *
  */
-public class MotifViewRibbonSection extends RibbonSection implements ModernClickListener {
+public class MotifViewRibbonSection extends RibbonSection
+    implements ModernClickListener {
   private static final long serialVersionUID = 1L;
 
-  private RibbonLargeRadioButton mPButton = new RibbonLargeRadioButton("Probability");
+  private RibbonLargeRadioButton mPButton = new RibbonLargeRadioButton(
+      "Probability");
 
-  private RibbonLargeRadioButton mBitsButton = new RibbonLargeRadioButton("Bits");
+  private RibbonLargeRadioButton mBitsButton = new RibbonLargeRadioButton(
+      "Bits");
 
-  private ModernTwoStateWidget mButtonRevComp = new ModernCheckSwitch("Reverse Complement");
+  private ModernTwoStateWidget mButtonRevComp = new ModernCheckSwitch(
+      "Reverse Complement");
 
   private MotifViewModel mModel;
 
@@ -33,7 +37,8 @@ public class MotifViewRibbonSection extends RibbonSection implements ModernClick
 
     mModel = model;
 
-    mPButton.setToolTip("Probabilities", "Show sequence logo scores as probabilities.");
+    mPButton.setToolTip("Probabilities",
+        "Show sequence logo scores as probabilities.");
     add(mPButton);
 
     mBitsButton.setToolTip("Bits", "Show sequence logo scores as bits.");

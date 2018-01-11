@@ -35,7 +35,8 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
     public int index;
   }
 
-  public MotifSearchTask(MainMatCalcWindow parent, List<Motif> motifs, double threshold) {
+  public MotifSearchTask(MainMatCalcWindow parent, List<Motif> motifs,
+      double threshold) {
     mParent = parent;
     mMotifs = motifs;
     mThreshold = threshold;
@@ -69,22 +70,27 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
     List<SearchSequence> sequences = SequenceUtils.matrixToSequences(m);
 
     if (sequences.size() == 0) {
-      ModernMessageDialog.createWarningDialog(mParent, "There are no suitable DNA sequences in the table.");
+      ModernMessageDialog.createWarningDialog(mParent,
+          "There are no suitable DNA sequences in the table.");
 
       return null;
     }
 
-    List<SearchSequence> revCompSeqs = SearchSequence.reverseComplement(sequences);
+    List<SearchSequence> revCompSeqs = SearchSequence
+        .reverseComplement(sequences);
 
     return createMotifsTable(mMotifs, m, sequences, revCompSeqs, mThreshold);
   }
 
-  private static DataFrame createMotifsTable(List<Motif> motifs, DataFrame matrix, List<SearchSequence> sequences,
-      List<SearchSequence> revCompSeqs, double threshold) throws IOException {
+  private static DataFrame createMotifsTable(List<Motif> motifs,
+      DataFrame matrix,
+      List<SearchSequence> sequences,
+      List<SearchSequence> revCompSeqs,
+      double threshold) throws IOException {
 
     /*
-     * // The header cell = row.createCell(c++); cell.setCellValue("Feature"); cell
-     * = row.createCell(c++); cell.setCellValue("Feature Strand"); cell =
+     * // The header cell = row.createCell(c++); cell.setCellValue("Feature");
+     * cell = row.createCell(c++); cell.setCellValue("Feature Strand"); cell =
      * row.createCell(c++); cell.setCellValue("Feature Region"); cell =
      * row.createCell(c++); cell.setCellValue("Reference Location"); cell =
      * row.createCell(c++); cell.setCellValue("5' Offset"); cell =
@@ -95,11 +101,11 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
      * row.createCell(c++); cell.setCellValue("Motif Database"); cell =
      * row.createCell(c++); cell.setCellValue("5' Sequence"); cell =
      * row.createCell(c++); cell.setCellValue("3' Sequence"); cell =
-     * row.createCell(c++); cell.setCellValue("Score"); cell = row.createCell(c++);
-     * cell.setCellValue("Max Score"); cell = row.createCell(c++);
-     * cell.setCellValue("Strand"); cell = row.createCell(c++);
-     * cell.setCellValue("Offset From Reference"); cell = row.createCell(c++);
-     * cell.setCellValue("Motif Location");
+     * row.createCell(c++); cell.setCellValue("Score"); cell =
+     * row.createCell(c++); cell.setCellValue("Max Score"); cell =
+     * row.createCell(c++); cell.setCellValue("Strand"); cell =
+     * row.createCell(c++); cell.setCellValue("Offset From Reference"); cell =
+     * row.createCell(c++); cell.setCellValue("Motif Location");
      */
 
     // Use a buffer that can accommodate all scores regardless of
@@ -129,15 +135,18 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 
         int w = motif.getBaseCount();
 
-        double bgscore = motif.getBgPwm(); // Mathematics.repeatArray(m.getBgPwm(), n);
+        double bgscore = motif.getBgPwm(); // Mathematics.repeatArray(m.getBgPwm(),
+                                           // n);
 
         double[][] pwm = motif.getPwm();
 
         // SearchRegion region = searchRegions.get(i);
 
-        MotifSearch.search(iSeq, iRevCompSeq, n, pwm, bgscore, w, t, llkrf, llkrr);
+        MotifSearch
+            .search(iSeq, iRevCompSeq, n, pwm, bgscore, w, t, llkrf, llkrr);
 
-        List<BindingSite> sites = MotifSearch.getBindingSites(seq, n, w, llkrf, llkrr);
+        List<BindingSite> sites = MotifSearch
+            .getBindingSites(seq, n, w, llkrf, llkrr);
 
         sites = BindingSite.sortByScore(sites);
 
@@ -160,10 +169,12 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
           if (s.getType() == SearchSequenceType.GENOMIC) {
             GenomicRegion r = s.getRegion();
 
-            motifLocation = new GenomicRegion(r.getChr(), r.getStart() + site.getOffset(),
-                r.getStart() + site.getOffset() + site.getSequence().length() - 1);
+            motifLocation = new GenomicRegion(r.getChr(),
+                r.getStart() + site.getOffset(), r.getStart() + site.getOffset()
+                    + site.getSequence().length() - 1);
           } else {
-            motifLocation = new Region(site.getOffset(), site.getOffset() + site.getSequence().length() - 1);
+            motifLocation = new Region(site.getOffset(),
+                site.getOffset() + site.getSequence().length() - 1);
           }
 
           SearchResult sr = new SearchResult();
@@ -178,28 +189,33 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
           searchResults.add(sr);
 
           /*
-           * cell = row.createCell(c++); cell.setCellValue(region.getName()); cell =
-           * row.createCell(c++);
+           * cell = row.createCell(c++); cell.setCellValue(region.getName());
+           * cell = row.createCell(c++);
            * cell.setCellValue(Character.toString(region.getStrand())); cell =
-           * row.createCell(c++); cell.setCellValue(region.getRegion().toString()); cell =
+           * row.createCell(c++);
+           * cell.setCellValue(region.getRegion().toString()); cell =
            * row.createCell(c++);
            * cell.setCellValue(region.getReferencePoint().toString()); cell =
            * row.createCell(c++); cell.setCellValue(region.getExt5p()); cell =
            * row.createCell(c++); cell.setCellValue(region.getExt3p()); cell =
-           * row.createCell(c++); cell.setCellValue(region.getSearchRegion().toString());
-           * cell = row.createCell(c++); cell.setCellValue(m.getName()); cell =
+           * row.createCell(c++);
+           * cell.setCellValue(region.getSearchRegion().toString()); cell =
+           * row.createCell(c++); cell.setCellValue(m.getName()); cell =
            * row.createCell(c++); cell.setCellValue(m.getId()); cell =
            * row.createCell(c++); cell.setCellValue(m.getDatabase()); cell =
            * row.createCell(c++); cell.setCellValue(site.getSequence()); cell =
            * row.createCell(c++);
-           * cell.setCellValue(Sequence.reverseComplement(site.getSequence())); cell =
-           * row.createCell(c++); cell.setCellValue(TextUtils.format2DP(site.getScore()));
+           * cell.setCellValue(Sequence.reverseComplement(site.getSequence()));
            * cell = row.createCell(c++);
-           * cell.setCellValue(TextUtils.format2DP(MotifSearch.getMaxScore(m))); cell =
-           * row.createCell(c++); cell.setCellValue(Character.toString(site.getStrand()));
-           * cell = row.createCell(c++); cell.setCellValue(offsetFromReference); cell =
-           * row.createCell(c++); cell.setCellValue(motifLocation.toString()); //cell =
-           * row.createCell(15); //cell.setCellValue(showSequence.getBases());
+           * cell.setCellValue(TextUtils.format2DP(site.getScore())); cell =
+           * row.createCell(c++);
+           * cell.setCellValue(TextUtils.format2DP(MotifSearch.getMaxScore(m)));
+           * cell = row.createCell(c++);
+           * cell.setCellValue(Character.toString(site.getStrand())); cell =
+           * row.createCell(c++); cell.setCellValue(offsetFromReference); cell =
+           * row.createCell(c++); cell.setCellValue(motifLocation.toString());
+           * //cell = row.createCell(15);
+           * //cell.setCellValue(showSequence.getBases());
            * 
            * ++r;
            */
@@ -211,7 +227,8 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
       return null;
     }
 
-    DataFrame ret = DataFrame.createDataFrame(searchResults.size(), matrix.getCols() + 10);
+    DataFrame ret = DataFrame.createDataFrame(searchResults.size(),
+        matrix.getCols() + 10);
 
     DataFrame.copyColumnNames(matrix, ret);
 
@@ -258,7 +275,9 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
       ret.set(r, c++, sr.motifLocation.toString());
       ret.set(r, c++, Character.toString(sr.site.getStrand()));
       ret.set(r, c++, Formatter.decimal().dp(2).format(sr.site.getScore()));
-      ret.set(r, c++, Formatter.decimal().dp(2).format(MotifSearch.getMaxScore(sr.motif)));
+      ret.set(r,
+          c++,
+          Formatter.decimal().dp(2).format(MotifSearch.getMaxScore(sr.motif)));
       ret.set(r, c++, sr.site.getOffset());
 
       ++r;

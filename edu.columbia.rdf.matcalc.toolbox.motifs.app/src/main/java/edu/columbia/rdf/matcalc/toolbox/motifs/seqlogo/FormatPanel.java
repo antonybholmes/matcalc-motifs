@@ -13,6 +13,7 @@ import org.jebtk.modern.tabs.TabsViewPanel;
 import org.jebtk.modern.tabs.TextTabs;
 import org.jebtk.modern.widget.ModernWidget;
 import org.jebtk.modern.window.ModernWindow;
+
 import edu.columbia.rdf.matcalc.figure.AxisControl;
 
 public class FormatPanel extends ModernWidget {

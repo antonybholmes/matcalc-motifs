@@ -52,7 +52,8 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
   private ModernCompactSpinner mThresholdField = new ModernCompactSpinner(0, 1,
       SettingsService.getInstance().getAsDouble("motifs.motif-threshold"), 0.1);
 
-  private ModernButton mSettingsButton = new ModernButton(UIService.getInstance().loadIcon("settings", 16));
+  private ModernButton mSettingsButton = new ModernButton(
+      UIService.getInstance().loadIcon("settings", 16));
 
   // private ModernCheckBox mCheckPeakWidth =
   // new ModernCheckBox("Peak widths only");
@@ -157,8 +158,8 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
 
     mSubFigure = new SeqLogoCanvas();
 
-    ModernScrollPane scrollPane = new ModernScrollPane(
-        new FigurePanel(new Figure("Seq Logo Figure").addSubFigure(mSubFigure)));
+    ModernScrollPane scrollPane = new ModernScrollPane(new FigurePanel(
+        new Figure("Seq Logo Figure").addSubFigure(mSubFigure)));
     scrollPane.setVerticalScrollBarPolicy(ScrollBarPolicy.NEVER);
 
     UI.setSize(scrollPane, 800, 220);
@@ -169,7 +170,8 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
 
     Box box = VBox.create();
 
-    mSettingsButton.setToolTip("DNA Base Settings", "Adjust the way DNA bases are represented.");
+    mSettingsButton.setToolTip("DNA Base Settings",
+        "Adjust the way DNA bases are represented.");
     box.add(mSettingsButton);
 
     panel.setRight(box);
@@ -186,19 +188,23 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
 
     c.add(box);
 
-    // panel.add(new ModernDialogHelpButton("Group", "The group of regions in which
+    // panel.add(new ModernDialogHelpButton("Group", "The group of regions in
+    // which
     // to search for motifs."));
     // panel.add(new ModernLabel("5' extension"));
     // panel.add(new ModernTextBorderPanel(mExt5pField));
-    // panel.add(new ModernDialogHelpButton("5' Extension", "How much to extend the
+    // panel.add(new ModernDialogHelpButton("5' Extension", "How much to extend
+    // the
     // 5' search region relative to the feature orientation."));
     // panel.add(new ModernLabel("3' extension"));
     // panel.add(new ModernTextBorderPanel(mExt3pField));
-    // panel.add(new ModernDialogHelpButton("3' Extension", "How much to extend the
+    // panel.add(new ModernDialogHelpButton("3' Extension", "How much to extend
+    // the
     // 3' search region relative to the feature orientation."));
     // panel.add(new ModernLabel("Motif threshold"));
     // panel.add(new ModernTextBorderPanel(mThresholdField));
-    // panel.add(new ModernDialogHelpButton("Motif Threshold", "Motifs must score at
+    // panel.add(new ModernDialogHelpButton("Motif Threshold", "Motifs must
+    // score at
     // least p * maxScore()."));
     // box.add(panel);
     // box.add(ModernPanel.createVGap());
@@ -221,7 +227,10 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
       try {
         // Validation.validateAsInt("5' extension", mExt5pField.getText());
         // Validation.validateAsInt("3' extension", mExt3pField.getText());
-        Validation.validateAsDouble("Motif threshold", mThresholdField.getText(), 0, 1);
+        Validation.validateAsDouble("Motif threshold",
+            mThresholdField.getText(),
+            0,
+            1);
         Validation.validateSelection("motifs", getMotifs());
 
         // SettingsService.getInstance().update("motifs.search.5p-extension",

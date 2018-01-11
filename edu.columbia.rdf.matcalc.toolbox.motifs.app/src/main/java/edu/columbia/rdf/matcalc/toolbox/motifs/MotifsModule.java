@@ -78,7 +78,8 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
   private static final Path RES_DIR = AppService.MOD_DIR.resolve("motifs");
 
-  private static final Path CHR_SIZE_FILE = RES_DIR.resolve("ucsc_chromosome_sizes_hg19.txt.gz");
+  private static final Path CHR_SIZE_FILE = RES_DIR
+      .resolve("ucsc_chromosome_sizes_hg19.txt.gz");
 
   private static final Path DATABASE_DIR = RES_DIR.resolve("database");
 
@@ -94,10 +95,11 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
   // private GenomeAssemblyWeb mAssembly;
 
   static {
-    if (SettingsService.getInstance().getAsBool("org.matcalc.toolbox.bio.dna.web.enabled")) {
+    if (SettingsService.getInstance()
+        .getAsBool("org.matcalc.toolbox.bio.dna.web.enabled")) {
       try {
-        GenomeAssemblyService.getInstance()
-            .add(new GenomeAssemblyWeb(new URL(SettingsService.getInstance().getAsString("dna.remote-url"))));
+        GenomeAssemblyService.getInstance().add(new GenomeAssemblyWeb(new URL(
+            SettingsService.getInstance().getAsString("dna.remote-url"))));
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -120,9 +122,12 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
     // MotifsDBService.getInstance().addBackEnd(new MotifsWeb());
 
-    MotifsDataSourceService.getInstance().addDataSource(new MotifsFs(DATABASE_DIR));
-    MotifsDataSourceService.getInstance().addDataSource(new MotifsXmlFs(DATABASE_DIR));
-    MotifsDataSourceService.getInstance().addDataSource(new MotifsPwtFs(DATABASE_DIR));
+    MotifsDataSourceService.getInstance()
+        .addDataSource(new MotifsFs(DATABASE_DIR));
+    MotifsDataSourceService.getInstance()
+        .addDataSource(new MotifsXmlFs(DATABASE_DIR));
+    MotifsDataSourceService.getInstance()
+        .addDataSource(new MotifsPwtFs(DATABASE_DIR));
   }
 
   @Override
@@ -162,38 +167,44 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
      * ribbon.getToolbar("DNA").getSection("Motifs").add(button);
      */
 
-    button = new RibbonLargeButton("Search", UIService.getInstance().loadIcon(SearchVectorIcon.class, 24), "Search",
+    button = new RibbonLargeButton("Search",
+        UIService.getInstance().loadIcon(SearchVectorIcon.class, 24), "Search",
         "Search for motifs.");
     button.addClickListener(this);
     ribbon.getToolbar("DNA").getSection("Motifs").add(button);
 
     ribbon.getToolbar("DNA").getSection("Motifs").addSeparator();
 
-    button = new RibbonLargeButton("GC Background", UIService.getInstance().loadIcon("enrichment", 24), "GC Background",
+    button = new RibbonLargeButton("GC Background",
+        UIService.getInstance().loadIcon("enrichment", 24), "GC Background",
         "Generate background.");
     button.addClickListener(this);
     ribbon.getToolbar("DNA").getSection("Motifs").add(button);
 
-    button = new RibbonLargeButton("Enrichment", UIService.getInstance().loadIcon("enrichment", 24), "Enrichment",
+    button = new RibbonLargeButton("Enrichment",
+        UIService.getInstance().loadIcon("enrichment", 24), "Enrichment",
         "Look for enriched motifs.");
     button.addClickListener(this);
     ribbon.getToolbar("DNA").getSection("Motifs").add(button);
 
     ribbon.getToolbar("DNA").getSection("Motifs").addSeparator();
 
-    button = new RibbonLargeButton("Export BED", UIService.getInstance().loadIcon(SaveVectorIcon.class, 24),
+    button = new RibbonLargeButton("Export BED",
+        UIService.getInstance().loadIcon(SaveVectorIcon.class, 24),
         "Export BED", "Export Results as BED.");
     button.addClickListener(this);
     ribbon.getToolbar("DNA").getSection("Motifs").add(button);
 
     ribbon.getToolbar("DNA").getSection("Motifs").addSeparator();
 
-    button = new RibbonLargeButton("SeqLogo", UIService.getInstance().loadIcon(SeqLogoIcon.class, 24), "SeqLogo",
+    button = new RibbonLargeButton("SeqLogo",
+        UIService.getInstance().loadIcon(SeqLogoIcon.class, 24), "SeqLogo",
         "Browse sequence logos.");
     button.addClickListener(this);
     ribbon.getToolbar("DNA").getSection("Motifs").add(button);
 
-    button = new RibbonLargeButton("Plot", UIService.getInstance().loadIcon(RunVectorIcon.class, 24), "Plot",
+    button = new RibbonLargeButton("Plot",
+        UIService.getInstance().loadIcon(RunVectorIcon.class, 24), "Plot",
         "Plot motifs.");
     button.addClickListener(this);
     ribbon.getToolbar("DNA").getSection("Motifs").add(button);
@@ -241,8 +252,13 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
   }
 
   @Override
-  public DataFrame autoOpenFile(final MainMatCalcWindow window, final Path file, FileType type, int headers,
-      int rowAnnotations, String delimiter, Collection<String> skipLines) throws IOException {
+  public DataFrame autoOpenFile(final MainMatCalcWindow window,
+      final Path file,
+      FileType type,
+      int headers,
+      int rowAnnotations,
+      String delimiter,
+      Collection<String> skipLines) throws IOException {
     seqLogo(file);
 
     return null;
@@ -257,7 +273,8 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     }
 
     if (FileUtils.exists(file)) {
-      if (ModernMessageDialog.createFileReplaceDialog(mWindow, file) == ModernDialogStatus.CANCEL) {
+      if (ModernMessageDialog.createFileReplaceDialog(mWindow,
+          file) == ModernDialogStatus.CANCEL) {
         return;
       }
     }
@@ -281,9 +298,12 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
         double score = m.getValue(i, scoreCol);
         char strand = m.getText(i, strandCol).charAt(0);
 
-        String name = m.getText(i, nameCol).replaceAll(" +", "_").replaceAll(",", "") + "_" + m.getText(i, idCol);
+        String name = m.getText(i, nameCol).replaceAll(" +", "_")
+            .replaceAll(",", "") + "_" + m.getText(i, idCol);
 
-        writer.write(Join.onTab().values(r.getChr(), r.getStart(), r.getEnd(), name, score, strand).toString());
+        writer.write(Join.onTab()
+            .values(r.getChr(), r.getStart(), r.getEnd(), name, score, strand)
+            .toString());
         writer.newLine();
       }
     } finally {
@@ -308,7 +328,8 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     JFrame window;
 
     if (c != -1) {
-      List<String> names = CollectionUtils.uniquePreserveOrder(m.columnAsText(c));
+      List<String> names = CollectionUtils
+          .uniquePreserveOrder(m.columnAsText(c));
 
       window = new MainSeqLogoWindow(names);
 
@@ -330,18 +351,22 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
   }
 
   private void addRegionGroupsPanel() {
-    if (mWindow.getTabsPane().getModel().getLeftTabs().containsTab("Motif Groups")) {
+    if (mWindow.getTabsPane().getModel().getLeftTabs()
+        .containsTab("Motif Groups")) {
       return;
     }
 
     SizableContentPane sizePane = new SizableContentPane("Motif Groups",
-        new CloseableHTab("Motif Groups", mRegionGroupsPanel, mWindow.getTabsPane()), 250, 100, 500);
+        new CloseableHTab("Motif Groups", mRegionGroupsPanel,
+            mWindow.getTabsPane()),
+        250, 100, 500);
 
     mWindow.getTabsPane().getModel().addLeftTab(sizePane);
   }
 
   private void motifSearch() throws IOException {
-    MotifSearchDialog dialog = new MotifSearchDialog(mWindow, mRegionGroupsModel);
+    MotifSearchDialog dialog = new MotifSearchDialog(mWindow,
+        mRegionGroupsModel);
 
     dialog.setVisible(true);
 
@@ -349,7 +374,8 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
       return;
     }
 
-    MotifSearchTask task = new MotifSearchTask(mWindow, dialog.getMotifs(), dialog.getThreshold());
+    MotifSearchTask task = new MotifSearchTask(mWindow, dialog.getMotifs(),
+        dialog.getThreshold());
 
     task.doInBackground();
     task.done();
@@ -365,7 +391,8 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     }
 
     ModernDialogStatus status = ModernMessageDialog.createDialog(mWindow,
-        "Searching for motifs may take several minutes.", MessageDialogType.INFORMATION_OK_CANCEL);
+        "Searching for motifs may take several minutes.",
+        MessageDialogType.INFORMATION_OK_CANCEL);
 
     if (status == ModernDialogStatus.CANCEL) {
       return;
@@ -381,16 +408,19 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
     // Load some chromosome sizes for hg19
 
-    ChromosomeSizesService.getInstance().load(GenomeAssembly.HG19, Resources.getGzipReader(CHR_SIZE_FILE));
+    ChromosomeSizesService.getInstance().load(GenomeAssembly.HG19,
+        Resources.getGzipReader(CHR_SIZE_FILE));
 
     if (dialog.useForeVsBackMode()) {
-      MotifEnrichmentTask task = new MotifEnrichmentTask(mWindow, searchMotifs, foregroundGroup, backgroundGroup,
-          threshold, sensitivity, specificity);
+      MotifEnrichmentTask task = new MotifEnrichmentTask(mWindow, searchMotifs,
+          foregroundGroup, backgroundGroup, threshold, sensitivity,
+          specificity);
 
       task.doInBackground(); // execute();
     } else {
-      MotifEnrichmentGCHistTask task = new MotifEnrichmentGCHistTask(mWindow, "hg19",
-          GenomeAssemblyService.getInstance(), ChromosomeSizesService.getInstance().getSizes(GenomeAssembly.HG19),
+      MotifEnrichmentGCHistTask task = new MotifEnrichmentGCHistTask(mWindow,
+          "hg19", GenomeAssemblyService.getInstance(),
+          ChromosomeSizesService.getInstance().getSizes(GenomeAssembly.HG19),
           searchMotifs, foregroundGroup, threshold, sensitivity, specificity);
 
       task.doInBackground();
@@ -399,16 +429,19 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
   private void gcBackground() throws IOException {
     ModernDialogStatus status = ModernMessageDialog.createDialog(mWindow,
-        "Generating a GC matched set of sequences may take several minutes.", MessageDialogType.INFORMATION_OK_CANCEL);
+        "Generating a GC matched set of sequences may take several minutes.",
+        MessageDialogType.INFORMATION_OK_CANCEL);
 
     if (status == ModernDialogStatus.CANCEL) {
       return;
     }
 
     // Load some chromosome sizes for hg19
-    ChromosomeSizesService.getInstance().load(GenomeAssembly.HG19, Resources.getGzipReader(CHR_SIZE_FILE));
+    ChromosomeSizesService.getInstance().load(GenomeAssembly.HG19,
+        Resources.getGzipReader(CHR_SIZE_FILE));
 
-    GCBackgroundTask task = new GCBackgroundTask(mWindow, GenomeAssembly.HG19, GenomeAssemblyService.getInstance(),
+    GCBackgroundTask task = new GCBackgroundTask(mWindow, GenomeAssembly.HG19,
+        GenomeAssemblyService.getInstance(),
         ChromosomeSizesService.getInstance().getSizes(GenomeAssembly.HG19));
 
     task.doInBackground();
@@ -433,7 +466,8 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
     Figure figure = Figure.createRowFigure();
 
-    for (int i = Math.max(0, mutations.size() - MAX_MUTATIONS_PLOT - 1); i < mutations.size(); ++i) {
+    for (int i = Math.max(0,
+        mutations.size() - MAX_MUTATIONS_PLOT - 1); i < mutations.size(); ++i) {
       String mutation = mutations.get(i);
 
       SubFigure subFigure = figure.newSubFigure();

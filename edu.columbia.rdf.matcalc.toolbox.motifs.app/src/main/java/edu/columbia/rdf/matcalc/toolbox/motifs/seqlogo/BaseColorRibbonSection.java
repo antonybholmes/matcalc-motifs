@@ -69,31 +69,33 @@ public class BaseColorRibbonSection extends RibbonSection {
   /**
    * Instantiates a new genomic region ribbon section.
    *
-   * @param model
-   *          the model
-   * @param genomeModel
-   *          the genome model
-   * @param sizes
-   *          the sizes
-   * @param genes
-   *          the genes
+   * @param model the model
+   * @param genomeModel the genome model
+   * @param sizes the sizes
+   * @param genes the genes
    */
   public BaseColorRibbonSection(ModernRibbonWindow parent) {
     super(parent.getRibbon(), "Base Color");
 
     mParent = parent;
 
-    mColorAButton = new BaseButton(parent, DnaService.getInstance().getBaseAColor(), "A");
+    mColorAButton = new BaseButton(parent,
+        DnaService.getInstance().getBaseAColor(), "A");
 
-    mColorCButton = new BaseButton(parent, DnaService.getInstance().getBaseCColor(), "C");
+    mColorCButton = new BaseButton(parent,
+        DnaService.getInstance().getBaseCColor(), "C");
 
-    mColorGButton = new BaseButton(parent, DnaService.getInstance().getBaseGColor(), "G");
+    mColorGButton = new BaseButton(parent,
+        DnaService.getInstance().getBaseGColor(), "G");
 
-    mColorTButton = new BaseButton(parent, DnaService.getInstance().getBaseTColor(), "T");
+    mColorTButton = new BaseButton(parent,
+        DnaService.getInstance().getBaseTColor(), "T");
 
-    mColorNButton = new BaseButton(parent, DnaService.getInstance().getBaseNColor(), "N");
+    mColorNButton = new BaseButton(parent,
+        DnaService.getInstance().getBaseNColor(), "N");
 
-    mDefaultsButton = new RibbonLargeButton("Defaults", UIService.getInstance().loadIcon("reset", 24));
+    mDefaultsButton = new RibbonLargeButton("Defaults",
+        UIService.getInstance().loadIcon("reset", 24));
 
     // Box box = new RibbonStripContainer();
 
@@ -129,7 +131,8 @@ public class BaseColorRibbonSection extends RibbonSection {
     mColorAButton.addClickListener(new ModernClickListener() {
       @Override
       public void clicked(ModernClickEvent e) {
-        DnaService.getInstance().setBaseAColor(mColorAButton.getSelectedColor());
+        DnaService.getInstance()
+            .setBaseAColor(mColorAButton.getSelectedColor());
         fireClicked();
       }
     });
@@ -137,7 +140,8 @@ public class BaseColorRibbonSection extends RibbonSection {
     mColorCButton.addClickListener(new ModernClickListener() {
       @Override
       public void clicked(ModernClickEvent e) {
-        DnaService.getInstance().setBaseCColor(mColorCButton.getSelectedColor());
+        DnaService.getInstance()
+            .setBaseCColor(mColorCButton.getSelectedColor());
         fireClicked();
       }
     });
@@ -145,7 +149,8 @@ public class BaseColorRibbonSection extends RibbonSection {
     mColorGButton.addClickListener(new ModernClickListener() {
       @Override
       public void clicked(ModernClickEvent e) {
-        DnaService.getInstance().setBaseGColor(mColorGButton.getSelectedColor());
+        DnaService.getInstance()
+            .setBaseGColor(mColorGButton.getSelectedColor());
         fireClicked();
       }
     });
@@ -153,7 +158,8 @@ public class BaseColorRibbonSection extends RibbonSection {
     mColorTButton.addClickListener(new ModernClickListener() {
       @Override
       public void clicked(ModernClickEvent e) {
-        DnaService.getInstance().setBaseTColor(mColorTButton.getSelectedColor());
+        DnaService.getInstance()
+            .setBaseTColor(mColorTButton.getSelectedColor());
         fireClicked();
       }
     });
@@ -161,7 +167,8 @@ public class BaseColorRibbonSection extends RibbonSection {
     mColorNButton.addClickListener(new ModernClickListener() {
       @Override
       public void clicked(ModernClickEvent e) {
-        DnaService.getInstance().setBaseNColor(mColorNButton.getSelectedColor());
+        DnaService.getInstance()
+            .setBaseNColor(mColorNButton.getSelectedColor());
         fireClicked();
       }
     });
@@ -175,7 +182,8 @@ public class BaseColorRibbonSection extends RibbonSection {
   }
 
   private void resetToDefaults() {
-    ModernDialogStatus status = ModernMessageDialog.createOkCancelWarningDialog(mParent,
+    ModernDialogStatus status = ModernMessageDialog.createOkCancelWarningDialog(
+        mParent,
         "The base colors will be reset to their default values.");
 
     if (status == ModernDialogStatus.OK) {

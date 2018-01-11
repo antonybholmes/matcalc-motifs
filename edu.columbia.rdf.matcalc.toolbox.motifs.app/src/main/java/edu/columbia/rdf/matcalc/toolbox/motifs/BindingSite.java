@@ -29,8 +29,10 @@ public class BindingSite {
 
   @Override
   public String toString() {
-    return new StringBuilder(mSequence).append(TextUtils.TAB_DELIMITER).append(mStrand).append(TextUtils.TAB_DELIMITER)
-        .append(Integer.toString(mOffset)).append(TextUtils.TAB_DELIMITER).append(Double.toString(mScore)).toString();
+    return new StringBuilder(mSequence).append(TextUtils.TAB_DELIMITER)
+        .append(mStrand).append(TextUtils.TAB_DELIMITER)
+        .append(Integer.toString(mOffset)).append(TextUtils.TAB_DELIMITER)
+        .append(Double.toString(mScore)).toString();
   }
 
   public double getScore() {
@@ -62,7 +64,8 @@ public class BindingSite {
 
     List<BindingSite> ret = new ArrayList<BindingSite>();
 
-    for (double score : CollectionUtils.reverse(CollectionUtils.sort(scoreMap.keySet()))) {
+    for (double score : CollectionUtils
+        .reverse(CollectionUtils.sort(scoreMap.keySet()))) {
       for (BindingSite site : sortByDistance(scoreMap.get(score))) {
         ret.add(site);
       }

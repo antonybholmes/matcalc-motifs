@@ -11,7 +11,6 @@ import org.jebtk.graphplot.figure.SubFigure;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.graphics.DrawingContext;
 import org.jebtk.modern.graphics.ImageUtils;
-import org.jebtk.modern.widget.ModernWidget;
 
 public class TextLayer extends PlotLayer {
   private static final long serialVersionUID = 1L;
@@ -27,7 +26,12 @@ public class TextLayer extends PlotLayer {
   }
 
   @Override
-  public void plotLayer(Graphics2D g2, DrawingContext context, Figure figure, SubFigure subFigure, Axes axes, Plot plot,
+  public void plotLayer(Graphics2D g2,
+      DrawingContext context,
+      Figure figure,
+      SubFigure subFigure,
+      Axes axes,
+      Plot plot,
       DataFrame m) {
 
     int nameCol = DataFrame.findColumn(m, "Motif Name");
@@ -36,7 +40,8 @@ public class TextLayer extends PlotLayer {
     // int strandCol = DataFrame.findColumn(m, "Strand");
     int mutationCol = DataFrame.findColumn(m, "Mutation");
 
-    int lineHeight = g2.getFontMetrics().getAscent() / 2; // ModernWidget.getStringHeight(g2) / 2;
+    int lineHeight = g2.getFontMetrics().getAscent() / 2; // ModernWidget.getStringHeight(g2)
+                                                          // / 2;
 
     int y = axes.toPlotY1(0.7);
 

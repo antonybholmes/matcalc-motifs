@@ -24,7 +24,12 @@ public class MotifLayer extends PlotLayer {
   }
 
   @Override
-  public void plotLayer(Graphics2D g2, DrawingContext context, Figure figure, SubFigure subFigure, Axes axes, Plot plot,
+  public void plotLayer(Graphics2D g2,
+      DrawingContext context,
+      Figure figure,
+      SubFigure subFigure,
+      Axes axes,
+      Plot plot,
       DataFrame m) {
 
     // int dnaCol = DataFrame.findColumn(m, "DNA Sequence");
@@ -64,7 +69,8 @@ public class MotifLayer extends PlotLayer {
       // int h =
       // SettingsService.getInstance().getAsInt("mutplot.plot.protein.height");
 
-      // int y = PLOT_OFFSET.y + internalPlotSize.height - FEATURE_BLOCK_HEIGHT +
+      // int y = PLOT_OFFSET.y + internalPlotSize.height - FEATURE_BLOCK_HEIGHT
+      // +
       // (FEATURE_BLOCK_HEIGHT - h) / 2;
 
       g2.setColor(ColorUtils.tint(Color.RED, 0.5)); // ColorUtils.decodeHtmlColor(mProperty.getChildByPath("background/color").getValue()));

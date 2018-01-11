@@ -24,11 +24,8 @@ import org.jebtk.graphplot.ModernPlotCanvas;
 import org.jebtk.graphplot.figure.FigurePanel;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.UIService;
-import org.jebtk.modern.contentpane.CenterTab;
 import org.jebtk.modern.contentpane.CloseableHTab;
 import org.jebtk.modern.contentpane.HTab;
-import org.jebtk.modern.contentpane.ModernHContentPane;
-import org.jebtk.modern.contentpane.SizableContentPane;
 import org.jebtk.modern.dialog.DialogEvent;
 import org.jebtk.modern.dialog.DialogEventListener;
 import org.jebtk.modern.dialog.ModernDialogStatus;
@@ -65,7 +62,8 @@ import org.xml.sax.SAXException;
  * @author Antony Holmes Holmes
  *
  */
-public class MainSeqLogoWindow extends ModernRibbonWindow implements ModernClickListener {
+public class MainSeqLogoWindow extends ModernRibbonWindow
+    implements ModernClickListener {
   private static final long serialVersionUID = 1L;
 
   private OpenRibbonPanel mOpenPanel = new OpenRibbonPanel();
@@ -78,7 +76,9 @@ public class MainSeqLogoWindow extends ModernRibbonWindow implements ModernClick
 
   protected MatrixGroupModel mGroupsModel = new MatrixGroupModel();
 
-  private SeqLogosCanvas mFigure = new SeqLogosCanvas(); // new PeaksCanvas(mBedGraphsModel, mGenomicModel);
+  private SeqLogosCanvas mFigure = new SeqLogosCanvas(); // new
+                                                         // PeaksCanvas(mBedGraphsModel,
+                                                         // mGenomicModel);
 
   private MotifModel mMotifModel = new MotifModel();
 
@@ -192,11 +192,13 @@ public class MainSeqLogoWindow extends ModernRibbonWindow implements ModernClick
     getRibbonMenu().addSeparator();
 
     menuItem = new RibbonMenuItem(UI.MENU_INFO);
-    getRibbonMenu().addTabbedMenuItem(menuItem, new RibbonPanelProductInfo(getAppInfo()));
+    getRibbonMenu().addTabbedMenuItem(menuItem,
+        new RibbonPanelProductInfo(getAppInfo()));
     // getRibbonMenu().addTabbedMenuItem(menuItem);
 
     menuItem = new RibbonMenuItem(UI.MENU_OPTIONS);
-    getRibbonMenu().addTabbedMenuItem(menuItem, new ModernOptionsRibbonPanel(getAppInfo()));
+    getRibbonMenu().addTabbedMenuItem(menuItem,
+        new ModernOptionsRibbonPanel(getAppInfo()));
 
     getRibbonMenu().setDefaultIndex(0);
 
@@ -207,13 +209,15 @@ public class MainSeqLogoWindow extends ModernRibbonWindow implements ModernClick
     // Ribbon2 ribbon = new Ribbon2();
     getRibbon().setHelpButtonEnabled(getAppInfo());
 
-    button = new QuickAccessButton(UIService.getInstance().loadIcon(QuickOpenVectorIcon.class, 16));
+    button = new QuickAccessButton(
+        UIService.getInstance().loadIcon(QuickOpenVectorIcon.class, 16));
     button.setClickMessage(UI.MENU_OPEN);
     button.setToolTip(new ModernToolTip("Open", "Open peak files."));
     button.addClickListener(this);
     addQuickAccessButton(button);
 
-    button = new QuickAccessButton(UIService.getInstance().loadIcon(QuickSaveVectorIcon.class, 16));
+    button = new QuickAccessButton(
+        UIService.getInstance().loadIcon(QuickSaveVectorIcon.class, 16));
     button.setClickMessage(UI.MENU_SAVE);
     button.setToolTip(new ModernToolTip("Save", "Save the current image."));
     button.addClickListener(this);
@@ -224,14 +228,16 @@ public class MainSeqLogoWindow extends ModernRibbonWindow implements ModernClick
 
     // RibbonSection toolbarContainer = new RibbonSection("Options");
 
-    // mButtonRevComp = new RibbonLargeCheckButtonIconText2("Reverse Complement",
+    // mButtonRevComp = new RibbonLargeCheckButtonIconText2("Reverse
+    // Complement",
     // UIResources.getInstance().loadIcon("reverse_complement", 24),
     // "Reverse Complement",
     // "Reverse complement motifs.");
 
     // Ui.setSize(mButtonRevComp, Ribbon2.MEDIUM_TEXT_BUTTON_SIZE);
 
-    getRibbon().getToolbar("Plot").add(new MotifViewRibbonSection(getRibbon(), mViewModel));
+    getRibbon().getToolbar("Plot")
+        .add(new MotifViewRibbonSection(getRibbon(), mViewModel));
 
     // mButtonRevComp = new ModernCheckBox("Reverse Complement");
     // toolbarContainer.add(new RibbonStripContainer(mButtonRevComp));
@@ -302,7 +308,8 @@ public class MainSeqLogoWindow extends ModernRibbonWindow implements ModernClick
 
     mMotifsPanel.setBorder(ModernPanel.DOUBLE_BORDER);
 
-    getTabsPane().addLeftTab("Motifs", new HTab("Motifs", mMotifsPanel), 250, 200, 500);
+    getTabsPane()
+        .addLeftTab("Motifs", new HTab("Motifs", mMotifsPanel), 250, 200, 500);
   }
 
   private void addFormatPane() {
@@ -310,14 +317,18 @@ public class MainSeqLogoWindow extends ModernRibbonWindow implements ModernClick
       return;
     }
 
-    getTabsPane().addRightTab("Format Plot", new CloseableHTab("Format Plot", mFormatPanel, getTabsPane()), 300, 200,
+    getTabsPane().addRightTab("Format Plot",
+        new CloseableHTab("Format Plot", mFormatPanel, getTabsPane()),
+        300,
+        200,
         500);
 
   }
 
   @Override
   public final void clicked(ModernClickEvent e) {
-    if (e.getMessage().equals(UI.MENU_OPEN) || e.getMessage().equals(UI.MENU_BROWSE)
+    if (e.getMessage().equals(UI.MENU_OPEN)
+        || e.getMessage().equals(UI.MENU_BROWSE)
         || e.getMessage().startsWith("Other...")) {
       try {
         browseForFile();
@@ -371,11 +382,13 @@ public class MainSeqLogoWindow extends ModernRibbonWindow implements ModernClick
     }
   }
 
-  private void browseForFile() throws IOException, SAXException, ParserConfigurationException {
+  private void browseForFile()
+      throws IOException, SAXException, ParserConfigurationException {
     browseForFile(RecentFilesService.getInstance().getPwd());
   }
 
-  private void browseForFile(Path workingDirectory) throws IOException, SAXException, ParserConfigurationException {
+  private void browseForFile(Path workingDirectory)
+      throws IOException, SAXException, ParserConfigurationException {
     openFile(BioInfDialog.openMotifFile(this, workingDirectory));
   }
 
@@ -441,7 +454,8 @@ public class MainSeqLogoWindow extends ModernRibbonWindow implements ModernClick
     }
 
     if (FileUtils.exists(file)) {
-      ModernMessageDialog.createFileReplaceDialog(this, file, new ExportCallBack(file, pwd));
+      ModernMessageDialog
+          .createFileReplaceDialog(this, file, new ExportCallBack(file, pwd));
     } else {
       save(file);
     }
