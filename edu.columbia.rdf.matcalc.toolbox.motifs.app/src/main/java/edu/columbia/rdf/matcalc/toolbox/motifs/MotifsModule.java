@@ -76,14 +76,16 @@ import edu.columbia.rdf.matcalc.toolbox.motifs.seqlogo.SeqLogoIcon;
 public class MotifsModule extends CalcModule implements ModernClickListener {
   public static final Logger LOG = LoggerFactory.getLogger(MotifsModule.class);
 
-  private static final Path RES_DIR = AppService.MOD_DIR.resolve("motifs");
+  private static final Path MOD_DIR = 
+      AppService.INSTANCE_MOD_DIR.resolve("motifs");
 
-  private static final Path CHR_SIZE_FILE = RES_DIR
+  private static final Path CHR_SIZE_FILE = MOD_DIR
       .resolve("ucsc_chromosome_sizes_hg19.txt.gz");
 
-  private static final Path DATABASE_DIR = RES_DIR.resolve("database");
+  private static final Path DATABASE_DIR = MOD_DIR.resolve("database");
 
-  private static final Set<GuiFileExtFilter> FILE_TYPES_SET = new TreeSet<GuiFileExtFilter>();
+  private static final Set<GuiFileExtFilter> FILE_TYPES_SET = 
+      new TreeSet<GuiFileExtFilter>();
 
   private static final int MAX_MUTATIONS_PLOT = 50;
 
@@ -122,6 +124,8 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
     // MotifsDBService.getInstance().addBackEnd(new MotifsWeb());
 
+    System.err.println("mod " + DATABASE_DIR);
+    
     MotifsDataSourceService.getInstance()
         .addDataSource(new MotifsFs(DATABASE_DIR));
     MotifsDataSourceService.getInstance()
