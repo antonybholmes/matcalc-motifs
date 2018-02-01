@@ -41,10 +41,10 @@ public class MotifViewRibbonSection extends RibbonSection
         "Show sequence logo scores as probabilities.");
     add(mPButton);
 
-    mBitsButton.setToolTip("Bits", "Show sequence logo scores as bits.");
+    mBitsButton.setToolTip("Bits", "Show sequence logo scores in bits.");
     add(mBitsButton);
 
-    add(UI.createHGap(5));
+    add(UI.createHGap(10));
 
     add(mButtonRevComp);
 
@@ -65,6 +65,8 @@ public class MotifViewRibbonSection extends RibbonSection
       mPButton.setSelected(true);
       break;
     }
+
+    mButtonRevComp.setSelected(mModel.getRevComp());
   }
 
   private void change(ModernClickEvent e) {

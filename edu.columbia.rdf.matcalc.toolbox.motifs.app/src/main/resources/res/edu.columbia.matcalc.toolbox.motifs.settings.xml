@@ -20,15 +20,15 @@
 	<setting name="org.matcalc.toolbox.bio.seqlogo.motif-view" value="p"/>
 	<setting name="org.matcalc.toolbox.bio.seqlogo.rev-comp" value="false"/>
 	<setting name="motifs.help.type" value="web" />
-	<setting name="motifs.help.url" value="https://bitbucket.org/lab_rdf/matcalc/wiki/Motifs" />
+	<setting name="motifs.help.url" value="https://github.com/lab-rdf/matcalc/wiki/Motifs" />
 	
 	<setting name="motifs.plot.bar.background.color" value="#cccccc" />
 	<setting name="motifs.plot.bar.border.color" value="#c0c0c0" />
 	
 	<setting name="seqlogo.help.type" value="web" />
-	<setting name="seqlogo.help.url" value="https://bitbucket.org/lab_rdf/matcalc/wiki/SeqLogo" />
+	<setting name="seqlogo.help.url" value="https://github.com/lab-rdf/matcalc/wiki/SeqLogo" />
 	
-	<setting name="org.matcalc.toolbox.bio.motifs.search.help.url" value="https://bitbucket.org/lab_rdf/matcalc/wiki/Motifs#markdown-header-searching"/>
-	<setting name="org.matcalc.toolbox.bio.motifs.enrichment.help.url" value="https://bitbucket.org/lab_rdf/matcalc/wiki/Motifs#markdown-header-enrichment"/>
-	<setting name="org.matcalc.toolbox.bio.motifs.seqlogo.dna-bases.help.url" value="https://bitbucket.org/lab_rdf/matcalc/wiki/SeqLogo_DNA_Bases"/>
+	<setting name="org.matcalc.toolbox.bio.motifs.search.help.url" value="https://github.com/lab-rdf/matcalc/wiki/Motifs#markdown-header-searching"/>
+	<setting name="org.matcalc.toolbox.bio.motifs.enrichment.help.url" value="https://github.com/lab-rdf/matcalc/wiki/Motifs#markdown-header-enrichment"/>
+	<setting name="org.matcalc.toolbox.bio.motifs.seqlogo.dna-bases.help.url" value="https://github.com/lab-rdf/matcalc/wiki/SeqLogo_DNA_Bases"/>
 </settings>

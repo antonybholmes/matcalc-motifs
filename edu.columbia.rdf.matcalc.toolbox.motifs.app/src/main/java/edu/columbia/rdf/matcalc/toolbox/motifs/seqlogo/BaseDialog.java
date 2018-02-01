@@ -106,7 +106,7 @@ public class BaseDialog extends ModernDialogHelpWindow {
         "The base colors will be reset to their default values.");
 
     if (status == ModernDialogStatus.OK) {
-      DnaService.getInstance().resetToDefaults();
+      DnaService.getInstance().reset();
 
       setColors();
     }

@@ -24,6 +24,7 @@ import org.jebtk.bioinformatics.motifs.MotifsPwtFs;
 import org.jebtk.bioinformatics.motifs.MotifsXmlFs;
 import org.jebtk.bioinformatics.ui.external.ucsc.BedGuiFileFilter;
 import org.jebtk.bioinformatics.ui.filters.MotifGuiFileFilter;
+import org.jebtk.bioinformatics.ui.filters.MotifPwm2GuiFileFilter;
 import org.jebtk.bioinformatics.ui.filters.MotifPwmGuiFileFilter;
 import org.jebtk.bioinformatics.ui.groups.GroupsModel;
 import org.jebtk.bioinformatics.ui.groups.GroupsPanel;
@@ -76,16 +77,15 @@ import edu.columbia.rdf.matcalc.toolbox.motifs.seqlogo.SeqLogoIcon;
 public class MotifsModule extends CalcModule implements ModernClickListener {
   public static final Logger LOG = LoggerFactory.getLogger(MotifsModule.class);
 
-  private static final Path MOD_DIR = 
-      AppService.INSTANCE_MOD_DIR.resolve("motifs");
+  private static final Path MOD_DIR = AppService.INSTANCE_MOD_DIR
+      .resolve("motifs");
 
   private static final Path CHR_SIZE_FILE = MOD_DIR
       .resolve("ucsc_chromosome_sizes_hg19.txt.gz");
 
   private static final Path DATABASE_DIR = MOD_DIR.resolve("database");
 
-  private static final Set<GuiFileExtFilter> FILE_TYPES_SET = 
-      new TreeSet<GuiFileExtFilter>();
+  private static final Set<GuiFileExtFilter> FILE_TYPES_SET = new TreeSet<GuiFileExtFilter>();
 
   private static final int MAX_MUTATIONS_PLOT = 50;
 
@@ -111,6 +111,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
     FILE_TYPES_SET.add(new MotifGuiFileFilter());
     FILE_TYPES_SET.add(new MotifPwmGuiFileFilter());
+    FILE_TYPES_SET.add(new MotifPwm2GuiFileFilter());
   }
 
   public MotifsModule() throws MalformedURLException, IOException {
@@ -125,7 +126,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     // MotifsDBService.getInstance().addBackEnd(new MotifsWeb());
 
     System.err.println("mod " + DATABASE_DIR);
-    
+
     MotifsDataSourceService.getInstance()
         .addDataSource(new MotifsFs(DATABASE_DIR));
     MotifsDataSourceService.getInstance()
@@ -456,6 +457,13 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
     int mutationCol = DataFrame.findColumn(m, "Mutation");
 
+    if (mutationCol == -1) {
+      ModernMessageDialog.createWarningDialog(mWindow,
+          "You need column called 'Mutation'.");
+
+      return;
+    }
+
     List<String> mutations = new UniqueArrayList<String>();
 
     for (int i = 0; i < m.getRows(); ++i) {
@@ -467,6 +475,17 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     String dna = m.getText(0, dnaCol);
 
     int l = dna.length();
+
+    PlotDialog dialog = new PlotDialog(mWindow, mutations);
+
+    dialog.setVisible(true);
+
+    if (dialog.isCancelled()) {
+      return;
+    }
+
+    // We just plot the mutations of interest
+    mutations = dialog.getMutations();
 
     Figure figure = Figure.createRowFigure();
 

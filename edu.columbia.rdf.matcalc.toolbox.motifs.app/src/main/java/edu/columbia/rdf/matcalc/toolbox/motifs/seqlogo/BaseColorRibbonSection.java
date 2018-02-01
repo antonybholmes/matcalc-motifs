@@ -79,23 +79,19 @@ public class BaseColorRibbonSection extends RibbonSection {
 
     mParent = parent;
 
-    mColorAButton = new BaseButton(parent,
-        DnaService.getInstance().getBaseAColor(), "A");
+    mColorAButton = new BaseButton(parent, 'A');
 
-    mColorCButton = new BaseButton(parent,
-        DnaService.getInstance().getBaseCColor(), "C");
+    mColorCButton = new BaseButton(parent, 'C');
 
-    mColorGButton = new BaseButton(parent,
-        DnaService.getInstance().getBaseGColor(), "G");
+    mColorGButton = new BaseButton(parent, 'G');
 
-    mColorTButton = new BaseButton(parent,
-        DnaService.getInstance().getBaseTColor(), "T");
+    mColorTButton = new BaseButton(parent, 'T');
 
-    mColorNButton = new BaseButton(parent,
-        DnaService.getInstance().getBaseNColor(), "N");
+    mColorNButton = new BaseButton(parent, 'N');
 
     mDefaultsButton = new RibbonLargeButton("Defaults",
-        UIService.getInstance().loadIcon("reset", 24));
+        UIService.getInstance().loadIcon("reset", 24), "Defaults",
+        "Reset colors to their defaults.");
 
     // Box box = new RibbonStripContainer();
 
@@ -128,51 +124,6 @@ public class BaseColorRibbonSection extends RibbonSection {
 
     // add(box);
 
-    mColorAButton.addClickListener(new ModernClickListener() {
-      @Override
-      public void clicked(ModernClickEvent e) {
-        DnaService.getInstance()
-            .setBaseAColor(mColorAButton.getSelectedColor());
-        fireClicked();
-      }
-    });
-
-    mColorCButton.addClickListener(new ModernClickListener() {
-      @Override
-      public void clicked(ModernClickEvent e) {
-        DnaService.getInstance()
-            .setBaseCColor(mColorCButton.getSelectedColor());
-        fireClicked();
-      }
-    });
-
-    mColorGButton.addClickListener(new ModernClickListener() {
-      @Override
-      public void clicked(ModernClickEvent e) {
-        DnaService.getInstance()
-            .setBaseGColor(mColorGButton.getSelectedColor());
-        fireClicked();
-      }
-    });
-
-    mColorTButton.addClickListener(new ModernClickListener() {
-      @Override
-      public void clicked(ModernClickEvent e) {
-        DnaService.getInstance()
-            .setBaseTColor(mColorTButton.getSelectedColor());
-        fireClicked();
-      }
-    });
-
-    mColorNButton.addClickListener(new ModernClickListener() {
-      @Override
-      public void clicked(ModernClickEvent e) {
-        DnaService.getInstance()
-            .setBaseNColor(mColorNButton.getSelectedColor());
-        fireClicked();
-      }
-    });
-
     mDefaultsButton.addClickListener(new ModernClickListener() {
       @Override
       public void clicked(ModernClickEvent e) {
@@ -187,7 +138,7 @@ public class BaseColorRibbonSection extends RibbonSection {
         "The base colors will be reset to their default values.");
 
     if (status == ModernDialogStatus.OK) {
-      DnaService.getInstance().resetToDefaults();
+      DnaService.getInstance().reset();
       fireClicked();
     }
   }

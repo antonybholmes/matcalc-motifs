@@ -8,6 +8,7 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.batik.transcoder.TranscoderException;
+import org.jebtk.bioinformatics.genomic.DnaService;
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.bioinformatics.ui.BioInfDialog;
 import org.jebtk.bioinformatics.ui.motifs.MotifModel;
@@ -25,7 +26,6 @@ import org.jebtk.graphplot.figure.FigurePanel;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.UIService;
 import org.jebtk.modern.contentpane.CloseableHTab;
-import org.jebtk.modern.contentpane.HTab;
 import org.jebtk.modern.dialog.DialogEvent;
 import org.jebtk.modern.dialog.DialogEventListener;
 import org.jebtk.modern.dialog.ModernDialogStatus;
@@ -47,6 +47,8 @@ import org.jebtk.modern.ribbon.QuickAccessButton;
 import org.jebtk.modern.ribbon.RibbonMenuItem;
 import org.jebtk.modern.scrollpane.FixedIncScroller;
 import org.jebtk.modern.scrollpane.ModernScrollPane;
+import org.jebtk.modern.scrollpane.ScrollBarLocation;
+import org.jebtk.modern.scrollpane.ScrollBarPolicy;
 import org.jebtk.modern.tooltip.ModernToolTip;
 import org.jebtk.modern.widget.ModernClickWidget;
 import org.jebtk.modern.widget.ModernWidget;
@@ -77,14 +79,14 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
   protected MatrixGroupModel mGroupsModel = new MatrixGroupModel();
 
   private SeqLogosCanvas mFigure = new SeqLogosCanvas(); // new
-                                                         // PeaksCanvas(mBedGraphsModel,
-                                                         // mGenomicModel);
+  // PeaksCanvas(mBedGraphsModel,
+  // mGenomicModel);
 
   private MotifModel mMotifModel = new MotifModel();
 
   private FormatPanel mFormatPanel;
 
-  private Path mFile;
+  private Path mFile = null;
 
   private MotifsTreePanel mMotifsPanel;
 
@@ -105,7 +107,7 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
 
     @Override
     public void changed(ChangeEvent e) {
-      openMotifs();
+      changeView();
     }
   }
 
@@ -171,6 +173,14 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
 
     mViewModel.addChangeListener(new MotifViewEvents());
 
+    // When a base color changes, refresh the display
+    DnaService.getInstance().addChangeListener(new ChangeListener() {
+      @Override
+      public void changed(ChangeEvent e) {
+        changeView();
+      }
+    });
+
     setSize(1280, 720);
 
     UI.centerWindowToScreen(this);
@@ -179,6 +189,9 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
   public final void createRibbon() {
     // RibbongetRibbonMenu() getRibbonMenu() = new RibbongetRibbonMenu()(0);
     RibbonMenuItem menuItem;
+
+    menuItem = new RibbonMenuItem(UI.MENU_NEW_WINDOW);
+    getRibbonMenu().addTabbedMenuItem(menuItem);
 
     menuItem = new RibbonMenuItem(UI.MENU_OPEN);
     getRibbonMenu().addTabbedMenuItem(menuItem, mOpenPanel);
@@ -200,7 +213,7 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
     getRibbonMenu().addTabbedMenuItem(menuItem,
         new ModernOptionsRibbonPanel(getAppInfo()));
 
-    getRibbonMenu().setDefaultIndex(0);
+    getRibbonMenu().setDefaultIndex(1);
 
     getRibbonMenu().addClickListener(this);
 
@@ -243,17 +256,7 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
     // toolbarContainer.add(new RibbonStripContainer(mButtonRevComp));
     // toolbar.add(toolbarContainer);
 
-    BaseColorRibbonSection baseColorRibbon = new BaseColorRibbonSection(this);
-
-    baseColorRibbon.addClickListener(new ModernClickListener() {
-
-      @Override
-      public void clicked(ModernClickEvent e) {
-        openMotifs();
-      }
-    });
-
-    getRibbon().getToolbar("Plot").add(baseColorRibbon);
+    getRibbon().getToolbar("Plot").add(new BaseColorRibbonSection(this));
 
     // toolbarSection = new
     // PlotSizeRibbonSection(mCanvas.getGraphSpace().getLayoutProperties());
@@ -291,10 +294,10 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
     ModernScrollPane scrollPane = new ModernScrollPane(canvas);
 
     scrollPane.getVScrollBar().setScroller(new FixedIncScroller(200));
+    scrollPane.setScrollBarLocation(ScrollBarLocation.FLOATING)
+        .setScrollBarPolicy(ScrollBarPolicy.AUTO_SHOW);
 
-    ModernPanel panel = new ModernPanel(scrollPane, ModernWidget.BORDER);
-
-    setCard(panel);
+    setCard(scrollPane);
 
     mStatusBar.addRight(new ModernStatusZoomSlider(mZoomModel));
 
@@ -308,8 +311,7 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
 
     mMotifsPanel.setBorder(ModernPanel.DOUBLE_BORDER);
 
-    getTabsPane()
-        .addLeftTab("Motifs", new HTab("Motifs", mMotifsPanel), 250, 200, 500);
+    getTabsPane().addLeftTab("Motifs", mMotifsPanel, 250, 200, 500);
   }
 
   private void addFormatPane() {
@@ -371,6 +373,8 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
       } catch (TranscoderException e1) {
         e1.printStackTrace();
       }
+    } else if (e.getMessage().equals(UI.MENU_NEW_WINDOW)) {
+      newWindow();
     } else if (e.getMessage().equals("Format Plot")) {
       addFormatPane();
     } else if (e.getMessage().equals(UI.MENU_ABOUT)) {
@@ -401,26 +405,51 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
       // We have already opened a file so create a new
       // window
 
-      MainSeqLogoWindow window = new MainSeqLogoWindow(file);
-
-      window.setVisible(true);
+      new MainSeqLogoWindow(file).setVisible(true);
     } else {
-
-      if (PathUtils.getFileExt(file).equals("motif")) {
-        Motif motif = Motif.parseMotif(file);
-
-        openMotif(motif);
-      } else if (PathUtils.getFileExt(file).equals("pwm")) {
-        Motif motif = Motif.parsePwmMotif(file);
-
-        openMotif(motif);
-      } else {
-        // do nothing
-      }
-
       RecentFilesService.getInstance().add(file);
 
       mFile = file;
+
+      openFile();
+    }
+  }
+
+  private void newWindow() {
+    new MainSeqLogoWindow().setVisible(true);
+  }
+
+  private void openFile() throws IOException {
+    if (mFile == null) {
+      return;
+    }
+
+    if (PathUtils.getFileExt(mFile).equals("motif")) {
+      Motif motif = Motif.parseMotif(mFile);
+
+      openMotif(motif);
+    } else if (PathUtils.getFileExt(mFile).equals("pwm2")) {
+      Motif motif = Motif.parsePwm2Motif(mFile);
+
+      openMotif(motif);
+    } else if (PathUtils.getFileExt(mFile).equals("pwm")) {
+      Motif motif = Motif.parsePwmMotif(mFile);
+
+      openMotif(motif);
+    } else {
+      // do nothing
+    }
+  }
+
+  private void changeView() {
+    if (mFile != null) {
+      try {
+        openFile();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    } else {
+      openMotifs();
     }
   }
 
