@@ -10,7 +10,6 @@ import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.core.Mathematics;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.statistics.Hypergeometric;
-import org.jebtk.math.statistics.Statistics;
 import org.jebtk.modern.dialog.ModernMessageDialog;
 
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
@@ -149,17 +148,17 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
 
     int c = 1;
 
-    for (Motif m : motifs) {
-      // lets set the threshold to be at least half the max
-      // score of the motif
+    MotifSearch ms = new MotifSearch();
 
+    for (Motif m : motifs) {
+      // Set the threshold to be at least half the max score of the motif
       double t = MotifSearch.getMaxScore(m) * threshold;
 
       int w = m.getBaseCount();
 
       // double[][] pwm = m.getPwm();
 
-      MotifSearch.bestScores(m, w, iSeqs, iRevCompSeqs, t, 0, bestScores);
+      ms.bestScores(m, w, iSeqs, iRevCompSeqs, t, 0, bestScores);
 
       /*
        * MotifSearch.bestScores(m, w, iSeqs, tripletMap, iRevCompSeqs,
@@ -171,7 +170,7 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
        * foregroundRevCompSeqs, t, 0, bestScores);
        */
 
-      MotifSearch.bestScores(m,
+      ms.bestScores(m,
           w,
           iBackSeqs,
           iBackRevCompSeqs,
@@ -255,8 +254,8 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
       matrix.set(r, 0, sr.m.getName());
       matrix.set(r, 1, sr.m.getId());
       matrix.set(r, 2, sr.m.getDatabase());
-      matrix.set(r, 3, Statistics.minusLog10P(sr.p));
-      matrix.set(r, 4, Statistics.minusLog10P(sr.q));
+      matrix.set(r, 3, -Mathematics.log10(sr.p));
+      matrix.set(r, 4, -Mathematics.log10(sr.q));
       matrix.set(r, 5, sr.stats.truePositive);
       matrix.set(r, 6, sr.stats.falseNegative);
       matrix.set(r, 7, sr.stats.falsePositive);

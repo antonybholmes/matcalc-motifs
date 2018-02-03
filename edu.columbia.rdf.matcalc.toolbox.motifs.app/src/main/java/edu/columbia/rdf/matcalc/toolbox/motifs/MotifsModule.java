@@ -13,7 +13,7 @@ import java.util.TreeSet;
 import javax.swing.JFrame;
 
 import org.jebtk.bioinformatics.dna.GenomeAssemblyWeb;
-import org.jebtk.bioinformatics.genomic.ChromosomeSizesService;
+import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomeAssembly;
 import org.jebtk.bioinformatics.genomic.GenomeAssemblyService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
@@ -413,7 +413,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
     // Load some chromosome sizes for hg19
 
-    ChromosomeSizesService.getInstance().load(GenomeAssembly.HG19,
+    GenomeService.getInstance().load(GenomeAssembly.HG19,
         Resources.getGzipReader(CHR_SIZE_FILE));
 
     if (dialog.useForeVsBackMode()) {
@@ -425,7 +425,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     } else {
       MotifEnrichmentGCHistTask task = new MotifEnrichmentGCHistTask(mWindow,
           "hg19", GenomeAssemblyService.getInstance(),
-          ChromosomeSizesService.getInstance().getSizes(GenomeAssembly.HG19),
+          GenomeService.getInstance().getSizes(GenomeAssembly.HG19),
           searchMotifs, foregroundGroup, threshold, sensitivity, specificity);
 
       task.doInBackground();
@@ -442,12 +442,12 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     }
 
     // Load some chromosome sizes for hg19
-    ChromosomeSizesService.getInstance().load(GenomeAssembly.HG19,
+    GenomeService.getInstance().load(GenomeAssembly.HG19,
         Resources.getGzipReader(CHR_SIZE_FILE));
 
     GCBackgroundTask task = new GCBackgroundTask(mWindow, GenomeAssembly.HG19,
         GenomeAssemblyService.getInstance(),
-        ChromosomeSizesService.getInstance().getSizes(GenomeAssembly.HG19));
+        GenomeService.getInstance().getSizes(GenomeAssembly.HG19));
 
     task.doInBackground();
   }

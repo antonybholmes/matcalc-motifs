@@ -90,8 +90,10 @@ public class ParameterOptimization {
     // lets set the threshold to be at least half the max
     // score of the motif
 
+    MotifSearch ms = new MotifSearch();
+    
     BufferedWriter writer = FileUtils.newBufferedWriter(file);
-
+    
     try {
       for (double threshold = 0; threshold < 1.1; threshold += 0.1) {
         writer.write(Double.toString(threshold));
@@ -108,7 +110,7 @@ public class ParameterOptimization {
 
         int w = motif.getBaseCount();
 
-        MotifSearch.bestScores(motif,
+        ms.bestScores(motif,
             w,
             foregroundSequences,
             foregroundRevCompSeqs,
@@ -116,7 +118,7 @@ public class ParameterOptimization {
             0,
             bestScores);
 
-        MotifSearch.bestScores(motif,
+        ms.bestScores(motif,
             w,
             backgroundSequences,
             backgroundRevCompSeqs,
@@ -216,7 +218,7 @@ public class ParameterOptimization {
 
     int w = motif.getBaseCount();
 
-    // Stats minStats = new Stats();
+    MotifSearch ms = new MotifSearch();
 
     Hypergeometric hyg = new Hypergeometric();
 
@@ -235,14 +237,14 @@ public class ParameterOptimization {
         for (int minSens = 1; minSens < 11; ++minSens) {
           double minSensitivity = minSens / 10.0;
 
-          MotifSearch.bestScores(motif,
+          ms.bestScores(motif,
               w,
               foregroundSequences,
               foregroundRevCompSeqs,
               threshold,
               bestScores);
 
-          MotifSearch.bestScores(motif,
+          ms.bestScores(motif,
               w,
               backgroundSequences,
               backgroundRevCompSeqs,

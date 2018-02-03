@@ -115,6 +115,8 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
     double[] llkrr = new double[MotifSearch.BUFFER_SIZE];
 
     // lets keep all motifs for the moment
+    
+    MotifSearch ms = new MotifSearch();
 
     List<SearchResult> searchResults = new ArrayList<SearchResult>();
 
@@ -142,8 +144,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 
         // SearchRegion region = searchRegions.get(i);
 
-        MotifSearch
-            .search(iSeq, iRevCompSeq, n, pwm, bgscore, w, t, llkrf, llkrr);
+        ms.search(iSeq, iRevCompSeq, n, pwm, bgscore, w, t, llkrf, llkrr);
 
         List<BindingSite> sites = MotifSearch
             .getBindingSites(seq, n, w, llkrf, llkrr);
