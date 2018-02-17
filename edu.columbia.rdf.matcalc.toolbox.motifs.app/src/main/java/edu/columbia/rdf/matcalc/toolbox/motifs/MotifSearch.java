@@ -1344,7 +1344,8 @@ public class MotifSearch {
     }
   }
 
-  public static List<SearchRegion> getSearchRegions(Group group,
+  public static List<SearchRegion> getSearchRegions(String genome,
+      Group group,
       int ext5p,
       int ext3p,
       boolean mainVariants,
@@ -1358,7 +1359,7 @@ public class MotifSearch {
       if (GenomicRegion.isGenomicRegion(id)) {
         // assume it is a peak file that I made
 
-        region = GenomicRegion.parse(id);
+        region = GenomicRegion.parse(genome, id);
 
         if (peakWidths) {
           // Use the peak width as the search region rather than

@@ -7,7 +7,6 @@ import javax.swing.SwingWorker;
 
 import org.jebtk.bioinformatics.dna.Sequence;
 import org.jebtk.bioinformatics.gapsearch.BinaryGapSearch;
-import org.jebtk.bioinformatics.genomic.ChromosomeSizes;
 import org.jebtk.bioinformatics.genomic.GenomeAssembly;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
@@ -25,7 +24,6 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
   private DataFrame mNewModel = null;
   private GenomeAssembly mAssembly;
 
-  private ChromosomeSizes mChrSizes;
   private MainMatCalcWindow mParent;
   private String mGenome;
 
@@ -41,11 +39,10 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
    * @param minSpecificity
    */
   public GCBackgroundTask(MainMatCalcWindow parent, String genome,
-      GenomeAssembly assembly, ChromosomeSizes chrSizes) {
+      GenomeAssembly assembly) {
     mParent = parent;
     mGenome = genome;
     mAssembly = assembly;
-    mChrSizes = chrSizes;
   }
 
   @Override
@@ -67,7 +64,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
     MotifsModule.LOG.info("Searching for motifs in foreground regions...");
 
     List<SearchSequence> foregroundSequences = SequenceUtils
-        .matrixToSequences(mParent.getCurrentMatrix());
+        .matrixToSequences(genome, mParent.getCurrentMatrix());
 
     //
     // Determine the GC content of the sequences
@@ -157,7 +154,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
         for (int t = 0; t < MAX_ATTEMPTS; ++t) {
           // Random sequence
           rs = Sequence
-              .getRandomSequence(genome, mAssembly, mChrSizes, sequenceLength);
+              .getRandomSequence(genome, mAssembly, sequenceLength);
 
           double gc = Sequence.gcContent(rs.getSequence());
 

@@ -43,7 +43,7 @@ public class ParameterOptimization {
     boolean mainVariants = false;
     boolean peakWidths = false;
 
-    List<SearchRegion> foregroundRegions = MotifSearch.getSearchRegions(
+    List<SearchRegion> foregroundRegions = MotifSearch.getSearchRegions(genome,
         foregroundGroup,
         ext5p,
         ext3p,
@@ -61,7 +61,7 @@ public class ParameterOptimization {
     List<SequenceRegion> foregroundRevCompSeqs = SequenceRegion
         .reverseComplementRegion(foregroundSequences);
 
-    List<SearchRegion> backgroundRegions = MotifSearch.getSearchRegions(
+    List<SearchRegion> backgroundRegions = MotifSearch.getSearchRegions(genome,
         backgroundGroup,
         ext5p,
         ext3p,
@@ -174,7 +174,7 @@ public class ParameterOptimization {
     boolean mainVariants = false;
     boolean peakWidths = false;
 
-    List<SearchRegion> foregroundRegions = MotifSearch.getSearchRegions(
+    List<SearchRegion> foregroundRegions = MotifSearch.getSearchRegions(genome,
         foregroundGroup,
         ext5p,
         ext3p,
@@ -192,7 +192,7 @@ public class ParameterOptimization {
     List<SequenceRegion> foregroundRevCompSeqs = SequenceRegion
         .reverseComplementRegion(foregroundSequences);
 
-    List<SearchRegion> backgroundRegions = MotifSearch.getSearchRegions(
+    List<SearchRegion> backgroundRegions = MotifSearch.getSearchRegions(genome,
         backgroundGroup,
         ext5p,
         ext3p,

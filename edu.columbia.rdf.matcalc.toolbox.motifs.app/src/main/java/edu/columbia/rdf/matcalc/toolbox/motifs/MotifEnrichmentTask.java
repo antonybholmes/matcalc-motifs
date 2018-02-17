@@ -26,6 +26,7 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
   private MainMatCalcWindow mBackgroundGroup;
   private MainMatCalcWindow mForegroundGroup;
   private MainMatCalcWindow mParent;
+  private String mGenome;
 
   private static class SearchResult implements Comparable<SearchResult> {
     public double q;
@@ -56,10 +57,12 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
    * @param minSensitivity
    * @param minSpecificity
    */
-  public MotifEnrichmentTask(MainMatCalcWindow parent, List<Motif> motifs,
+  public MotifEnrichmentTask(MainMatCalcWindow parent, String genome,
+      List<Motif> motifs,
       MainMatCalcWindow foregroundGroup, MainMatCalcWindow backgroundGroup,
       double threshold, double minSensitivity, double minSpecificity) {
     mParent = parent;
+    mGenome = genome;
     mMotifs = motifs;
     mForegroundGroup = foregroundGroup;
     mBackgroundGroup = backgroundGroup;
@@ -88,10 +91,10 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
     System.err.println("Search for motifs in foreground regions...");
 
     List<SearchSequence> foregroundSequences = SequenceUtils
-        .matrixToSequences(mForegroundGroup.getCurrentMatrix());
+        .matrixToSequences(mGenome, mForegroundGroup.getCurrentMatrix());
 
     List<SearchSequence> backgroundSequences = SequenceUtils
-        .matrixToSequences(mBackgroundGroup.getCurrentMatrix());
+        .matrixToSequences(mGenome, mBackgroundGroup.getCurrentMatrix());
 
     return enrichmentMotifs(mThreshold,
         mMinSpecificity,

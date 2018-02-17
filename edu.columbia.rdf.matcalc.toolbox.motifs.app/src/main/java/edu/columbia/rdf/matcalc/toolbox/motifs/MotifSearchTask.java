@@ -25,6 +25,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
   private List<Motif> mMotifs;
   private double mThreshold;
   private MainMatCalcWindow mParent;
+  private String mGenome;
 
   public static class SearchResult {
     public SearchRegion region;
@@ -35,9 +36,10 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
     public int index;
   }
 
-  public MotifSearchTask(MainMatCalcWindow parent, List<Motif> motifs,
+  public MotifSearchTask(MainMatCalcWindow parent, String genome, List<Motif> motifs,
       double threshold) {
     mParent = parent;
+    mGenome = genome;
     mMotifs = motifs;
     mThreshold = threshold;
   }
@@ -67,7 +69,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
   private DataFrame motifs() throws IOException {
     DataFrame m = mParent.getCurrentMatrix();
 
-    List<SearchSequence> sequences = SequenceUtils.matrixToSequences(m);
+    List<SearchSequence> sequences = SequenceUtils.matrixToSequences(mGenome, m);
 
     if (sequences.size() == 0) {
       ModernMessageDialog.createWarningDialog(mParent,

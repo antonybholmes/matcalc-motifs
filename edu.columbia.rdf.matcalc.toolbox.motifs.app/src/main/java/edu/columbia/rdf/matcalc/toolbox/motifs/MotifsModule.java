@@ -13,7 +13,6 @@ import java.util.TreeSet;
 import javax.swing.JFrame;
 
 import org.jebtk.bioinformatics.dna.GenomeAssemblyWeb;
-import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomeAssembly;
 import org.jebtk.bioinformatics.genomic.GenomeAssemblyService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
@@ -29,7 +28,6 @@ import org.jebtk.bioinformatics.ui.filters.MotifPwmGuiFileFilter;
 import org.jebtk.bioinformatics.ui.groups.GroupsModel;
 import org.jebtk.bioinformatics.ui.groups.GroupsPanel;
 import org.jebtk.core.AppService;
-import org.jebtk.core.Resources;
 import org.jebtk.core.collections.CollectionUtils;
 import org.jebtk.core.collections.UniqueArrayList;
 import org.jebtk.core.io.FileUtils;
@@ -299,7 +297,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
       writer.newLine();
 
       for (int i = 0; i < m.getRows(); ++i) {
-        GenomicRegion r = GenomicRegion.parse(m.getText(i, locCol));
+        GenomicRegion r = GenomicRegion.parse(GenomeAssembly.HG19, m.getText(i, locCol));
         double score = m.getValue(i, scoreCol);
         char strand = m.getText(i, strandCol).charAt(0);
 
@@ -379,7 +377,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
       return;
     }
 
-    MotifSearchTask task = new MotifSearchTask(mWindow, dialog.getMotifs(),
+    MotifSearchTask task = new MotifSearchTask(mWindow, GenomeAssembly.HG19, dialog.getMotifs(),
         dialog.getThreshold());
 
     task.doInBackground();
@@ -413,19 +411,15 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
     // Load some chromosome sizes for hg19
 
-    GenomeService.getInstance().load(GenomeAssembly.HG19,
-        Resources.getGzipReader(CHR_SIZE_FILE));
-
     if (dialog.useForeVsBackMode()) {
-      MotifEnrichmentTask task = new MotifEnrichmentTask(mWindow, searchMotifs,
+      MotifEnrichmentTask task = new MotifEnrichmentTask(mWindow, GenomeAssembly.HG19, searchMotifs,
           foregroundGroup, backgroundGroup, threshold, sensitivity,
           specificity);
 
       task.doInBackground(); // execute();
     } else {
       MotifEnrichmentGCHistTask task = new MotifEnrichmentGCHistTask(mWindow,
-          "hg19", GenomeAssemblyService.getInstance(),
-          GenomeService.getInstance().getSizes(GenomeAssembly.HG19),
+          GenomeAssembly.HG19, GenomeAssemblyService.getInstance(),
           searchMotifs, foregroundGroup, threshold, sensitivity, specificity);
 
       task.doInBackground();
@@ -441,13 +435,8 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
       return;
     }
 
-    // Load some chromosome sizes for hg19
-    GenomeService.getInstance().load(GenomeAssembly.HG19,
-        Resources.getGzipReader(CHR_SIZE_FILE));
-
     GCBackgroundTask task = new GCBackgroundTask(mWindow, GenomeAssembly.HG19,
-        GenomeAssemblyService.getInstance(),
-        GenomeService.getInstance().getSizes(GenomeAssembly.HG19));
+        GenomeAssemblyService.getInstance());
 
     task.doInBackground();
   }

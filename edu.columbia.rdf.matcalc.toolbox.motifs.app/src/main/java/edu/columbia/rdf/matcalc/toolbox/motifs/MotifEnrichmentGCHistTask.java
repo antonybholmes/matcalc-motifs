@@ -7,7 +7,6 @@ import javax.swing.SwingWorker;
 
 import org.jebtk.bioinformatics.dna.Sequence;
 import org.jebtk.bioinformatics.gapsearch.BinaryGapSearch;
-import org.jebtk.bioinformatics.genomic.ChromosomeSizes;
 import org.jebtk.bioinformatics.genomic.GenomeAssembly;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
@@ -30,7 +29,6 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
   private MainMatCalcWindow mForegroundSeqWindow;
   private GenomeAssembly mAssembly;
   private List<SearchSequence> mBackgroundSequences;
-  private ChromosomeSizes mChrSizes;
   private MainMatCalcWindow mParent;
   private String mGenome;
 
@@ -46,13 +44,12 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
    * @param minSpecificity
    */
   public MotifEnrichmentGCHistTask(MainMatCalcWindow parent, String genome,
-      GenomeAssembly assembly, ChromosomeSizes chrSizes, List<Motif> motifs,
+      GenomeAssembly assembly, List<Motif> motifs,
       MainMatCalcWindow foregroundSeqWindow, double threshold,
       double minSensitivity, double minSpecificity) {
     mParent = parent;
     mGenome = genome;
     mAssembly = assembly;
-    mChrSizes = chrSizes;
     mMotifs = motifs;
     mForegroundSeqWindow = foregroundSeqWindow;
     mThreshold = threshold;
@@ -79,7 +76,7 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
     System.err.println("Searching for motifs in foreground regions...");
 
     List<SearchSequence> foregroundSequences = SequenceUtils
-        .matrixToSequences(mForegroundSeqWindow.getCurrentMatrix());
+        .matrixToSequences(mGenome, mForegroundSeqWindow.getCurrentMatrix());
 
     //
     // Determine the GC content of the sequences
@@ -142,7 +139,7 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
       while (j < gcHist.get(i).getCount()) {
         // Get a random sequence
         SequenceRegion rs = Sequence
-            .getRandomSequence(mGenome, mAssembly, mChrSizes, sequenceLength);
+            .getRandomSequence(mGenome, mAssembly, sequenceLength);
 
         //
         // Make sure random sequence does not overlap the
