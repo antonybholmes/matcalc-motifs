@@ -321,7 +321,8 @@ public class MotifSearch {
       double sensitivity = tp / (double) (tp + fn);
       double specificity = tn / (double) (tn + fp);
 
-      double error = 1.0 - (sensitivity + specificity) / 2.0;
+      double error = 
+1;
       // double error = 1.0 - sensitivity;
       // double error = 1.0 - specificity;
 

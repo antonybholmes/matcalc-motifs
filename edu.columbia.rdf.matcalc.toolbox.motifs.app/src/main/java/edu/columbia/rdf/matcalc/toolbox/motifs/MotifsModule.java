@@ -134,11 +134,6 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
   }
 
   @Override
-  public void run(String... args) {
-    // Do nothing
-  }
-
-  @Override
   public String getName() {
     return "Motifs";
   }
