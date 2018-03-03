@@ -13,6 +13,8 @@ import org.jebtk.modern.theme.ThemeService;
 import org.xml.sax.SAXException;
 
 import edu.columbia.rdf.matcalc.MainMatCalc;
+import edu.columbia.rdf.matcalc.ModuleLoader;
+import edu.columbia.rdf.matcalc.ModuleService;
 import edu.columbia.rdf.matcalc.BasicModuleLoader;
 import edu.columbia.rdf.matcalc.bio.BioModuleLoader;
 import edu.columbia.rdf.matcalc.toolbox.motifs.MotifsModule;
@@ -28,8 +30,10 @@ public class MainMotifs {
 
     GuiAppInfo info = new MotifsInfo();
 
-    BasicModuleLoader ml = new BioModuleLoader().addModule(MotifsModule.class);
+    ModuleLoader ml = new BioModuleLoader().addModule(MotifsModule.class);
 
+    //ModuleService.getInstance().add(MotifsModule.class);
+    
     MainMatCalc.main(info, ml);
   }
 }

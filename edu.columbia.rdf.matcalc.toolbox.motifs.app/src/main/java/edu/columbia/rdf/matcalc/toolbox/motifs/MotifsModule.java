@@ -98,7 +98,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     if (SettingsService.getInstance()
         .getAsBool("org.matcalc.toolbox.bio.dna.web.enabled")) {
       try {
-        GenomeAssemblyService.getInstance().add(new GenomeAssemblyWeb(new URL(
+        GenomeAssemblyService.instance().add(new GenomeAssemblyWeb(new URL(
             SettingsService.getInstance().getAsString("dna.remote-url"))));
       } catch (IOException e) {
         e.printStackTrace();
@@ -414,7 +414,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
       task.doInBackground(); // execute();
     } else {
       MotifEnrichmentGCHistTask task = new MotifEnrichmentGCHistTask(mWindow,
-          GenomeAssembly.HG19, GenomeAssemblyService.getInstance(),
+          GenomeAssembly.HG19, GenomeAssemblyService.instance(),
           searchMotifs, foregroundGroup, threshold, sensitivity, specificity);
 
       task.doInBackground();
@@ -431,7 +431,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     }
 
     GCBackgroundTask task = new GCBackgroundTask(mWindow, GenomeAssembly.HG19,
-        GenomeAssemblyService.getInstance());
+        GenomeAssemblyService.instance());
 
     task.doInBackground();
   }
