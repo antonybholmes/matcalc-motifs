@@ -9,10 +9,11 @@ import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jebtk.bioinformatics.dna.GenomeAssemblyWeb;
+import org.jebtk.bioinformatics.dna.URLSequenceReader;
 import org.jebtk.bioinformatics.genomic.GenesDb;
-import org.jebtk.bioinformatics.genomic.GenesWeb;
-import org.jebtk.bioinformatics.genomic.GenomeAssembly;
+import org.jebtk.bioinformatics.genomic.URLGenes;
+import org.jebtk.bioinformatics.genomic.Genome;
+import org.jebtk.bioinformatics.genomic.SequenceReader;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.bioinformatics.ui.groups.Group;
@@ -37,9 +38,9 @@ public class ParameterOptimization {
       int ext5p,
       int ext3p,
       String genome,
-      GenomeAssembly assembly,
+      SequenceReader assembly,
       GenesDb genesDb,
-      Path file) throws IOException, ParseException {
+      Path file) throws IOException {
     boolean mainVariants = false;
     boolean peakWidths = false;
 
@@ -169,7 +170,7 @@ public class ParameterOptimization {
       int ext5p,
       int ext3p,
       String genome,
-      GenomeAssembly assembly,
+      SequenceReader assembly,
       GenesDb genesDb) throws IOException, ParseException {
     boolean mainVariants = false;
     boolean peakWidths = false;
@@ -347,10 +348,10 @@ public class ParameterOptimization {
         "/ifs/home/cancer/Lab_RDF/Personal/Antony/motifs/database/Database/RDF/bcl6bs.motif"),
         "test");
 
-    GenesDb genesDb = new GenesWeb(SettingsService.getInstance()
+    GenesDb genesDb = new URLGenes(SettingsService.getInstance()
         .getSetting("motifs.genome.remote-url").getAsUrl());
 
-    GenomeAssembly assembly = new GenomeAssemblyWeb(new URL(
+    SequenceReader assembly = new URLSequenceReader(new URL(
         SettingsService.getInstance().getAsString("motifs.dna.remote-url")));
 
     List<Group> groups = Group.loadGroups(PathUtils.getPath(
@@ -364,7 +365,7 @@ public class ParameterOptimization {
         backgroundGroup,
         ext5p,
         ext3p,
-        GenomeAssembly.HG19,
+        Genome.HG19,
         assembly,
         genesDb);
   }

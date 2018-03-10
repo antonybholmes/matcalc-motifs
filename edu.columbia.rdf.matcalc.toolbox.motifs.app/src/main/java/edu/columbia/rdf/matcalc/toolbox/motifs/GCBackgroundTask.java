@@ -5,10 +5,10 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
-import org.jebtk.bioinformatics.dna.Sequence;
 import org.jebtk.bioinformatics.gapsearch.BinaryGapSearch;
-import org.jebtk.bioinformatics.genomic.GenomeAssembly;
+import org.jebtk.bioinformatics.genomic.SequenceReader;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
+import org.jebtk.bioinformatics.genomic.Sequence;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.statistics.HistBin;
@@ -22,7 +22,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
 
   private static final int MAX_ATTEMPTS = 10000;
   private DataFrame mNewModel = null;
-  private GenomeAssembly mAssembly;
+  private SequenceReader mAssembly;
 
   private MainMatCalcWindow mParent;
   private String mGenome;
@@ -39,7 +39,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
    * @param minSpecificity
    */
   public GCBackgroundTask(MainMatCalcWindow parent, String genome,
-      GenomeAssembly assembly) {
+      SequenceReader assembly) {
     mParent = parent;
     mGenome = genome;
     mAssembly = assembly;

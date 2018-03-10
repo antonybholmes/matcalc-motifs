@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
-import org.jebtk.bioinformatics.dna.Sequence;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Region;
+import org.jebtk.bioinformatics.genomic.Sequence;
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.core.text.Formatter;
 import org.jebtk.math.matrix.DataFrame;

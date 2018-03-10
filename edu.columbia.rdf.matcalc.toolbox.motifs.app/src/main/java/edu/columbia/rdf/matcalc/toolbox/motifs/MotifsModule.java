@@ -12,10 +12,10 @@ import java.util.TreeSet;
 
 import javax.swing.JFrame;
 
-import org.jebtk.bioinformatics.dna.GenomeAssemblyWeb;
-import org.jebtk.bioinformatics.genomic.GenomeAssembly;
-import org.jebtk.bioinformatics.genomic.GenomeAssemblyService;
+import org.jebtk.bioinformatics.dna.URLSequenceReader;
+import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
+import org.jebtk.bioinformatics.genomic.SequenceReaderService;
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.bioinformatics.motifs.MotifsDataSourceService;
 import org.jebtk.bioinformatics.motifs.MotifsFs;
@@ -75,7 +75,7 @@ import edu.columbia.rdf.matcalc.toolbox.motifs.seqlogo.SeqLogoIcon;
 public class MotifsModule extends CalcModule implements ModernClickListener {
   public static final Logger LOG = LoggerFactory.getLogger(MotifsModule.class);
 
-  private static final Path MOD_DIR = AppService.INSTANCE_MOD_DIR
+  private static final Path MOD_DIR = AppService.MOD_DIR
       .resolve("motifs");
 
   private static final Path CHR_SIZE_FILE = MOD_DIR
@@ -98,7 +98,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     if (SettingsService.getInstance()
         .getAsBool("org.matcalc.toolbox.bio.dna.web.enabled")) {
       try {
-        GenomeAssemblyService.instance().add(new GenomeAssemblyWeb(new URL(
+        SequenceReaderService.instance().add(new URLSequenceReader(new URL(
             SettingsService.getInstance().getAsString("dna.remote-url"))));
       } catch (IOException e) {
         e.printStackTrace();
@@ -292,7 +292,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
       writer.newLine();
 
       for (int i = 0; i < m.getRows(); ++i) {
-        GenomicRegion r = GenomicRegion.parse(GenomeAssembly.HG19, m.getText(i, locCol));
+        GenomicRegion r = GenomicRegion.parse(Genome.HG19, m.getText(i, locCol));
         double score = m.getValue(i, scoreCol);
         char strand = m.getText(i, strandCol).charAt(0);
 
@@ -372,7 +372,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
       return;
     }
 
-    MotifSearchTask task = new MotifSearchTask(mWindow, GenomeAssembly.HG19, dialog.getMotifs(),
+    MotifSearchTask task = new MotifSearchTask(mWindow, Genome.HG19, dialog.getMotifs(),
         dialog.getThreshold());
 
     task.doInBackground();
@@ -407,14 +407,14 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     // Load some chromosome sizes for hg19
 
     if (dialog.useForeVsBackMode()) {
-      MotifEnrichmentTask task = new MotifEnrichmentTask(mWindow, GenomeAssembly.HG19, searchMotifs,
+      MotifEnrichmentTask task = new MotifEnrichmentTask(mWindow, Genome.HG19, searchMotifs,
           foregroundGroup, backgroundGroup, threshold, sensitivity,
           specificity);
 
       task.doInBackground(); // execute();
     } else {
       MotifEnrichmentGCHistTask task = new MotifEnrichmentGCHistTask(mWindow,
-          GenomeAssembly.HG19, GenomeAssemblyService.instance(),
+          Genome.HG19, SequenceReaderService.instance(),
           searchMotifs, foregroundGroup, threshold, sensitivity, specificity);
 
       task.doInBackground();
@@ -430,8 +430,8 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
       return;
     }
 
-    GCBackgroundTask task = new GCBackgroundTask(mWindow, GenomeAssembly.HG19,
-        GenomeAssemblyService.instance());
+    GCBackgroundTask task = new GCBackgroundTask(mWindow, Genome.HG19,
+        SequenceReaderService.instance());
 
     task.doInBackground();
   }

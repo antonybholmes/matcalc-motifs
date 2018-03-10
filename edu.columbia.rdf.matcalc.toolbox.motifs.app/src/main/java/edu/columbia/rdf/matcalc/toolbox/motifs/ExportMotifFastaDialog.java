@@ -1,9 +1,8 @@
 package edu.columbia.rdf.matcalc.toolbox.motifs;
 
-import java.awt.Dimension;
-
 import javax.swing.Box;
 
+import org.jebtk.bioinformatics.Bio;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.button.ModernButtonGroup;
 import org.jebtk.modern.button.ModernRadioButton;
@@ -21,7 +20,7 @@ import org.jebtk.modern.window.WindowWidgetFocusEvents;
 public class ExportMotifFastaDialog extends ModernDialogTaskWindow {
   private static final long serialVersionUID = 1L;
 
-  private ModernRadioButton mCheckMotifs = new ModernRadioButton("Motifs",
+  private ModernRadioButton mCheckMotifs = new ModernRadioButton(Bio.ASSET_MOTIFS,
       true);
 
   private ModernRadioButton mCheckRegions = new ModernRadioButton("Regions");
@@ -39,7 +38,7 @@ public class ExportMotifFastaDialog extends ModernDialogTaskWindow {
   private void setup() {
     addWindowListener(new WindowWidgetFocusEvents(mOkButton));
 
-    setSize(new Dimension(320, 240));
+    setSize(320, 240);
 
     UI.centerWindowToScreen(this);
   }

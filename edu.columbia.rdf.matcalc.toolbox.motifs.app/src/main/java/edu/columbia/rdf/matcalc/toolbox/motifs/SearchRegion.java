@@ -1,13 +1,12 @@
 package edu.columbia.rdf.matcalc.toolbox.motifs;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jebtk.bioinformatics.genomic.Gene;
-import org.jebtk.bioinformatics.genomic.GenomeAssembly;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
+import org.jebtk.bioinformatics.genomic.SequenceReader;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
 import org.jebtk.bioinformatics.genomic.Strand;
 
@@ -88,13 +87,12 @@ public class SearchRegion {
   }
 
   public static List<SequenceRegion> getSequences(String genome,
-      GenomeAssembly genomeAssembly,
-      List<SearchRegion> searchRegions) throws IOException, ParseException {
+      SequenceReader genomeAssembly,
+      List<SearchRegion> searchRegions) throws IOException {
     List<SequenceRegion> sequences = new ArrayList<SequenceRegion>();
 
     for (SearchRegion searchRegion : searchRegions) {
-      sequences
-          .add(genomeAssembly.getSequence(genome, searchRegion.mSearchRegion));
+      sequences.add(genomeAssembly.getSequence(genome, searchRegion.mSearchRegion));
     }
 
     return sequences;

@@ -1,17 +1,16 @@
 package edu.columbia.rdf.matcalc.toolbox.motifs;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jebtk.bioinformatics.dna.Sequence;
 import org.jebtk.bioinformatics.genomic.Gene;
 import org.jebtk.bioinformatics.genomic.GenesDb;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
+import org.jebtk.bioinformatics.genomic.Sequence;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.bioinformatics.ui.groups.Group;
@@ -1351,7 +1350,7 @@ public class MotifSearch {
       int ext3p,
       boolean mainVariants,
       boolean peakWidths,
-      GenesDb genesDb) throws IOException, ParseException {
+      GenesDb genesDb) throws IOException {
     List<SearchRegion> regions = new ArrayList<SearchRegion>();
 
     for (String id : group) {

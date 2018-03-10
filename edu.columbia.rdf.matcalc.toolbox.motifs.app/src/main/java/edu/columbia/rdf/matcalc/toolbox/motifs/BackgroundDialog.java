@@ -46,7 +46,7 @@ public class BackgroundDialog extends ModernDialogTaskWindow {
 
   private ColorSwatchButton mColorButton;
 
-  private ModernTextField mNameField = new ModernClipboardTextField("Name");
+  private ModernTextField mNameField = new ModernClipboardTextField(UI.ASSET_NAME);
 
   private RegionsTextArea mTextArea = new RegionsTextArea();
 
@@ -90,19 +90,19 @@ public class BackgroundDialog extends ModernDialogTaskWindow {
     Box box2 = VBox.create();
 
     Box box3 = HBox.create();
-    box3.add(new ModernAutoSizeLabel("Group", 100));
+    box3.add(new ModernAutoSizeLabel(UI.ASSET_GROUP, 100));
     box3.add(mForegroundCombo);
     box2.add(box3);
     box2.add(ModernPanel.createVGap());
 
     box3 = HBox.create();
-    box3.add(new ModernAutoSizeLabel("Name", 100));
+    box3.add(new ModernAutoSizeLabel(UI.ASSET_NAME, 100));
     box3.add(new ModernTextBorderPanel(mNameField, NAME_FIELD_SIZE));
     box2.add(box3);
     box2.add(ModernPanel.createVGap());
 
     box3 = HBox.create();
-    box3.add(new ModernAutoSizeLabel("Color", 100));
+    box3.add(new ModernAutoSizeLabel(UI.ASSET_COLOR, 100));
     box3.add(mColorButton);
     box2.add(box3);
 
