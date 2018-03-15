@@ -218,7 +218,7 @@ public class MotifEnrichmentDialog extends ModernDialogHelpWindow {
     // box.add(UI.createVGap(5));
     // box.add(mCheckPeakWidths);
 
-    setDialogCardContent(box);
+    setCard(box);
 
     mBackgroundCombo.setSelectedIndex(1);
   }

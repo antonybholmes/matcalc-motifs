@@ -120,7 +120,7 @@ public class BackgroundDialog extends ModernDialogTaskWindow {
 
     box.add(scrollPane, BorderLayout.CENTER);
 
-    setDialogCardContent(box);
+    setCard(box);
   }
 
   private void createBackground() {

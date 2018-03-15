@@ -94,7 +94,7 @@ public class BaseDialog extends ModernDialogHelpWindow {
 
     box.add(button);
 
-    setDialogCardContent(box);
+    setCard(box);
   }
 
   /**

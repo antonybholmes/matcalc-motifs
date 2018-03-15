@@ -218,7 +218,7 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
 
     // mTabsModel.addTab("Search Options", box);
 
-    setDialogCardContent(c);
+    setCard(c);
   }
 
   @Override

@@ -50,7 +50,7 @@ public class BaseButton extends RibbonLargeColorSwatchButton2 {
 
   @Override
   public void setCompactSize() {
-    UI.setSize(this, Ribbon.COMPACT_BUTTON_HEIGHT);
+    UI.setSize(this, Ribbon.COMPACT_BUTTON_HEIGHT, Ribbon.COMPACT_BUTTON_HEIGHT);
   }
 
   /*
@@ -63,8 +63,7 @@ public class BaseButton extends RibbonLargeColorSwatchButton2 {
   @Override
   public void drawForegroundAAText(Graphics2D g2) {
     Color color = DnaService.getInstance().getBaseColor(mBase); // ((ColorPopupMenu2)
-                                                                // mMenu).getSelectedColor();
-
+                                                                // mMenu).getSelectedColor();  
     if (color.equals(Color.WHITE)) {
       g2.setColor(Color.BLACK);
     } else {

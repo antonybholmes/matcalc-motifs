@@ -56,7 +56,7 @@ public class ExportMotifFastaDialog extends ModernDialogTaskWindow {
 
     box.add(mCheckRegions);
 
-    setDialogCardContent(box);
+    setCard(box);
 
     ModernButtonGroup group = new ModernButtonGroup();
 
