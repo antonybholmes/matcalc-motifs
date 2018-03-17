@@ -51,7 +51,6 @@ import org.jebtk.modern.scrollpane.ScrollBarLocation;
 import org.jebtk.modern.scrollpane.ScrollBarPolicy;
 import org.jebtk.modern.tooltip.ModernToolTip;
 import org.jebtk.modern.widget.ModernClickWidget;
-import org.jebtk.modern.widget.ModernWidget;
 import org.jebtk.modern.window.ModernRibbonWindow;
 import org.jebtk.modern.zoom.ModernStatusZoomSlider;
 import org.jebtk.modern.zoom.ZoomModel;
@@ -305,22 +304,22 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
   }
 
   private void addMotifPanel() {
-    if (getTabsPane().getModel().getLeftTabs().containsTab("Motifs")) {
+    if (tabsPane().tabs().left().contains("Motifs")) {
       return;
     }
 
     mMotifsPanel.setBorder(ModernPanel.DOUBLE_BORDER);
 
-    getTabsPane().addLeftTab("Motifs", mMotifsPanel, 250, 200, 500);
+    tabsPane().tabs().left().add("Motifs", mMotifsPanel, 250, 200, 500);
   }
 
   private void addFormatPane() {
-    if (getTabsPane().getModel().getRightTabs().containsTab("Format Plot")) {
+    if (tabsPane().tabs().right().contains("Format Plot")) {
       return;
     }
 
-    getTabsPane().addRightTab("Format Plot",
-        new CloseableHTab("Format Plot", mFormatPanel, getTabsPane()),
+    tabsPane().tabs().right().add("Format Plot",
+        new CloseableHTab("Format Plot", mFormatPanel, tabsPane()),
         300,
         200,
         500);

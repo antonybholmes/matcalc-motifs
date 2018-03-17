@@ -42,7 +42,6 @@ import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.UIService;
 import org.jebtk.modern.contentpane.CloseableHTab;
-import org.jebtk.modern.contentpane.SizableContentPane;
 import org.jebtk.modern.dialog.MessageDialogType;
 import org.jebtk.modern.dialog.ModernDialogStatus;
 import org.jebtk.modern.dialog.ModernMessageDialog;
@@ -57,6 +56,7 @@ import org.jebtk.modern.io.GuiFileExtFilter;
 import org.jebtk.modern.io.RecentFilesService;
 import org.jebtk.modern.ribbon.Ribbon;
 import org.jebtk.modern.ribbon.RibbonLargeButton;
+import org.jebtk.modern.tabs.SizableTab;
 import org.jebtk.modern.widget.ModernClickWidget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -344,17 +344,17 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
   }
 
   private void addRegionGroupsPanel() {
-    if (mWindow.getTabsPane().getModel().getLeftTabs()
-        .containsTab("Motif Groups")) {
+    if (mWindow.tabsPane().tabs().left()
+        .contains("Motif Groups")) {
       return;
     }
 
-    SizableContentPane sizePane = new SizableContentPane("Motif Groups",
+    SizableTab sizePane = new SizableTab("Motif Groups",
         new CloseableHTab("Motif Groups", mRegionGroupsPanel,
-            mWindow.getTabsPane()),
+            mWindow.tabsPane()),
         250, 100, 500);
 
-    mWindow.getTabsPane().getModel().addLeftTab(sizePane);
+    mWindow.tabsPane().tabs().left().add(sizePane);
   }
 
   private void motifSearch() throws IOException {
