@@ -12,7 +12,7 @@ import java.util.TreeSet;
 
 import javax.swing.JFrame;
 
-import org.jebtk.bioinformatics.dna.URLSequenceReader;
+import org.jebtk.bioinformatics.dna.HttpSequenceReader;
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.SequenceReaderService;
@@ -95,7 +95,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     if (SettingsService.getInstance()
         .getAsBool("org.matcalc.toolbox.bio.dna.web.enabled")) {
       try {
-        SequenceReaderService.instance().add(new URLSequenceReader(new URL(
+        SequenceReaderService.instance().add(new HttpSequenceReader(new URL(
             SettingsService.getInstance().getAsString("dna.remote-url"))));
       } catch (IOException e) {
         e.printStackTrace();

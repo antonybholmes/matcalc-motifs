@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jebtk.bioinformatics.dna.URLSequenceReader;
+import org.jebtk.bioinformatics.dna.HttpSequenceReader;
 import org.jebtk.bioinformatics.genomic.GenesDb;
 import org.jebtk.bioinformatics.genomic.URLGenes;
 import org.jebtk.bioinformatics.genomic.Genome;
@@ -351,7 +351,7 @@ public class ParameterOptimization {
     GenesDb genesDb = new URLGenes(SettingsService.getInstance()
         .getSetting("motifs.genome.remote-url").getAsUrl());
 
-    SequenceReader assembly = new URLSequenceReader(new URL(
+    SequenceReader assembly = new HttpSequenceReader(new URL(
         SettingsService.getInstance().getAsString("motifs.dna.remote-url")));
 
     List<Group> groups = Group.loadGroups(PathUtils.getPath(

@@ -87,12 +87,12 @@ public class SearchRegion {
   }
 
   public static List<SequenceRegion> getSequences(String genome,
-      SequenceReader genomeAssembly,
+      SequenceReader reader,
       List<SearchRegion> searchRegions) throws IOException {
     List<SequenceRegion> sequences = new ArrayList<SequenceRegion>();
 
     for (SearchRegion searchRegion : searchRegions) {
-      sequences.add(genomeAssembly.getSequence(genome, searchRegion.mSearchRegion));
+      sequences.add(reader.getSequence(searchRegion.mSearchRegion));
     }
 
     return sequences;
