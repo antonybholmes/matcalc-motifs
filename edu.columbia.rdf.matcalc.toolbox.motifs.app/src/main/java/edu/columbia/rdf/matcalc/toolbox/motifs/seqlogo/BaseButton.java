@@ -45,7 +45,7 @@ public class BaseButton extends RibbonLargeColorSwatchButton2 {
       }
     });
 
-    setBackgroundAnimation(new BaseButtonHighlightAnimation(this));
+    setAnimations(new BaseButtonHighlightAnimation(this));
   }
 
   @Override
