@@ -349,10 +349,10 @@ public class ParameterOptimization {
         "test");
 
     GenesDb genesDb = new URLGenes(SettingsService.getInstance()
-        .getSetting("motifs.genome.remote-url").getAsUrl());
+        .getSetting("motifs.genome.remote-url").getUrl());
 
     SequenceReader assembly = new HttpSequenceReader(new URL(
-        SettingsService.getInstance().getAsString("motifs.dna.remote-url")));
+        SettingsService.getInstance().getString("motifs.dna.remote-url")));
 
     List<Group> groups = Group.loadGroups(PathUtils.getPath(
         "/ifs/home/cancer/Lab_RDF/Personal/Antony/motifs/groups.mgrpx"));

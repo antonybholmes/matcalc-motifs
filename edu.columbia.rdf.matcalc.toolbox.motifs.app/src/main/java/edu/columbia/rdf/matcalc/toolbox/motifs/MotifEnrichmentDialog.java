@@ -53,22 +53,22 @@ public class MotifEnrichmentDialog extends ModernDialogHelpWindow {
 
   // private ModernTextField mExt5pField =
   // new
-  // ModernNumericalTextField(SettingsService.getInstance().getAsInt("motifs.search.5p-extension"));
+  // ModernNumericalTextField(SettingsService.getInstance().getInt("motifs.search.5p-extension"));
 
   // private ModernTextField mExt3pField =
   // new
-  // ModernNumericalTextField(SettingsService.getInstance().getAsInt("motifs.search.3p-extension"));
+  // ModernNumericalTextField(SettingsService.getInstance().getInt("motifs.search.3p-extension"));
 
   private ModernCompactSpinner mSensField = new ModernCompactSpinner(0, 1,
-      SettingsService.getInstance().getAsDouble("motifs.minimum-sensitivity"),
+      SettingsService.getInstance().getDouble("motifs.minimum-sensitivity"),
       0.1);
 
   private ModernCompactSpinner mSpecField = new ModernCompactSpinner(0, 1,
-      SettingsService.getInstance().getAsDouble("motifs.minimum-specificity"),
+      SettingsService.getInstance().getDouble("motifs.minimum-specificity"),
       0.1);
 
   private ModernCompactSpinner mThresholdField = new ModernCompactSpinner(0, 1,
-      SettingsService.getInstance().getAsDouble("motifs.motif-threshold"), 0.1);
+      SettingsService.getInstance().getDouble("motifs.motif-threshold"), 0.1);
 
   private ModernCheckBox mCheckMainVariants = new ModernCheckBox(
       "Main gene variants");

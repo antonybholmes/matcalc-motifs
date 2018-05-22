@@ -17,9 +17,9 @@ public class MotifViewModel extends ItemModel<MotifView> {
 
   public MotifViewModel() {
     update(MotifView.parse(SettingsService.getInstance()
-        .getAsString("org.matcalc.toolbox.bio.seqlogo.motif-view")));
+        .getString("org.matcalc.toolbox.bio.seqlogo.motif-view")));
     setRevComp(SettingsService.getInstance()
-        .getAsBool("org.matcalc.toolbox.bio.seqlogo.rev-comp"));
+        .getBool("org.matcalc.toolbox.bio.seqlogo.rev-comp"));
   }
 
   @Override

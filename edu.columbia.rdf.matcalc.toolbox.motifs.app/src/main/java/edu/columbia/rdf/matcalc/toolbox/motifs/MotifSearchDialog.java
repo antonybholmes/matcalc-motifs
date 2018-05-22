@@ -15,7 +15,7 @@ import org.jebtk.graphplot.figure.Figure;
 import org.jebtk.graphplot.figure.FigurePanel;
 import org.jebtk.modern.ModernComponent;
 import org.jebtk.modern.UI;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.Validation;
 import org.jebtk.modern.ValidationException;
 import org.jebtk.modern.button.ModernButton;
@@ -43,17 +43,17 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
 
   // private ModernTextField mExt5pField =
   // new
-  // ModernNumericalTextField(SettingsService.getInstance().getAsInt("motifs.search.5p-extension"));
+  // ModernNumericalTextField(SettingsService.getInstance().getInt("motifs.search.5p-extension"));
 
   // private ModernTextField mExt3pField =
   // new
-  // ModernNumericalTextField(SettingsService.getInstance().getAsInt("motifs.search.3p-extension"));
+  // ModernNumericalTextField(SettingsService.getInstance().getInt("motifs.search.3p-extension"));
 
   private ModernCompactSpinner mThresholdField = new ModernCompactSpinner(0, 1,
-      SettingsService.getInstance().getAsDouble("motifs.motif-threshold"), 0.1);
+      SettingsService.getInstance().getDouble("motifs.motif-threshold"), 0.1);
 
   private ModernButton mSettingsButton = new ModernButton(
-      UIService.getInstance().loadIcon("settings", 16));
+      AssetService.getInstance().loadIcon("settings", 16));
 
   // private ModernCheckBox mCheckPeakWidth =
   // new ModernCheckBox("Peak widths only");

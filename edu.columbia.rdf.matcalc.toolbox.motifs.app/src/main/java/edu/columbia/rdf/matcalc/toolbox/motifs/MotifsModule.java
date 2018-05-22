@@ -40,7 +40,7 @@ import org.jebtk.graphplot.figure.Plot;
 import org.jebtk.graphplot.figure.SubFigure;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.UI;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.contentpane.CloseableHTab;
 import org.jebtk.modern.dialog.MessageDialogType;
 import org.jebtk.modern.dialog.ModernDialogStatus;
@@ -93,10 +93,10 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
   static {
     if (SettingsService.getInstance()
-        .getAsBool("org.matcalc.toolbox.bio.dna.web.enabled")) {
+        .getBool("org.matcalc.toolbox.bio.dna.web.enabled")) {
       try {
-        SequenceReaderService.instance().add(new HttpSequenceReader(new URL(
-            SettingsService.getInstance().getAsString("dna.remote-url"))));
+        SequenceReaderService.getInstance().add(new HttpSequenceReader(new URL(
+            SettingsService.getInstance().getString("dna.remote-url"))));
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -111,12 +111,12 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
 
   public MotifsModule() throws MalformedURLException, IOException {
     // GenomeAssemblyService.getInstance().add(new GenomeAssemblyWeb(new
-    // URL(SettingsService.getInstance().getAsString("dna.remote-url"))));
+    // URL(SettingsService.getInstance().getString("dna.remote-url"))));
     // GenomeAssemblyService.getInstance().add(new
     // GenomeAssemblyFile4Bit(FILE_PATH));
 
     // mAssembly = new
-    // GenomeAssemblyWeb(SettingsService.getInstance().getAsUrl("dna.remote-url"));
+    // GenomeAssemblyWeb(SettingsService.getInstance().getUrl("dna.remote-url"));
 
     // MotifsDBService.getInstance().addBackEnd(new MotifsWeb());
 
@@ -161,7 +161,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
      */
 
     button = new RibbonLargeButton("Search",
-        UIService.getInstance().loadIcon(SearchVectorIcon.class, 24), "Search",
+        AssetService.getInstance().loadIcon(SearchVectorIcon.class, 24), "Search",
         "Search for motifs.");
     button.addClickListener(this);
     ribbon.getToolbar("DNA").getSection("Motifs").add(button);
@@ -169,13 +169,13 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     ribbon.getToolbar("DNA").getSection("Motifs").addSeparator();
 
     button = new RibbonLargeButton("GC Background",
-        UIService.getInstance().loadIcon("enrichment", 24), "GC Background",
+        AssetService.getInstance().loadIcon("enrichment", 24), "GC Background",
         "Generate background.");
     button.addClickListener(this);
     ribbon.getToolbar("DNA").getSection("Motifs").add(button);
 
     button = new RibbonLargeButton("Enrichment",
-        UIService.getInstance().loadIcon("enrichment", 24), "Enrichment",
+        AssetService.getInstance().loadIcon("enrichment", 24), "Enrichment",
         "Look for enriched motifs.");
     button.addClickListener(this);
     ribbon.getToolbar("DNA").getSection("Motifs").add(button);
@@ -183,7 +183,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     ribbon.getToolbar("DNA").getSection("Motifs").addSeparator();
 
     button = new RibbonLargeButton("Export BED",
-        UIService.getInstance().loadIcon(SaveVectorIcon.class, 24),
+        AssetService.getInstance().loadIcon(SaveVectorIcon.class, 24),
         "Export BED", "Export Results as BED.");
     button.addClickListener(this);
     ribbon.getToolbar("DNA").getSection("Motifs").add(button);
@@ -191,13 +191,13 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     ribbon.getToolbar("DNA").getSection("Motifs").addSeparator();
 
     button = new RibbonLargeButton("SeqLogo",
-        UIService.getInstance().loadIcon(SeqLogoIcon.class, 24), "SeqLogo",
+        AssetService.getInstance().loadIcon(SeqLogoIcon.class, 24), "SeqLogo",
         "Browse sequence logos.");
     button.addClickListener(this);
     ribbon.getToolbar("DNA").getSection("Motifs").add(button);
 
     button = new RibbonLargeButton("Plot",
-        UIService.getInstance().loadIcon(RunVectorIcon.class, 24), "Plot",
+        AssetService.getInstance().loadIcon(RunVectorIcon.class, 24), "Plot",
         "Plot motifs.");
     button.addClickListener(this);
     ribbon.getToolbar("DNA").getSection("Motifs").add(button);
@@ -409,7 +409,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
       task.doInBackground(); // execute();
     } else {
       MotifEnrichmentGCHistTask task = new MotifEnrichmentGCHistTask(mWindow,
-          Genome.HG19, SequenceReaderService.instance(),
+          Genome.HG19, SequenceReaderService.getInstance(),
           searchMotifs, foregroundGroup, threshold, sensitivity, specificity);
 
       task.doInBackground();
@@ -426,7 +426,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     }
 
     GCBackgroundTask task = new GCBackgroundTask(mWindow, Genome.HG19,
-        SequenceReaderService.instance());
+        SequenceReaderService.getInstance());
 
     task.doInBackground();
   }

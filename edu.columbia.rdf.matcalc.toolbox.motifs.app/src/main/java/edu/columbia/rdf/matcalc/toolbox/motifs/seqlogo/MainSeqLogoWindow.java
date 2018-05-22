@@ -24,7 +24,7 @@ import org.jebtk.graphplot.MatrixGroupModel;
 import org.jebtk.graphplot.ModernPlotCanvas;
 import org.jebtk.graphplot.figure.FigurePanel;
 import org.jebtk.modern.UI;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.contentpane.CloseableHTab;
 import org.jebtk.modern.dialog.DialogEvent;
 import org.jebtk.modern.dialog.DialogEventListener;
@@ -222,14 +222,14 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
     getRibbon().setHelpButtonEnabled(getAppInfo());
 
     button = new QuickAccessButton(
-        UIService.getInstance().loadIcon(QuickOpenVectorIcon.class, 16));
+        AssetService.getInstance().loadIcon(QuickOpenVectorIcon.class, 16));
     button.setClickMessage(UI.MENU_OPEN);
     button.setToolTip(new ModernToolTip("Open", "Open peak files."));
     button.addClickListener(this);
     addQuickAccessButton(button);
 
     button = new QuickAccessButton(
-        UIService.getInstance().loadIcon(QuickSaveVectorIcon.class, 16));
+        AssetService.getInstance().loadIcon(QuickSaveVectorIcon.class, 16));
     button.setClickMessage(UI.MENU_SAVE);
     button.setToolTip(new ModernToolTip("Save", "Save the current image."));
     button.addClickListener(this);

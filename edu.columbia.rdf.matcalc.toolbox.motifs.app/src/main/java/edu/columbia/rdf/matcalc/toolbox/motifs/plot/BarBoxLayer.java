@@ -41,19 +41,19 @@ public class BarBoxLayer extends PlotLayer {
     int y2 = axes.toPlotY1(0.45);
 
     // int h =
-    // SettingsService.getInstance().getAsInt("mutplot.plot.protein.height");
+    // SettingsService.getInstance().getInt("mutplot.plot.protein.height");
 
     // int y = PLOT_OFFSET.y + internalPlotSize.height - FEATURE_BLOCK_HEIGHT +
     // (FEATURE_BLOCK_HEIGHT - h) / 2;
 
     g2.setColor(SettingsService.getInstance()
-        .getAsColor("motifs.plot.bar.background.color")); // ColorUtils.decodeHtmlColor(mProperty.getChildByPath("background/color").getValue()));
+        .getColor("motifs.plot.bar.background.color")); // ColorUtils.decodeHtmlColor(mProperty.getChildByPath("background/color").getValue()));
 
     // g2.fillRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
     g2.fillRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
 
     g2.setColor(SettingsService.getInstance()
-        .getAsColor("motifs.plot.bar.border.color"));
+        .getColor("motifs.plot.bar.border.color"));
 
     // g2.drawRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
     g2.drawRect(x1, y1, x2 - x1, y2 - y1);

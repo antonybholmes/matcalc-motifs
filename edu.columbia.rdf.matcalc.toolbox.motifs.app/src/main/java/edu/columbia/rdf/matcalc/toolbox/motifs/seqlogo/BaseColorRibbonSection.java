@@ -29,7 +29,7 @@ package edu.columbia.rdf.matcalc.toolbox.motifs.seqlogo;
 
 import org.jebtk.bioinformatics.genomic.DnaService;
 import org.jebtk.modern.UI;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.dialog.ModernDialogStatus;
 import org.jebtk.modern.dialog.ModernMessageDialog;
 import org.jebtk.modern.event.ModernClickEvent;
@@ -90,7 +90,7 @@ public class BaseColorRibbonSection extends RibbonSection {
     mColorNButton = new BaseButton(parent, 'N');
 
     mDefaultsButton = new RibbonLargeButton("Defaults",
-        UIService.getInstance().loadIcon("reset", 24), "Defaults",
+        AssetService.getInstance().loadIcon("reset", 24), "Defaults",
         "Reset colors to their defaults.");
 
     // Box box = new RibbonStripContainer();

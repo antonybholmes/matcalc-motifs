@@ -67,7 +67,7 @@ public class MotifLayer extends PlotLayer {
       int x2 = axes.toPlotX1(offset + motif.length());
 
       // int h =
-      // SettingsService.getInstance().getAsInt("mutplot.plot.protein.height");
+      // SettingsService.getInstance().getInt("mutplot.plot.protein.height");
 
       // int y = PLOT_OFFSET.y + internalPlotSize.height - FEATURE_BLOCK_HEIGHT
       // +
