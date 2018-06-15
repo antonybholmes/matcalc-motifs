@@ -89,8 +89,14 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
   private class MotifEvents implements ModernSelectionListener {
 
     @Override
-    public void selectionChanged(ChangeEvent e) {
-      mSubFigure.setMotif(mModel.getSelected());
+    public void selectionAdded(ChangeEvent e) {
+       mSubFigure.setMotif(mModel.getSelected());
+    }
+
+    @Override
+    public void selectionRemoved(ChangeEvent e) {
+      // TODO Auto-generated method stub
+      
     }
 
   }

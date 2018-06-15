@@ -96,8 +96,14 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
   private class MotifEvents implements ModernSelectionListener {
 
     @Override
-    public void selectionChanged(ChangeEvent e) {
+    public void selectionAdded(ChangeEvent e) {
       openMotifs();
+    }
+
+    @Override
+    public void selectionRemoved(ChangeEvent e) {
+      // TODO Auto-generated method stub
+      
     }
 
   }

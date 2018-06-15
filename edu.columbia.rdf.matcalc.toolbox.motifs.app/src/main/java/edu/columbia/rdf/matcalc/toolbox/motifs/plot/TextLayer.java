@@ -70,7 +70,7 @@ public class TextLayer extends PlotLayer {
       // continue;
       // }
 
-      Graphics2D g2Text = ImageUtils.createAAGraphics(g2);
+      Graphics2D g2Text = ImageUtils.createAATextGraphics(g2);
 
       try {
         g2Text.translate(x, y);

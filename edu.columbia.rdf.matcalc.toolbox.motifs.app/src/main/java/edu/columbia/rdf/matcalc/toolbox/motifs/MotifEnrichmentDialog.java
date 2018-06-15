@@ -110,12 +110,18 @@ public class MotifEnrichmentDialog extends ModernDialogHelpWindow {
   private class MotifEvents implements ModernSelectionListener {
 
     @Override
-    public void selectionChanged(ChangeEvent e) {
+    public void selectionAdded(ChangeEvent e) {
       Motif motif = mMotifsModel.getSelected();
 
       if (motif != null) {
         mCanvasPanel.setMotif(motif);
       }
+    }
+
+    @Override
+    public void selectionRemoved(ChangeEvent e) {
+      // TODO Auto-generated method stub
+      
     }
 
   }
