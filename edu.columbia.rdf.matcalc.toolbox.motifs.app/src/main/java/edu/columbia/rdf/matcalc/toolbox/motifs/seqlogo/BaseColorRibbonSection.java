@@ -27,7 +27,7 @@
  */
 package edu.columbia.rdf.matcalc.toolbox.motifs.seqlogo;
 
-import org.jebtk.bioinformatics.genomic.DnaService;
+import org.jebtk.bioinformatics.genomic.SequenceService;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.AssetService;
 import org.jebtk.modern.dialog.ModernDialogStatus;
@@ -138,7 +138,7 @@ public class BaseColorRibbonSection extends RibbonSection {
         "The base colors will be reset to their default values.");
 
     if (status == ModernDialogStatus.OK) {
-      DnaService.getInstance().reset();
+      SequenceService.getInstance().reset();
       fireClicked();
     }
   }

@@ -3,7 +3,7 @@ package edu.columbia.rdf.matcalc.toolbox.motifs.seqlogo;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import org.jebtk.bioinformatics.genomic.DnaService;
+import org.jebtk.bioinformatics.genomic.SequenceService;
 import org.jebtk.core.event.ChangeEvent;
 import org.jebtk.core.event.ChangeListener;
 import org.jebtk.modern.UI;
@@ -27,11 +27,11 @@ public class BaseButton extends RibbonLargeColorSwatchButton2 {
    * @param color the color
    */
   public BaseButton(ModernWindow parent, char base) {
-    super(parent, DnaService.getInstance().getBaseColor(base));
+    super(parent, SequenceService.getInstance().getBaseColor(base));
 
     mBase = base;
 
-    DnaService.getInstance().addChangeListener(base, new ChangeListener() {
+    SequenceService.getInstance().addChangeListener(base, new ChangeListener() {
       @Override
       public void changed(ChangeEvent e) {
         repaint();
@@ -41,7 +41,7 @@ public class BaseButton extends RibbonLargeColorSwatchButton2 {
     addClickListener(new ModernClickListener() {
       @Override
       public void clicked(ModernClickEvent e) {
-        DnaService.getInstance().setBaseColor(mBase, getSelectedColor());
+        SequenceService.getInstance().setBaseColor(mBase, getSelectedColor());
       }
     });
 
@@ -62,7 +62,7 @@ public class BaseButton extends RibbonLargeColorSwatchButton2 {
    */
   @Override
   public void drawForegroundAAText(Graphics2D g2) {
-    Color color = DnaService.getInstance().getBaseColor(mBase); // ((ColorPopupMenu2)
+    Color color = SequenceService.getInstance().getBaseColor(mBase); // ((ColorPopupMenu2)
                                                                 // mMenu).getSelectedColor();  
     if (color.equals(Color.WHITE)) {
       g2.setColor(Color.BLACK);

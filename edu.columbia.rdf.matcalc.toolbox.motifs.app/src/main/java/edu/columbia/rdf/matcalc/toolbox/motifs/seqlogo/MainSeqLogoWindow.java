@@ -8,7 +8,7 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.batik.transcoder.TranscoderException;
-import org.jebtk.bioinformatics.genomic.DnaService;
+import org.jebtk.bioinformatics.genomic.SequenceService;
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.bioinformatics.ui.BioInfDialog;
 import org.jebtk.bioinformatics.ui.motifs.MotifModel;
@@ -179,7 +179,7 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
     mViewModel.addChangeListener(new MotifViewEvents());
 
     // When a base color changes, refresh the display
-    DnaService.getInstance().addChangeListener(new ChangeListener() {
+    SequenceService.getInstance().addChangeListener(new ChangeListener() {
       @Override
       public void changed(ChangeEvent e) {
         changeView();

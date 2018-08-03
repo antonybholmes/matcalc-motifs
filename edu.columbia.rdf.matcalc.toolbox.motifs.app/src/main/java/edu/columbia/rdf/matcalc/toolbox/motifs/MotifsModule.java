@@ -3,7 +3,6 @@ package edu.columbia.rdf.matcalc.toolbox.motifs;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
@@ -12,10 +11,10 @@ import java.util.TreeSet;
 
 import javax.swing.JFrame;
 
-import org.jebtk.bioinformatics.dna.HttpSequenceReader;
+import org.jebtk.bioinformatics.dna.WebSequenceReader;
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
-import org.jebtk.bioinformatics.genomic.SequenceReaderService;
+import org.jebtk.bioinformatics.genomic.SequenceService;
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.bioinformatics.motifs.MotifsDataSourceService;
 import org.jebtk.bioinformatics.motifs.MotifsFs;
@@ -39,8 +38,8 @@ import org.jebtk.graphplot.figure.GridLocation;
 import org.jebtk.graphplot.figure.Plot;
 import org.jebtk.graphplot.figure.SubFigure;
 import org.jebtk.math.matrix.DataFrame;
-import org.jebtk.modern.UI;
 import org.jebtk.modern.AssetService;
+import org.jebtk.modern.UI;
 import org.jebtk.modern.contentpane.CloseableHTab;
 import org.jebtk.modern.dialog.MessageDialogType;
 import org.jebtk.modern.dialog.ModernDialogStatus;
@@ -95,8 +94,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     if (SettingsService.getInstance()
         .getBool("org.matcalc.toolbox.bio.dna.web.enabled")) {
       try {
-        SequenceReaderService.getInstance().add(new HttpSequenceReader(new URL(
-            SettingsService.getInstance().getString("dna.remote-url"))));
+        SequenceService.getInstance().add(new WebSequenceReader(SettingsService.getInstance().getUrl("dna.remote-url")));
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -409,7 +407,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
       task.doInBackground(); // execute();
     } else {
       MotifEnrichmentGCHistTask task = new MotifEnrichmentGCHistTask(mWindow,
-          Genome.HG19, SequenceReaderService.getInstance(),
+          Genome.HG19, SequenceService.getInstance(),
           searchMotifs, foregroundGroup, threshold, sensitivity, specificity);
 
       task.doInBackground();
@@ -426,7 +424,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     }
 
     GCBackgroundTask task = new GCBackgroundTask(mWindow, Genome.HG19,
-        SequenceReaderService.getInstance());
+        SequenceService.getInstance());
 
     task.doInBackground();
   }

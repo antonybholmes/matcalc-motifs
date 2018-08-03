@@ -1,0 +1,12 @@
+[
+  {
+    "name":"org\/matcalc\/toolbox\/bio\/seqlogo\/motif-view", 
+    "value":"bits", 
+    "description":""
+  },
+  {
+    "name":"org\/matcalc\/toolbox\/bio\/seqlogo\/rev-comp", 
+    "value":false, 
+    "description":""
+  }
+]

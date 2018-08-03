@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jebtk.bioinformatics.genomic.Gene;
-import org.jebtk.bioinformatics.genomic.GenesDb;
+import org.jebtk.bioinformatics.genomic.Genes;
+import org.jebtk.bioinformatics.genomic.GenomicEntity;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Sequence;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
@@ -225,19 +225,19 @@ public class MotifSearch {
    */
   private static double max(final double[] scores, int n, int w) {
     double max = 0;
-    
+
     int l = n - w + 1;
-    
+
     double score;
-    
+
     for (int i = 0; i < l; ++i) {
       score = scores[i];
-      
+
       if (score > max) {
         max = score;
       }
     }
-    
+
     return max;
 
     /*
@@ -266,7 +266,7 @@ public class MotifSearch {
     }
 
     return max;
-    */
+     */
   }
 
   public static Stats enrichmentByMinError(final double[] bestScores,
@@ -321,7 +321,7 @@ public class MotifSearch {
       double specificity = tn / (double) (tn + fp);
 
       double error = 
-1;
+          1;
       // double error = 1.0 - sensitivity;
       // double error = 1.0 - specificity;
 
@@ -1153,7 +1153,7 @@ public class MotifSearch {
       double[] scores) {
     // Reset scores
     CollectionUtils.fill(0, n, scores);
-    
+
     double ratio;
 
     // the last motif must occur within these bases
@@ -1182,7 +1182,7 @@ public class MotifSearch {
         // The length of the motif, or portion of motif, for copying the
         // log ratio.
         w2 = i2 - i;
-        
+
         // The maximum score in a continuous block
         score = Mathematics.max(fg, i, w2);
 
@@ -1277,7 +1277,7 @@ public class MotifSearch {
       // Thus we only store the maximum scores found
       if (p > fg[i]) {
         //Mathematics.add(p, i, i + w, fg);
-        
+
         // We only care where the best scoring motifs in a region are.
         CollectionUtils.fill(p, i, i + w, fg);
 
@@ -1330,7 +1330,7 @@ public class MotifSearch {
         // System.err.println("hmm " + p);
 
         //Mathematics.add(p, i, i + w, fg);
-        
+
         // We only care where the best scoring motifs in a region are.
         CollectionUtils.fill(p, i, i + w, fg);
 
@@ -1339,18 +1339,19 @@ public class MotifSearch {
           // Record the maximum score found
            fg[j] += p;
         }
-        */
+         */
       }
     }
   }
 
-  public static List<SearchRegion> getSearchRegions(String genome,
+  public static List<SearchRegion> getSearchRegions(String db,
+      String genome,
       Group group,
       int ext5p,
       int ext3p,
       boolean mainVariants,
       boolean peakWidths,
-      GenesDb genesDb) throws IOException {
+      Genes genesDb) throws IOException {
     List<SearchRegion> regions = new ArrayList<SearchRegion>();
 
     for (String id : group) {
@@ -1372,17 +1373,17 @@ public class MotifSearch {
         // See if the id is a symbol, in which case we are looking
         // at the TSS
 
-        if (mainVariants) {
-          regions.add(SearchRegion
-              .createSearchRegion(genesDb.getMainGene(id), ext5p, ext3p));
-        } else {
-          List<Gene> genes = genesDb.getGenes(id);
+        //if (mainVariants) {
+        //  regions.add(SearchRegion
+        //      .createSearchRegion(genesDb(db, id), ext5p, ext3p));
+        //} else {
+        List<GenomicEntity> genes = genesDb.getGenes(db, genome, id);
 
-          for (Gene gene : genes) {
-            regions.add(SearchRegion.createSearchRegion(gene, ext5p, ext3p));
-          }
+        for (GenomicEntity gene : genes) {
+          regions.add(SearchRegion.createSearchRegion(gene, ext5p, ext3p));
         }
       }
+      //}
     }
 
     return regions;
