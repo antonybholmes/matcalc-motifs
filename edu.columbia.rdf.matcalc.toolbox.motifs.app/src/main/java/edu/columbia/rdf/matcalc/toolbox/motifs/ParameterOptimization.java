@@ -10,7 +10,7 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jebtk.bioinformatics.dna.WebSequenceReader;
-import org.jebtk.bioinformatics.genomic.GeneDb;
+import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.Genes;
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.SequenceReader;
@@ -302,7 +302,7 @@ public class ParameterOptimization {
 
       BufferedWriter writer = FileUtils
           .newBufferedWriter(PathUtils.getPath(Motif.sanitize(
-              TextUtils.paste("_", motif.getId(), "error", "threshold", t)
+              TextUtils.cat("_", motif.getId(), "error", "threshold", t)
                   + ".txt")));
 
       try {
@@ -372,7 +372,7 @@ public class ParameterOptimization {
         backgroundGroup,
         ext5p,
         ext3p,
-        GeneDb.UCSC,
+        Genome.UCSC,
         Genome.HG19,
         assembly,
         genesDb);
