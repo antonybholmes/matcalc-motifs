@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jebtk.bioinformatics.genomic.Genes;
-import org.jebtk.bioinformatics.genomic.GenomicEntity;
+import org.jebtk.bioinformatics.genomic.GenesDB;
+import org.jebtk.bioinformatics.genomic.Genome;
+import org.jebtk.bioinformatics.genomic.GenomicElement;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Sequence;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
@@ -1344,14 +1345,13 @@ public class MotifSearch {
     }
   }
 
-  public static List<SearchRegion> getSearchRegions(String db,
-      String genome,
+  public static List<SearchRegion> getSearchRegions(Genome genome,
       Group group,
       int ext5p,
       int ext3p,
       boolean mainVariants,
       boolean peakWidths,
-      Genes genesDb) throws IOException {
+      GenesDB genesDb) throws IOException {
     List<SearchRegion> regions = new ArrayList<SearchRegion>();
 
     for (String id : group) {
@@ -1377,9 +1377,9 @@ public class MotifSearch {
         //  regions.add(SearchRegion
         //      .createSearchRegion(genesDb(db, id), ext5p, ext3p));
         //} else {
-        List<GenomicEntity> genes = genesDb.getGenes(db, genome, id);
+        List<GenomicElement> genes = genesDb.getElements(genome, id, "gene");
 
-        for (GenomicEntity gene : genes) {
+        for (GenomicElement gene : genes) {
           regions.add(SearchRegion.createSearchRegion(gene, ext5p, ext3p));
         }
       }

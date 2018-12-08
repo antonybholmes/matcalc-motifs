@@ -6,9 +6,10 @@ import java.util.List;
 import javax.swing.SwingWorker;
 
 import org.jebtk.bioinformatics.gapsearch.BinaryGapSearch;
-import org.jebtk.bioinformatics.genomic.SequenceReader;
+import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Sequence;
+import org.jebtk.bioinformatics.genomic.SequenceReader;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.math.matrix.DataFrame;
@@ -30,7 +31,7 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
   private SequenceReader mAssembly;
   private List<SearchSequence> mBackgroundSequences;
   private MainMatCalcWindow mParent;
-  private String mGenome;
+  private Genome mGenome;
 
   /**
    * Create a new Enrichment task.
@@ -43,7 +44,7 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
    * @param minSensitivity
    * @param minSpecificity
    */
-  public MotifEnrichmentGCHistTask(MainMatCalcWindow parent, String genome,
+  public MotifEnrichmentGCHistTask(MainMatCalcWindow parent, Genome genome,
       SequenceReader assembly, List<Motif> motifs,
       MainMatCalcWindow foregroundSeqWindow, double threshold,
       double minSensitivity, double minSpecificity) {

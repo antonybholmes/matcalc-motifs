@@ -10,8 +10,7 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jebtk.bioinformatics.dna.WebSequenceReader;
-import org.jebtk.bioinformatics.genomic.Genome;
-import org.jebtk.bioinformatics.genomic.Genes;
+import org.jebtk.bioinformatics.genomic.GenesDB;
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.SequenceReader;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
@@ -39,15 +38,14 @@ public class ParameterOptimization {
       int ext5p,
       int ext3p,
       String db,
-      String genome,
+      Genome genome,
       SequenceReader assembly,
-      Genes genesDb,
+      GenesDB genesDb,
       Path file) throws IOException {
     boolean mainVariants = false;
     boolean peakWidths = false;
 
-    List<SearchRegion> foregroundRegions = MotifSearch.getSearchRegions(db,
-        genome,
+    List<SearchRegion> foregroundRegions = MotifSearch.getSearchRegions(genome,
         foregroundGroup,
         ext5p,
         ext3p,
@@ -65,8 +63,7 @@ public class ParameterOptimization {
     List<SequenceRegion> foregroundRevCompSeqs = SequenceRegion
         .reverseComplementRegion(foregroundSequences);
 
-    List<SearchRegion> backgroundRegions = MotifSearch.getSearchRegions(db,
-        genome,
+    List<SearchRegion> backgroundRegions = MotifSearch.getSearchRegions(genome,
         backgroundGroup,
         ext5p,
         ext3p,
@@ -173,15 +170,13 @@ public class ParameterOptimization {
       Group backgroundGroup,
       int ext5p,
       int ext3p,
-      String db,
-      String genome,
+      Genome genome,
       SequenceReader assembly,
-      Genes genesDb) throws IOException, ParseException {
+      GenesDB genesDb) throws IOException, ParseException {
     boolean mainVariants = false;
     boolean peakWidths = false;
 
-    List<SearchRegion> foregroundRegions = MotifSearch.getSearchRegions(db,
-        genome,
+    List<SearchRegion> foregroundRegions = MotifSearch.getSearchRegions(genome,
         foregroundGroup,
         ext5p,
         ext3p,
@@ -199,8 +194,7 @@ public class ParameterOptimization {
     List<SequenceRegion> foregroundRevCompSeqs = SequenceRegion
         .reverseComplementRegion(foregroundSequences);
 
-    List<SearchRegion> backgroundRegions = MotifSearch.getSearchRegions(db,
-        genome,
+    List<SearchRegion> backgroundRegions = MotifSearch.getSearchRegions(genome,
         backgroundGroup,
         ext5p,
         ext3p,
@@ -355,7 +349,7 @@ public class ParameterOptimization {
         "/ifs/home/cancer/Lab_RDF/Personal/Antony/motifs/database/Database/RDF/bcl6bs.motif"),
         "test");
 
-    Genes genesDb = new WebGenes(SettingsService.getInstance()
+    GenesDB genesDb = new WebGenes(SettingsService.getInstance()
         .getSetting("motifs.genome.remote-url").getUrl());
 
     SequenceReader assembly = new WebSequenceReader(new URL(
@@ -372,7 +366,6 @@ public class ParameterOptimization {
         backgroundGroup,
         ext5p,
         ext3p,
-        Genome.UCSC,
         Genome.HG19,
         assembly,
         genesDb);

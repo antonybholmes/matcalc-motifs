@@ -6,9 +6,10 @@ import java.util.List;
 import javax.swing.SwingWorker;
 
 import org.jebtk.bioinformatics.gapsearch.BinaryGapSearch;
-import org.jebtk.bioinformatics.genomic.SequenceReader;
+import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Sequence;
+import org.jebtk.bioinformatics.genomic.SequenceReader;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.statistics.HistBin;
@@ -25,7 +26,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
   private SequenceReader mAssembly;
 
   private MainMatCalcWindow mParent;
-  private String mGenome;
+  private Genome mGenome;
 
   /**
    * Create a new Enrichment task.
@@ -38,7 +39,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
    * @param minSensitivity
    * @param minSpecificity
    */
-  public GCBackgroundTask(MainMatCalcWindow parent, String genome,
+  public GCBackgroundTask(MainMatCalcWindow parent, Genome genome,
       SequenceReader assembly) {
     mParent = parent;
     mGenome = genome;
@@ -60,7 +61,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
     return null;
   }
 
-  private DataFrame motifs(String genome) throws Exception {
+  private DataFrame motifs(Genome genome) throws Exception {
     MotifsModule.LOG.info("Searching for motifs in foreground regions...");
 
     List<SearchSequence> foregroundSequences = SequenceUtils

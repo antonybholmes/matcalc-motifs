@@ -55,6 +55,7 @@ import org.jebtk.modern.io.GuiFileExtFilter;
 import org.jebtk.modern.io.RecentFilesService;
 import org.jebtk.modern.ribbon.Ribbon;
 import org.jebtk.modern.ribbon.RibbonLargeButton;
+import org.jebtk.modern.ribbon.RibbonToolbar;
 import org.jebtk.modern.tabs.SizableTab;
 import org.jebtk.modern.widget.ModernClickWidget;
 import org.slf4j.Logger;
@@ -157,48 +158,50 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
      * "Show the motifs group"); button.addClickListener(this);
      * ribbon.getToolbar("DNA").getSection("Motifs").add(button);
      */
+    
+    RibbonToolbar toolbar = ribbon.getToolbar("Motifs");
 
     button = new RibbonLargeButton("Search",
         AssetService.getInstance().loadIcon(SearchVectorIcon.class, 24), "Search",
         "Search for motifs.");
     button.addClickListener(this);
-    ribbon.getToolbar("DNA").getSection("Motifs").add(button);
+    toolbar.getSection("Motifs").add(button);
 
-    ribbon.getToolbar("DNA").getSection("Motifs").addSeparator();
+    toolbar.getSection("Motifs").addSeparator();
 
     button = new RibbonLargeButton("GC Background",
         AssetService.getInstance().loadIcon("enrichment", 24), "GC Background",
         "Generate background.");
     button.addClickListener(this);
-    ribbon.getToolbar("DNA").getSection("Motifs").add(button);
+    toolbar.getSection("Motifs").add(button);
 
     button = new RibbonLargeButton("Enrichment",
         AssetService.getInstance().loadIcon("enrichment", 24), "Enrichment",
         "Look for enriched motifs.");
     button.addClickListener(this);
-    ribbon.getToolbar("DNA").getSection("Motifs").add(button);
+    toolbar.getSection("Motifs").add(button);
 
-    ribbon.getToolbar("DNA").getSection("Motifs").addSeparator();
+    toolbar.getSection("Motifs").addSeparator();
 
     button = new RibbonLargeButton("Export BED",
         AssetService.getInstance().loadIcon(SaveVectorIcon.class, 24),
         "Export BED", "Export Results as BED.");
     button.addClickListener(this);
-    ribbon.getToolbar("DNA").getSection("Motifs").add(button);
+    toolbar.getSection("Motifs").add(button);
 
-    ribbon.getToolbar("DNA").getSection("Motifs").addSeparator();
+    toolbar.getSection("Motifs").addSeparator();
 
     button = new RibbonLargeButton("SeqLogo",
         AssetService.getInstance().loadIcon(SeqLogoIcon.class, 24), "SeqLogo",
         "Browse sequence logos.");
     button.addClickListener(this);
-    ribbon.getToolbar("DNA").getSection("Motifs").add(button);
+    toolbar.getSection("Motifs").add(button);
 
     button = new RibbonLargeButton("Plot",
         AssetService.getInstance().loadIcon(RunVectorIcon.class, 24), "Plot",
         "Plot motifs.");
     button.addClickListener(this);
-    ribbon.getToolbar("DNA").getSection("Motifs").add(button);
+    toolbar.getSection("Motifs").add(button);
   }
 
   @Override

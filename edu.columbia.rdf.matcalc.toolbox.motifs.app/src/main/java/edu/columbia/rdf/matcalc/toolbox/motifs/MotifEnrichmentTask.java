@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
+import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.motifs.Motif;
 import org.jebtk.core.Mathematics;
 import org.jebtk.math.matrix.DataFrame;
@@ -26,7 +27,7 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
   private MainMatCalcWindow mBackgroundGroup;
   private MainMatCalcWindow mForegroundGroup;
   private MainMatCalcWindow mParent;
-  private String mGenome;
+  private Genome mGenome;
 
   private static class SearchResult implements Comparable<SearchResult> {
     public double q;
@@ -57,7 +58,7 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
    * @param minSensitivity
    * @param minSpecificity
    */
-  public MotifEnrichmentTask(MainMatCalcWindow parent, String genome,
+  public MotifEnrichmentTask(MainMatCalcWindow parent, Genome genome,
       List<Motif> motifs,
       MainMatCalcWindow foregroundGroup, MainMatCalcWindow backgroundGroup,
       double threshold, double minSensitivity, double minSpecificity) {

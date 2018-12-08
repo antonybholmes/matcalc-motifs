@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jebtk.bioinformatics.genomic.Gene;
+import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.SequenceReader;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
@@ -86,7 +87,7 @@ public class SearchRegion {
     return mStrand;
   }
 
-  public static List<SequenceRegion> getSequences(String genome,
+  public static List<SequenceRegion> getSequences(Genome genome,
       SequenceReader reader,
       List<SearchRegion> searchRegions) throws IOException {
     List<SequenceRegion> sequences = new ArrayList<SequenceRegion>();

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
+import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Region;
 import org.jebtk.bioinformatics.genomic.Sequence;
@@ -25,7 +26,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
   private List<Motif> mMotifs;
   private double mThreshold;
   private MainMatCalcWindow mParent;
-  private String mGenome;
+  private Genome mGenome;
 
   public static class SearchResult {
     public SearchRegion region;
@@ -36,7 +37,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
     public int index;
   }
 
-  public MotifSearchTask(MainMatCalcWindow parent, String genome, List<Motif> motifs,
+  public MotifSearchTask(MainMatCalcWindow parent, Genome genome, List<Motif> motifs,
       double threshold) {
     mParent = parent;
     mGenome = genome;
@@ -285,8 +286,6 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 
       ++r;
     }
-
-    System.err.println("matrix " + ret.getRows());
 
     return ret;
   }
