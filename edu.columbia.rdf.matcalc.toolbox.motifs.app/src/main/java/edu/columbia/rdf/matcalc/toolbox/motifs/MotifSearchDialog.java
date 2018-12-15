@@ -90,13 +90,13 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
 
     @Override
     public void selectionAdded(ChangeEvent e) {
-       mSubFigure.setMotif(mModel.getSelected());
+      mSubFigure.setMotif(mModel.getSelected());
     }
 
     @Override
     public void selectionRemoved(ChangeEvent e) {
       // TODO Auto-generated method stub
-      
+
     }
 
   }
@@ -152,15 +152,15 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
 
     // content.setBody(viewPanel);
 
-    ModernComponent c = new VBoxAutoWidth();
+    ModernComponent c;
 
     mMotifsPanel = new MotifsTreePanel(mParent, mModel);
 
     UI.setSize(mMotifsPanel, 800, 240);
+    
+    addCard(mMotifsPanel);
 
-    c.add(mMotifsPanel);
-
-    c.add(UI.createVGap(10));
+    addBlock(UI.createVGap(10));
 
     mSubFigure = new SeqLogoCanvas();
 
@@ -168,7 +168,7 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
         new Figure("Seq Logo Figure").addSubFigure(mSubFigure)));
     scrollPane.setVerticalScrollBarPolicy(ScrollBarPolicy.NEVER);
 
-    UI.setSize(scrollPane, 800, 220);
+    UI.setSize(scrollPane, 800, 180);
 
     ModernComponent panel = new ModernComponent();
 
@@ -182,9 +182,9 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
 
     panel.setRight(box);
 
-    c.add(panel);
+    addCard(panel);
 
-    c.add(UI.createVGap(20));
+    addBlock(UI.createVGap(20));
 
     box = HBox.create();
 
@@ -192,7 +192,7 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
     box.add(new ModernAutoSizeLabel("Motif threshold", 100));
     box.add(mThresholdField);
 
-    c.add(box);
+    addBlock(box);
 
     // panel.add(new ModernDialogHelpButton("Group", "The group of regions in
     // which
@@ -224,7 +224,7 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
 
     // mTabsModel.addTab("Search Options", box);
 
-    setCard(c);
+    //addCard(c);
   }
 
   @Override

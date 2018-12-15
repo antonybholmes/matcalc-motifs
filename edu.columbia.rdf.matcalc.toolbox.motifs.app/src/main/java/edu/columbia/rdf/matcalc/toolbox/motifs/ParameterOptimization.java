@@ -93,9 +93,9 @@ public class ParameterOptimization {
     // score of the motif
 
     MotifSearch ms = new MotifSearch();
-    
+
     BufferedWriter writer = FileUtils.newBufferedWriter(file);
-    
+
     try {
       for (double threshold = 0; threshold < 1.1; threshold += 0.1) {
         writer.write(Double.toString(threshold));

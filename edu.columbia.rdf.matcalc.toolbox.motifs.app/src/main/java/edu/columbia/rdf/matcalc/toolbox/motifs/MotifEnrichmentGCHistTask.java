@@ -65,7 +65,7 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
 
       mNewModel.setName("Motif Enrichment");
 
-      mParent.openMatrix(mNewModel);
+      mParent.openMatrices().open(mNewModel);
     } catch (Exception e) {
       e.printStackTrace();
     }

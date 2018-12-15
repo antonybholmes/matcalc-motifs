@@ -64,7 +64,7 @@ import org.slf4j.LoggerFactory;
 import edu.columbia.rdf.matcalc.FileType;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.figure.graph2d.Graph2dWindow;
-import edu.columbia.rdf.matcalc.toolbox.CalcModule;
+import edu.columbia.rdf.matcalc.toolbox.core.io.IOModule;
 import edu.columbia.rdf.matcalc.toolbox.motifs.app.MotifsInfo;
 import edu.columbia.rdf.matcalc.toolbox.motifs.plot.BarBoxLayer;
 import edu.columbia.rdf.matcalc.toolbox.motifs.plot.MotifLayer;
@@ -72,11 +72,10 @@ import edu.columbia.rdf.matcalc.toolbox.motifs.plot.TextLayer;
 import edu.columbia.rdf.matcalc.toolbox.motifs.seqlogo.MainSeqLogoWindow;
 import edu.columbia.rdf.matcalc.toolbox.motifs.seqlogo.SeqLogoIcon;
 
-public class MotifsModule extends CalcModule implements ModernClickListener {
+public class MotifsModule extends IOModule implements ModernClickListener {
   public static final Logger LOG = LoggerFactory.getLogger(MotifsModule.class);
 
-  private static final Path MOD_DIR = AppService.MOD_DIR
-      .resolve("motifs");
+  private static final Path MOD_DIR = AppService.MOD_DIR.resolve("motifs");
 
   private static final Path DATABASE_DIR = MOD_DIR.resolve("database");
 
@@ -95,7 +94,8 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     if (SettingsService.getInstance()
         .getBool("org.matcalc.toolbox.bio.dna.web.enabled")) {
       try {
-        SequenceService.getInstance().add(new WebSequenceReader(SettingsService.getInstance().getUrl("dna.remote-url")));
+        SequenceService.getInstance().add(new WebSequenceReader(
+            SettingsService.getInstance().getUrl("dna.remote-url")));
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -158,12 +158,12 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
      * "Show the motifs group"); button.addClickListener(this);
      * ribbon.getToolbar("DNA").getSection("Motifs").add(button);
      */
-    
+
     RibbonToolbar toolbar = ribbon.getToolbar("Motifs");
 
     button = new RibbonLargeButton("Search",
-        AssetService.getInstance().loadIcon(SearchVectorIcon.class, 24), "Search",
-        "Search for motifs.");
+        AssetService.getInstance().loadIcon(SearchVectorIcon.class, 24),
+        "Search", "Search for motifs.");
     button.addClickListener(this);
     toolbar.getSection("Motifs").add(button);
 
@@ -246,7 +246,7 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
   }
 
   @Override
-  public DataFrame autoOpenFile(final MainMatCalcWindow window,
+  public DataFrame read(final MainMatCalcWindow window,
       final Path file,
       FileType type,
       int headers,
@@ -288,7 +288,8 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
       writer.newLine();
 
       for (int i = 0; i < m.getRows(); ++i) {
-        GenomicRegion r = GenomicRegion.parse(Genome.HG19, m.getText(i, locCol));
+        GenomicRegion r = GenomicRegion.parse(Genome.HG19,
+            m.getText(i, locCol));
         double score = m.getValue(i, scoreCol);
         char strand = m.getText(i, strandCol).charAt(0);
 
@@ -345,15 +346,12 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
   }
 
   private void addRegionGroupsPanel() {
-    if (mWindow.tabsPane().tabs().left()
-        .contains("Motif Groups")) {
+    if (mWindow.tabsPane().tabs().left().contains("Motif Groups")) {
       return;
     }
 
-    SizableTab sizePane = new SizableTab("Motif Groups",
-        new CloseableHTab("Motif Groups", mRegionGroupsPanel,
-            mWindow.tabsPane()),
-        250, 100, 500);
+    SizableTab sizePane = new SizableTab("Motif Groups", new CloseableHTab(
+        "Motif Groups", mRegionGroupsPanel, mWindow.tabsPane()), 250, 100, 500);
 
     mWindow.tabsPane().tabs().left().add(sizePane);
   }
@@ -368,8 +366,8 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
       return;
     }
 
-    MotifSearchTask task = new MotifSearchTask(mWindow, Genome.HG19, dialog.getMotifs(),
-        dialog.getThreshold());
+    MotifSearchTask task = new MotifSearchTask(mWindow, Genome.HG19,
+        dialog.getMotifs(), dialog.getThreshold());
 
     task.doInBackground();
     task.done();
@@ -403,15 +401,15 @@ public class MotifsModule extends CalcModule implements ModernClickListener {
     // Load some chromosome sizes for hg19
 
     if (dialog.useForeVsBackMode()) {
-      MotifEnrichmentTask task = new MotifEnrichmentTask(mWindow, Genome.HG19, searchMotifs,
-          foregroundGroup, backgroundGroup, threshold, sensitivity,
-          specificity);
+      MotifEnrichmentTask task = new MotifEnrichmentTask(mWindow, Genome.HG19,
+          searchMotifs, foregroundGroup, backgroundGroup, threshold,
+          sensitivity, specificity);
 
       task.doInBackground(); // execute();
     } else {
       MotifEnrichmentGCHistTask task = new MotifEnrichmentGCHistTask(mWindow,
-          Genome.HG19, SequenceService.getInstance(),
-          searchMotifs, foregroundGroup, threshold, sensitivity, specificity);
+          Genome.HG19, SequenceService.getInstance(), searchMotifs,
+          foregroundGroup, threshold, sensitivity, specificity);
 
       task.doInBackground();
     }

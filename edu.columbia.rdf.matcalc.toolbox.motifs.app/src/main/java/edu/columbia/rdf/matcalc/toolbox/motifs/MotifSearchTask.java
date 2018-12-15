@@ -37,8 +37,8 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
     public int index;
   }
 
-  public MotifSearchTask(MainMatCalcWindow parent, Genome genome, List<Motif> motifs,
-      double threshold) {
+  public MotifSearchTask(MainMatCalcWindow parent, Genome genome,
+      List<Motif> motifs, double threshold) {
     mParent = parent;
     mGenome = genome;
     mMotifs = motifs;
@@ -64,13 +64,14 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
       return;
     }
 
-    mParent.addToHistory("Motif Search", mNewModel);
+    mParent.history().addToHistory("Motif Search", mNewModel);
   }
 
   private DataFrame motifs() throws IOException {
     DataFrame m = mParent.getCurrentMatrix();
 
-    List<SearchSequence> sequences = SequenceUtils.matrixToSequences(mGenome, m);
+    List<SearchSequence> sequences = SequenceUtils.matrixToSequences(mGenome,
+        m);
 
     if (sequences.size() == 0) {
       ModernMessageDialog.createWarningDialog(mParent,
@@ -114,11 +115,13 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
     // Use a buffer that can accommodate all scores regardless of
     // of sequence length. 4096 should cover most instances
 
-    double[] llkrf = new double[MotifSearch.BUFFER_SIZE];
-    double[] llkrr = new double[MotifSearch.BUFFER_SIZE];
+    double[] forwardScores = new double[MotifSearch.BUFFER_SIZE];
+    int[] forwardIds = new int[MotifSearch.BUFFER_SIZE];
+    double[] revScores = new double[MotifSearch.BUFFER_SIZE];
+    int[] revIds = new int[MotifSearch.BUFFER_SIZE];
 
     // lets keep all motifs for the moment
-    
+
     MotifSearch ms = new MotifSearch();
 
     List<SearchResult> searchResults = new ArrayList<SearchResult>();
@@ -136,6 +139,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
       int n = seq.length;
 
       for (Motif motif : motifs) {
+        System.err.println(motif.getName());
         double t = threshold * MotifSearch.getMaxScore(motif);
 
         int w = motif.getBaseCount();
@@ -147,10 +151,25 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 
         // SearchRegion region = searchRegions.get(i);
 
-        ms.search(iSeq, iRevCompSeq, n, pwm, bgscore, w, t, llkrf, llkrr);
+        ms.search(iSeq,
+            iRevCompSeq,
+            n,
+            pwm,
+            bgscore,
+            w,
+            t,
+            forwardScores,
+            forwardIds,
+            revScores,
+            revIds);
 
-        List<BindingSite> sites = MotifSearch
-            .getBindingSites(seq, n, w, llkrf, llkrr);
+        List<BindingSite> sites = MotifSearch.getBindingSites(seq,
+            n,
+            w,
+            forwardScores,
+            forwardIds,
+            revScores,
+            revIds);
 
         sites = BindingSite.sortByScore(sites);
 

@@ -121,7 +121,7 @@ public class MotifEnrichmentDialog extends ModernDialogHelpWindow {
     @Override
     public void selectionRemoved(ChangeEvent e) {
       // TODO Auto-generated method stub
-      
+
     }
 
   }

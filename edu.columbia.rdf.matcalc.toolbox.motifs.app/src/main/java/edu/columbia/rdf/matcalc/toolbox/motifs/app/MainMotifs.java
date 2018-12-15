@@ -32,8 +32,8 @@ public class MainMotifs {
 
     ModuleLoader ml = new BioModuleLoader().addModule(MotifsModule.class);
 
-    //ModuleService.getInstance().add(MotifsModule.class);
-    
+    // ModuleService.getInstance().add(MotifsModule.class);
+
     MainMatCalc.main(info, ml);
   }
 }

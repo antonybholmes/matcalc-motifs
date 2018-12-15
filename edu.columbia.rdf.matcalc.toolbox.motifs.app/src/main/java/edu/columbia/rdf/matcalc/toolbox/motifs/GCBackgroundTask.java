@@ -53,7 +53,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
 
       mNewModel.setName("GC Background Sequences");
 
-      mParent.openMatrixInNewWindow(mNewModel);
+      mParent.openMatrices().newWindow().open(mNewModel);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -154,8 +154,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
 
         for (int t = 0; t < MAX_ATTEMPTS; ++t) {
           // Random sequence
-          rs = Sequence
-              .getRandomSequence(genome, mAssembly, sequenceLength);
+          rs = Sequence.getRandomSequence(genome, mAssembly, sequenceLength);
 
           double gc = Sequence.gcContent(rs.getSequence());
 

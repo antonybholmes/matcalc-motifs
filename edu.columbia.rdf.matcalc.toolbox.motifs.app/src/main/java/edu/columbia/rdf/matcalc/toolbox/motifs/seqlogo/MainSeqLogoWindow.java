@@ -25,6 +25,7 @@ import org.jebtk.graphplot.ModernPlotCanvas;
 import org.jebtk.graphplot.figure.FigurePanel;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.AssetService;
+import org.jebtk.modern.ModernComponent;
 import org.jebtk.modern.contentpane.CloseableHTab;
 import org.jebtk.modern.dialog.DialogEvent;
 import org.jebtk.modern.dialog.DialogEventListener;
@@ -51,6 +52,7 @@ import org.jebtk.modern.scrollpane.ScrollBarLocation;
 import org.jebtk.modern.scrollpane.ScrollBarPolicy;
 import org.jebtk.modern.tooltip.ModernToolTip;
 import org.jebtk.modern.widget.ModernClickWidget;
+import org.jebtk.modern.widget.ModernWidget;
 import org.jebtk.modern.window.ModernRibbonWindow;
 import org.jebtk.modern.zoom.ModernStatusZoomSlider;
 import org.jebtk.modern.zoom.ZoomModel;
@@ -103,7 +105,7 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
     @Override
     public void selectionRemoved(ChangeEvent e) {
       // TODO Auto-generated method stub
-      
+
     }
 
   }
@@ -302,7 +304,7 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
     scrollPane.setScrollBarLocation(ScrollBarLocation.FLOATING)
         .setScrollBarPolicy(ScrollBarPolicy.AUTO_SHOW);
 
-    setCard(scrollPane);
+    setCard(new ModernComponent(scrollPane, ModernWidget.BORDER));
 
     mStatusBar.addRight(new ModernStatusZoomSlider(mZoomModel));
 

@@ -52,8 +52,8 @@ public class BarBoxLayer extends PlotLayer {
     // g2.fillRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
     g2.fillRect(x1, y1, x2 - x1 + 1, y2 - y1 + 1);
 
-    g2.setColor(SettingsService.getInstance()
-        .getColor("motifs.plot.bar.border.color"));
+    g2.setColor(
+        SettingsService.getInstance().getColor("motifs.plot.bar.border.color"));
 
     // g2.drawRect(PLOT_OFFSET.x, y, internalPlotSize.width, h);
     g2.drawRect(x1, y1, x2 - x1, y2 - y1);

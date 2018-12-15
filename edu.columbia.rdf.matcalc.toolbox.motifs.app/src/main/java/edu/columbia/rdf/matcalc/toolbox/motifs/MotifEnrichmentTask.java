@@ -59,9 +59,9 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
    * @param minSpecificity
    */
   public MotifEnrichmentTask(MainMatCalcWindow parent, Genome genome,
-      List<Motif> motifs,
-      MainMatCalcWindow foregroundGroup, MainMatCalcWindow backgroundGroup,
-      double threshold, double minSensitivity, double minSpecificity) {
+      List<Motif> motifs, MainMatCalcWindow foregroundGroup,
+      MainMatCalcWindow backgroundGroup, double threshold,
+      double minSensitivity, double minSpecificity) {
     mParent = parent;
     mGenome = genome;
     mMotifs = motifs;
@@ -79,7 +79,7 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
     mNewModel.setName("Motif Enrichment");
 
     if (mNewModel != null && mNewModel.getRows() > 0) {
-      mParent.openMatrix(mNewModel);
+      mParent.openMatrices().open(mNewModel);
     } else {
       ModernMessageDialog.createWarningDialog(mParent,
           "There were no enriched motifs.");

@@ -70,7 +70,7 @@ public class BaseDialog extends ModernDialogHelpWindow {
 
     VBox box = VBox.create();
 
-    sectionHeader("Base Color", box);
+    //sectionHeader("Base Color", box);
 
     box.add(new HExpandBox("A", mColorAButton));
     box.add(UI.createVGap(5));
@@ -116,21 +116,31 @@ public class BaseDialog extends ModernDialogHelpWindow {
    * Change the button color.
    */
   private void setColors() {
-    mColorAButton.setSelectedColor(SequenceService.getInstance().getBaseAColor());
-    mColorCButton.setSelectedColor(SequenceService.getInstance().getBaseCColor());
-    mColorGButton.setSelectedColor(SequenceService.getInstance().getBaseGColor());
-    mColorTButton.setSelectedColor(SequenceService.getInstance().getBaseTColor());
-    mColorNButton.setSelectedColor(SequenceService.getInstance().getBaseNColor());
+    mColorAButton
+        .setSelectedColor(SequenceService.getInstance().getBaseAColor());
+    mColorCButton
+        .setSelectedColor(SequenceService.getInstance().getBaseCColor());
+    mColorGButton
+        .setSelectedColor(SequenceService.getInstance().getBaseGColor());
+    mColorTButton
+        .setSelectedColor(SequenceService.getInstance().getBaseTColor());
+    mColorNButton
+        .setSelectedColor(SequenceService.getInstance().getBaseNColor());
   }
 
   @Override
   public final void clicked(ModernClickEvent e) {
     if (e.getMessage().equals(UI.BUTTON_OK)) {
-      SequenceService.getInstance().setBaseAColor(mColorAButton.getSelectedColor());
-      SequenceService.getInstance().setBaseCColor(mColorCButton.getSelectedColor());
-      SequenceService.getInstance().setBaseGColor(mColorGButton.getSelectedColor());
-      SequenceService.getInstance().setBaseTColor(mColorTButton.getSelectedColor());
-      SequenceService.getInstance().setBaseNColor(mColorNButton.getSelectedColor());
+      SequenceService.getInstance()
+          .setBaseAColor(mColorAButton.getSelectedColor());
+      SequenceService.getInstance()
+          .setBaseCColor(mColorCButton.getSelectedColor());
+      SequenceService.getInstance()
+          .setBaseGColor(mColorGButton.getSelectedColor());
+      SequenceService.getInstance()
+          .setBaseTColor(mColorTButton.getSelectedColor());
+      SequenceService.getInstance()
+          .setBaseNColor(mColorNButton.getSelectedColor());
     }
 
     super.clicked(e);
