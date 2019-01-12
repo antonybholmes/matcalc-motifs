@@ -14,7 +14,7 @@ import org.jebtk.modern.widget.ModernTwoStateWidget;
 /**
  * Allows user to select the resolution to view sequences
  *
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class MotifViewRibbonSection extends RibbonSection

@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -323,8 +324,8 @@ public class MotifsModule extends IOModule implements ModernClickListener {
     JFrame window;
 
     if (c != -1) {
-      List<String> names = CollectionUtils
-          .uniquePreserveOrder(m.columnAsText(c));
+      List<String> names = 
+          CollectionUtils.uniquePreserveOrder(Arrays.asList(m.columnToText(c)));
 
       window = new MainSeqLogoWindow(names);
 

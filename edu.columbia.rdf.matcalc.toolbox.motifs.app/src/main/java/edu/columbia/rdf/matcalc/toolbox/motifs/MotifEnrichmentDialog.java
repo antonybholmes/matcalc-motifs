@@ -36,7 +36,7 @@ import edu.columbia.rdf.matcalc.MatCalcWindowCombo;
 /**
  * Options for motif searching.
  * 
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class MotifEnrichmentDialog extends ModernDialogHelpWindow {

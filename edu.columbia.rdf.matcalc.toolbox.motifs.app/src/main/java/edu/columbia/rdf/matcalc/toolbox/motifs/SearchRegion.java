@@ -14,7 +14,7 @@ import org.jebtk.bioinformatics.genomic.Strand;
 /**
  * Describes what we looked for
  * 
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class SearchRegion {

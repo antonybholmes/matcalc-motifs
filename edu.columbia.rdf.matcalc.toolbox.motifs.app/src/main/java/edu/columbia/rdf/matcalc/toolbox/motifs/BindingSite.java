@@ -11,7 +11,7 @@ import org.jebtk.core.text.TextUtils;
 /**
  * Describes the location and match for a given motif.
  * 
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class BindingSite {

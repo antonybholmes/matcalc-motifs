@@ -42,7 +42,7 @@ import org.jebtk.modern.window.ModernWindow;
 /**
  * Allows user to select a color map.
  *
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class BaseColorRibbonSection extends RibbonSection {

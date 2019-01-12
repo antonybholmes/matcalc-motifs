@@ -18,7 +18,7 @@ import org.jebtk.modern.window.WindowWidgetFocusEvents;
 /**
  * Options for motif searching.
  * 
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class BaseDialog extends ModernDialogHelpWindow {

@@ -62,7 +62,7 @@ import org.xml.sax.SAXException;
 /**
  * Window for showing 2D graphs such as a scatter plot.
  * 
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class MainSeqLogoWindow extends ModernRibbonWindow
