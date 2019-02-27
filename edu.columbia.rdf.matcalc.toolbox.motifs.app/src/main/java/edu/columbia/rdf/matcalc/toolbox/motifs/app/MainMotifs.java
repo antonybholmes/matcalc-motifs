@@ -14,8 +14,6 @@ import org.xml.sax.SAXException;
 
 import edu.columbia.rdf.matcalc.MainMatCalc;
 import edu.columbia.rdf.matcalc.ModuleLoader;
-import edu.columbia.rdf.matcalc.ModuleService;
-import edu.columbia.rdf.matcalc.BasicModuleLoader;
 import edu.columbia.rdf.matcalc.bio.BioModuleLoader;
 import edu.columbia.rdf.matcalc.toolbox.motifs.MotifsModule;
 

@@ -3,7 +3,6 @@ package edu.columbia.rdf.matcalc.toolbox.motifs.seqlogo;
 import org.jebtk.bioinformatics.genomic.SequenceService;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.button.ModernButton;
-import org.jebtk.modern.dialog.ModernDialogFlatButton;
 import org.jebtk.modern.dialog.ModernDialogHelpWindow;
 import org.jebtk.modern.dialog.ModernDialogStatus;
 import org.jebtk.modern.dialog.ModernMessageDialog;
@@ -12,6 +11,7 @@ import org.jebtk.modern.event.ModernClickListener;
 import org.jebtk.modern.graphics.color.ColorSwatchButton;
 import org.jebtk.modern.panel.HExpandBox;
 import org.jebtk.modern.panel.VBox;
+import org.jebtk.modern.ribbon.RibbonButton;
 import org.jebtk.modern.window.ModernWindow;
 import org.jebtk.modern.window.WindowWidgetFocusEvents;
 
@@ -83,7 +83,7 @@ public class BaseDialog extends ModernDialogHelpWindow {
     box.add(new HExpandBox("N", mColorNButton));
     box.add(UI.createVGap(40));
 
-    ModernButton button = new ModernDialogFlatButton("Defaults");
+    ModernButton button = new RibbonButton("Defaults");
     button.addClickListener(new ModernClickListener() {
 
       @Override

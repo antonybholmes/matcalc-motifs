@@ -22,7 +22,6 @@ import org.jebtk.core.collections.DefaultHashMap;
 import org.jebtk.core.collections.DefaultHashMapCreator;
 import org.jebtk.core.collections.IterMap;
 import org.jebtk.core.collections.TreeSetCreator;
-import org.jebtk.core.sys.SysUtils;
 
 public class MotifSearch {
   private static final double ROUNDING_ERROR = 1E-10;

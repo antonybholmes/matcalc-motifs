@@ -28,8 +28,8 @@
 package edu.columbia.rdf.matcalc.toolbox.motifs.seqlogo;
 
 import org.jebtk.bioinformatics.genomic.SequenceService;
-import org.jebtk.modern.UI;
 import org.jebtk.modern.AssetService;
+import org.jebtk.modern.UI;
 import org.jebtk.modern.dialog.ModernDialogStatus;
 import org.jebtk.modern.dialog.ModernMessageDialog;
 import org.jebtk.modern.event.ModernClickEvent;
