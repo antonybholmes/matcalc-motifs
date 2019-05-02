@@ -58,6 +58,8 @@ public class BindingSite {
       if (!scoreMap.containsKey(site.getScore())) {
         scoreMap.put(site.getScore(), new ArrayList<BindingSite>());
       }
+      
+      System.err.println("score " + site.getScore());
 
       scoreMap.get(site.getScore()).add(site);
     }

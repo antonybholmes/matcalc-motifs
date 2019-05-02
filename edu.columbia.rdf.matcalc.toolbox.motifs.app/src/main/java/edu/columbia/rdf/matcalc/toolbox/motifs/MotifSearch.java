@@ -478,10 +478,10 @@ public class MotifSearch {
 
     double[] forwardScores = new double[BUFFER_SIZE];
     int[] forwardIds = new int[BUFFER_SIZE];
-    
+
     double[] revScores = new double[BUFFER_SIZE];
     int[] revIds = new int[BUFFER_SIZE];
-    
+
     for (int i = 0; i < iSeqs.length; ++i) {
       byte[] iSeq = iSeqs[i];
       byte[] iRevCompSeq = iRevCompSeqs[i];
@@ -532,11 +532,11 @@ public class MotifSearch {
 
     double[] forwardScores = new double[BUFFER_SIZE];
     int[] forwardIds = new int[BUFFER_SIZE];
-    
+
     double[] revScores = new double[BUFFER_SIZE];
     int[] revIds = new int[BUFFER_SIZE];
-    
-    
+
+
     for (int i = 0; i < iSeqs.length; ++i) {
       byte[] iSeq = iSeqs[i];
       byte[] iRevCompSeq = iRevCompSeqs[i];
@@ -574,13 +574,13 @@ public class MotifSearch {
     double bgscore = motif.getBgPwm();
 
     double[][] pwm = motif.getPwm();
-    
+
     double[] forwardScores = new double[BUFFER_SIZE];
     int[] forwardIds = new int[BUFFER_SIZE];
-    
+
     double[] revScores = new double[BUFFER_SIZE];
     int[] revIds = new int[BUFFER_SIZE];
-    
+
 
     for (int triplet : motif.getTriplets()) {
       if (tripletMap.containsKey(triplet)) {
@@ -711,7 +711,7 @@ public class MotifSearch {
 
     double[] forwardScores = new double[BUFFER_SIZE];
     int[] forwardIds = new int[BUFFER_SIZE];
-    
+
 
     for (int i = 0; i < sequences.size(); ++i) {
       char[] seq = sequences.get(i).toArray();
@@ -743,13 +743,13 @@ public class MotifSearch {
       double threshold) {
 
     double bgscore = motif.getBgPwm();
-    
+
     double[] forwardScores = new double[BUFFER_SIZE];
     int[] forwardIds = new int[BUFFER_SIZE];
-    
+
     double[] revScores = new double[BUFFER_SIZE];
     int[] revIds = new int[BUFFER_SIZE];
-    
+
 
     search(sequence,
         revComp,
@@ -785,10 +785,10 @@ public class MotifSearch {
       double threshold) {
 
     double bgscore = motif.getBgPwm(); 
-    
+
     double[] forwardScores = new double[BUFFER_SIZE];
     int[] forwardIds = new int[BUFFER_SIZE];
-    
+
     search(sequence,
         n,
         motif.getPwm(),
@@ -886,6 +886,7 @@ public class MotifSearch {
   public static List<BindingSite> getBindingSites(final char[] sequence,
       int n,
       int w,
+      double threshold,
       double[] forwardScores,
       int[] forwardIds,
       double[] revScores,
@@ -895,11 +896,12 @@ public class MotifSearch {
         n,
         w,
         '+',
+        threshold,
         forwardScores,
         forwardIds);
 
     // Append the reverse sequence matches
-    sites.addAll(processSite(sequence, n, w, '-', revScores, revIds));
+    sites.addAll(processSite(sequence, n, w, '-', threshold, revScores, revIds));
 
     return sites;
   }
@@ -918,6 +920,7 @@ public class MotifSearch {
       int n,
       int w,
       char strand,
+      double threshold,
       final double[] scores,
       final int[] ids) {
 
@@ -934,10 +937,14 @@ public class MotifSearch {
         // scores[i],
         // strand);
 
-        BindingSite site = new BindingSite(String.valueOf(sequence, i, w), i,
-            scores[i], strand);
+        System.err.println("score stuff " + scores[i]);
 
-        sites.add(site);
+        if (scores[i] >= threshold) {
+          BindingSite site = new BindingSite(String.valueOf(sequence, i, w), i,
+              scores[i], strand);
+
+          sites.add(site);
+        }
 
         // buffer = null;
 
@@ -1256,7 +1263,7 @@ public class MotifSearch {
         // expensive log operations and instead copy blocks of scores where
         // we can
         i2 = CollectionUtils.nextZero(fg, i + 1); // nextDiffValIdx(fg, f, i +
-                                                  // 1);
+        // 1);
 
         // The length of the motif, or portion of motif, for copying the
         // log ratio.
@@ -1267,16 +1274,22 @@ public class MotifSearch {
 
         ratio = score / bgscore; // bg[i];
 
+        System.err.println("rat " + score +  " " + bgscore + " " + ratio);
+
         if (ratio > 1.0) {
           // Could use Math.log(ratio) to be like Homer
           double logratio = Mathematics.log2(ratio);
 
-          // score must exceed a threshold to count
-          if (logratio >= threshold) {
-            // scores[i] = logratio;
+          System.err.println("rat2 " + logratio + " " + threshold);
 
-            Arrays.fill(scores, i, i2, logratio);
-          }
+          // score must exceed a threshold to count
+          //if (logratio >= threshold) {
+          // scores[i] = logratio;
+
+          System.err.println("rat3 " + logratio + " " + threshold);
+
+          Arrays.fill(scores, i, i2, logratio);
+          //}
         }
 
         // move i to end of motif or portion of motif
@@ -1363,13 +1376,14 @@ public class MotifSearch {
 
         // Annotate the id of the region
         Arrays.fill(ids, i, i + w, id);
-  
+
+        // Once this site has been used, allocate a new id to the next site
         if (forward) {
           ++id;
         } else {
           --id;
         }
-        
+
         // for (int j = i; j < i + w; ++j) {
         // fg[j] += p;
         // }

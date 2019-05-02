@@ -166,6 +166,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
         List<BindingSite> sites = MotifSearch.getBindingSites(seq,
             n,
             w,
+            threshold,
             forwardScores,
             forwardIds,
             revScores,
@@ -289,6 +290,8 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 
       ret.copyRow(matrix, sr.index, r);
 
+      System.err.println(sr.site.getScore() + " " + Formatter.decimal().dp(2).format(sr.site.getScore()));
+      
       c = matrix.getCols();
       ret.set(r, c++, sr.motif.getName());
       ret.set(r, c++, sr.motif.getId());
