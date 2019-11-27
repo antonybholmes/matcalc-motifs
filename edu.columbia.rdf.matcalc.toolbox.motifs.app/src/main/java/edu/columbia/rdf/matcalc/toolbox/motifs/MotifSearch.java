@@ -12,6 +12,7 @@ import org.jebtk.bioinformatics.genomic.GenesDB;
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomicElement;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
+import org.jebtk.bioinformatics.genomic.GenomicType;
 import org.jebtk.bioinformatics.genomic.Sequence;
 import org.jebtk.bioinformatics.genomic.SequenceRegion;
 import org.jebtk.bioinformatics.motifs.Motif;
@@ -937,9 +938,10 @@ public class MotifSearch {
         // scores[i],
         // strand);
 
-        System.err.println("score stuff " + scores[i]);
-
         if (scores[i] >= threshold) {
+          
+          //System.err.println(i + " " + scores[i] + " " + threshold);
+          
           BindingSite site = new BindingSite(String.valueOf(sequence, i, w), i,
               scores[i], strand);
 
@@ -1274,19 +1276,19 @@ public class MotifSearch {
 
         ratio = score / bgscore; // bg[i];
 
-        System.err.println("rat " + score +  " " + bgscore + " " + ratio);
+        //System.err.println("rat " + score +  " " + bgscore + " " + ratio);
 
         if (ratio > 1.0) {
           // Could use Math.log(ratio) to be like Homer
           double logratio = Mathematics.log2(ratio);
 
-          System.err.println("rat2 " + logratio + " " + threshold);
+          //System.err.println("rat2 " + logratio + " " + threshold);
 
           // score must exceed a threshold to count
           //if (logratio >= threshold) {
           // scores[i] = logratio;
 
-          System.err.println("rat3 " + logratio + " " + threshold);
+          //System.err.println("rat3 " + logratio + " " + threshold);
 
           Arrays.fill(scores, i, i2, logratio);
           //}
@@ -1477,7 +1479,7 @@ public class MotifSearch {
         // regions.add(SearchRegion
         // .createSearchRegion(genesDb(db, id), ext5p, ext3p));
         // } else {
-        List<GenomicElement> genes = genesDb.getElements(genome, id, "gene");
+        List<GenomicElement> genes = genesDb.getElements(genome, id, GenomicType.GENE);
 
         for (GenomicElement gene : genes) {
           regions.add(SearchRegion.createSearchRegion(gene, ext5p, ext3p));

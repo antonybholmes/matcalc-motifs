@@ -59,8 +59,6 @@ public class BindingSite {
         scoreMap.put(site.getScore(), new ArrayList<BindingSite>());
       }
       
-      System.err.println("score " + site.getScore());
-
       scoreMap.get(site.getScore()).add(site);
     }
 

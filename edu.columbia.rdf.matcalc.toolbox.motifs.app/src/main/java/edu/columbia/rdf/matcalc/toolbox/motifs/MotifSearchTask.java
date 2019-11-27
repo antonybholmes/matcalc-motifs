@@ -139,7 +139,8 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
       int n = seq.length;
 
       for (Motif motif : motifs) {
-        System.err.println(motif.getName());
+        //System.err.println(motif.getName());
+        
         double t = threshold * MotifSearch.getMaxScore(motif);
 
         int w = motif.getBaseCount();
@@ -166,7 +167,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
         List<BindingSite> sites = MotifSearch.getBindingSites(seq,
             n,
             w,
-            threshold,
+            t,
             forwardScores,
             forwardIds,
             revScores,
@@ -290,7 +291,7 @@ public class MotifSearchTask extends SwingWorker<Void, Void> {
 
       ret.copyRow(matrix, sr.index, r);
 
-      System.err.println(sr.site.getScore() + " " + Formatter.decimal().dp(2).format(sr.site.getScore()));
+      //System.err.println(sr.site.getScore() + " " + Formatter.decimal().dp(2).format(sr.site.getScore()));
       
       c = matrix.getCols();
       ret.set(r, c++, sr.motif.getName());
