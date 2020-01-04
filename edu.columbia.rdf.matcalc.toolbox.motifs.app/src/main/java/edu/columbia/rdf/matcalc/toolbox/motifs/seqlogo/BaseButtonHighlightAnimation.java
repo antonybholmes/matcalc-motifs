@@ -7,9 +7,9 @@ import org.jebtk.bioinformatics.genomic.SequenceService;
 import org.jebtk.core.ColorUtils;
 import org.jebtk.core.event.ChangeEvent;
 import org.jebtk.core.event.ChangeListener;
+import org.jebtk.modern.ModernWidget;
 import org.jebtk.modern.button.ButtonFillAnimation;
 import org.jebtk.modern.theme.DrawUIService;
-import org.jebtk.modern.widget.ModernWidget;
 
 public class BaseButtonHighlightAnimation extends ButtonFillAnimation {
   private BaseButton mButton;

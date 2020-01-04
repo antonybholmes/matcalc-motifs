@@ -6,12 +6,12 @@ import java.awt.Component;
 import javax.swing.Box;
 
 import org.jebtk.graphplot.figure.Axes;
+import org.jebtk.modern.ModernWidget;
 import org.jebtk.modern.collapsepane.ModernCollapsePane;
 import org.jebtk.modern.scrollpane.ModernScrollPane;
 import org.jebtk.modern.tabs.TabsModel;
 import org.jebtk.modern.tabs.TabsViewPanel;
 import org.jebtk.modern.tabs.TextTabs;
-import org.jebtk.modern.widget.ModernWidget;
 import org.jebtk.modern.window.ModernWindow;
 
 import edu.columbia.rdf.matcalc.figure.AxisControl;

@@ -41,6 +41,7 @@ import org.jebtk.graphplot.figure.SubFigure;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.AssetService;
 import org.jebtk.modern.UI;
+import org.jebtk.modern.button.ModernClickWidget;
 import org.jebtk.modern.contentpane.CloseableHTab;
 import org.jebtk.modern.dialog.MessageDialogType;
 import org.jebtk.modern.dialog.ModernDialogStatus;
@@ -58,7 +59,6 @@ import org.jebtk.modern.ribbon.Ribbon;
 import org.jebtk.modern.ribbon.RibbonLargeButton;
 import org.jebtk.modern.ribbon.RibbonToolbar;
 import org.jebtk.modern.tabs.SizableTab;
-import org.jebtk.modern.widget.ModernClickWidget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
