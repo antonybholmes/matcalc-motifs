@@ -5,8 +5,10 @@ import java.awt.Graphics2D;
 
 import org.jebtk.bioinformatics.genomic.SequenceService;
 import org.jebtk.core.ColorUtils;
+import org.jebtk.core.Props;
 import org.jebtk.core.event.ChangeEvent;
 import org.jebtk.core.event.ChangeListener;
+import org.jebtk.core.geom.IntRect;
 import org.jebtk.modern.ModernWidget;
 import org.jebtk.modern.button.ButtonFillAnimation;
 import org.jebtk.modern.theme.DrawUIService;
@@ -43,7 +45,7 @@ public class BaseButtonHighlightAnimation extends ButtonFillAnimation {
   }
 
   @Override
-  public void draw(ModernWidget c, Graphics2D g2, Object... params) {
+  public void draw(ModernWidget c, Graphics2D g2, Props props) {
     if (getWidget().isEnabled()) {
 
       int x = (mButton.getWidth() - BaseButton.SIZE) / 2; // PADDING;
@@ -54,7 +56,7 @@ public class BaseButtonHighlightAnimation extends ButtonFillAnimation {
       // w, SequenceService.getInstance().getBaseColor(mButton.getBase()));
 
       DrawUIService.getInstance().getRenderer("circle-fill")
-          .draw(g2, x, y, w, w, getFadeColor("fill"));
+          .draw(g2, new IntRect(x, y, w, w), getFadeColor("fill"));
     }
   }
 }
