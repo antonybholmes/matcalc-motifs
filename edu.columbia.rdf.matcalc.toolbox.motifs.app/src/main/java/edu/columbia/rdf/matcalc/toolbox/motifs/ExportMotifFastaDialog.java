@@ -20,8 +20,7 @@ import org.jebtk.modern.window.WindowWidgetFocusEvents;
 public class ExportMotifFastaDialog extends ModernDialogTaskWindow {
   private static final long serialVersionUID = 1L;
 
-  private ModernRadioButton mCheckMotifs = new ModernRadioButton(
-      Bio.ASSET_MOTIFS, true);
+  private ModernRadioButton mCheckMotifs = new ModernRadioButton(Bio.ASSET_MOTIFS, true);
 
   private ModernRadioButton mCheckRegions = new ModernRadioButton("Regions");
 

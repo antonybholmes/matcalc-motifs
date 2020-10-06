@@ -51,8 +51,7 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
   private ModernCompactSpinner mThresholdField = new ModernCompactSpinner(0, 1,
       SettingsService.getInstance().getDouble("motifs.motif-threshold"), 0.1);
 
-  private ModernButton mSettingsButton = new ModernButton(
-      AssetService.getInstance().loadIcon("settings", 16));
+  private ModernButton mSettingsButton = new ModernButton(AssetService.getInstance().loadIcon("settings", 16));
 
   // private ModernCheckBox mCheckPeakWidth =
   // new ModernCheckBox("Peak widths only");
@@ -156,15 +155,15 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
     mMotifsPanel = new MotifsTreePanel(mParent, mModel);
 
     UI.setSize(mMotifsPanel, 800, 240);
-    
+
     addCard(mMotifsPanel);
 
     addBlock(UI.createVGap(10));
 
     mSubFigure = new SeqLogoCanvas();
 
-    ModernScrollPane scrollPane = new ModernScrollPane(new FigurePanel(
-        new Figure("Seq Logo Figure").addSubFigure(mSubFigure)));
+    ModernScrollPane scrollPane = new ModernScrollPane(
+        new FigurePanel(new Figure("Seq Logo Figure").addSubFigure(mSubFigure)));
     scrollPane.setVerticalScrollBarPolicy(ScrollBarPolicy.NEVER);
 
     UI.setSize(scrollPane, 800, 180);
@@ -175,8 +174,7 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
 
     Box box = VBox.create();
 
-    mSettingsButton.setToolTip("DNA Base Settings",
-        "Adjust the way DNA bases are represented.");
+    mSettingsButton.setToolTip("DNA Base Settings", "Adjust the way DNA bases are represented.");
     box.add(mSettingsButton);
 
     panel.setRight(box);
@@ -223,7 +221,7 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
 
     // mTabsModel.addTab("Search Options", box);
 
-    //addCard(c);
+    // addCard(c);
   }
 
   @Override
@@ -232,10 +230,7 @@ public class MotifSearchDialog extends ModernDialogHelpWindow {
       try {
         // Validation.validateAsInt("5' extension", mExt5pField.getText());
         // Validation.validateAsInt("3' extension", mExt3pField.getText());
-        Validation.validateAsDouble("Motif threshold",
-            mThresholdField.getText(),
-            0,
-            1);
+        Validation.validateAsDouble("Motif threshold", mThresholdField.getText(), 0, 1);
         Validation.validateSelection("motifs", getMotifs());
 
         // SettingsService.getInstance().update("motifs.search.5p-extension",

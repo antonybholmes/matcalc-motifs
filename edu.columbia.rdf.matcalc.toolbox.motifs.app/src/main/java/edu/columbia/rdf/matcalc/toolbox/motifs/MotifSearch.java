@@ -32,11 +32,11 @@ public class MotifSearch {
   /** Arrays are reused on each iteration */
   public final double[] mFg = new double[BUFFER_SIZE];
 
-  //public final double[] forwardScores = new double[BUFFER_SIZE];
-  //public final int[] forwardIds = new int[BUFFER_SIZE];
+  // public final double[] forwardScores = new double[BUFFER_SIZE];
+  // public final int[] forwardIds = new int[BUFFER_SIZE];
 
-  //public final double[] revScores = new double[BUFFER_SIZE];
-  //public final int[] revIds = new int[BUFFER_SIZE];
+  // public final double[] revScores = new double[BUFFER_SIZE];
+  // public final int[] revIds = new int[BUFFER_SIZE];
 
   public static void main(String[] args) throws IOException {
     // albertoTest();
@@ -50,21 +50,17 @@ public class MotifSearch {
      * SequenceRegion.parseFasta(PathUtils.getPath(
      * "/ifs/scratch/cancer/Lab_RDF/abh2138/matlab/top_250.fasta"));
      * 
-     * List<Sequence> foregroundRevCompSeqs =
-     * Sequence.revComp(foregroundSequences);
+     * List<Sequence> foregroundRevCompSeqs = Sequence.revComp(foregroundSequences);
      * 
-     * List<Sequence> backgroundSequences =
-     * Sequence.parseFasta(PathUtils.getPath(
+     * List<Sequence> backgroundSequences = Sequence.parseFasta(PathUtils.getPath(
      * "/ifs/scratch/cancer/Lab_RDF/abh2138/matlab/bottom_250.fasta"));
      * 
-     * List<Sequence> backgroundRevCompSeqs =
-     * Sequence.revComp(backgroundSequences);
+     * List<Sequence> backgroundRevCompSeqs = Sequence.revComp(backgroundSequences);
      * 
      * List<Motif> motifs = new ArrayList<Motif>();
      * 
      * //motifs.addAll(Motif.parseMotifs(Resources.getGZIPReader(
-     * "res/motifs.txt.gz" )));
-     * motifs.addAll(Motif.parseMotifs(PathUtils.getPath(
+     * "res/motifs.txt.gz" ))); motifs.addAll(Motif.parseMotifs(PathUtils.getPath(
      * "/ifs/scratch/cancer/Lab_RDF/abh2138/matlab/stat1.motif"), "test"));
      * motifs.addAll(Motif.parseMotifs(PathUtils.getPath(
      * "/ifs/scratch/cancer/Lab_RDF/abh2138/matlab/ebf1.motif"), "test"));
@@ -100,8 +96,8 @@ public class MotifSearch {
      * bestScores(m, w, backgroundSequences, backgroundRevCompSeqs, threshold,
      * bestScores, foregroundSequences.size());
      * 
-     * Stats stats = enrichmentByMinError(bestScores, goldStandard,
-     * minSensitivity, minSpecificity);
+     * Stats stats = enrichmentByMinError(bestScores, goldStandard, minSensitivity,
+     * minSpecificity);
      * 
      * LOG.debug("Min error: {}", stats.error);
      * 
@@ -114,10 +110,9 @@ public class MotifSearch {
      * LOG.debug("tp: {}, tn: {}, fp: {}, fn: {}, n: {}", stats.truePositive,
      * stats.trueNegative, stats.falsePositive, stats.falseNegative, ns);
      * 
-     * //double p = hyg.cdfTwoTail(stats.truePositive, ns / 2,
-     * stats.truePositive + stats.falsePositive, ns); double p =
-     * hyg.cdfOneTail(stats.truePositive, ns / 2, stats.truePositive +
-     * stats.falsePositive, ns);
+     * //double p = hyg.cdfTwoTail(stats.truePositive, ns / 2, stats.truePositive +
+     * stats.falsePositive, ns); double p = hyg.cdfOneTail(stats.truePositive, ns /
+     * 2, stats.truePositive + stats.falsePositive, ns);
      * 
      * LOG.debug("HygP: {}", p);
      * 
@@ -149,8 +144,7 @@ public class MotifSearch {
      * 
      * revComp = Sequence.revComp(p);
      * 
-     * List<Double> scores = search(p, revComp, motif, bgscores, n,
-     * w);
+     * List<Double> scores = search(p, revComp, motif, bgscores, n, w);
      * 
      * //Sequence scoredSequence = showScores(p, scores, threshold);
      * 
@@ -165,8 +159,8 @@ public class MotifSearch {
      * 
      * double p = motifBackground / promoters.size();
      * 
-     * System.err.println("Background p " + motifBackground + "/" +
-     * promoters.size() + " " + p);
+     * System.err.println("Background p " + motifBackground + "/" + promoters.size()
+     * + " " + p);
      * 
      * System.exit(0);
      * 
@@ -191,8 +185,7 @@ public class MotifSearch {
      * 
      * bgpwm = Math.pow(0.25, w);
      * 
-     * List<Double> scores = search(sequence, revComp, m, bgscores, n,
-     * w);
+     * List<Double> scores = search(sequence, revComp, m, bgscores, n, w);
      * 
      * Sequence scoredSequence = showScores(sequence, scores, threshold);
      * 
@@ -209,8 +202,8 @@ public class MotifSearch {
      * 
      * 
      * //System.err.println(scores.toString());
-     * System.err.println(scoredSequence.getBases()); //System.err.println("n:"
-     * + sites.size()); System.err.println(thresholdedSites.toString());
+     * System.err.println(scoredSequence.getBases()); //System.err.println("n:" +
+     * sites.size()); System.err.println(thresholdedSites.toString());
      * //System.err.println(best);
      * 
      * ++c; } }
@@ -220,14 +213,14 @@ public class MotifSearch {
   }
 
   /**
-   * To generate max scores we must look for the highest value in a block of
-   * zero values immediately transitioning to a run of scores equal to the
-   * length of the motif. Scores must have been thresholded and log transformed
-   * to ensure that small values are floored to zero.
+   * To generate max scores we must look for the highest value in a block of zero
+   * values immediately transitioning to a run of scores equal to the length of
+   * the motif. Scores must have been thresholded and log transformed to ensure
+   * that small values are floored to zero.
    * 
    * @param scores The scores.
-   * @param n The sequence length.
-   * @param w The width of the motif.
+   * @param n      The sequence length.
+   * @param w      The width of the motif.
    * @return The max score found for the motif, or 0 if nothing was found.
    */
   private static double max(final double[] scores, int n, int w) {
@@ -254,26 +247,23 @@ public class MotifSearch {
      * 
      * if (scores[i] > max) { max = scores[i]; }
      * 
-     * // There must be at least 1 one base gap between // one binding site and
-     * the next. // Move i to the end of the motif //i += wi; }
+     * // There must be at least 1 one base gap between // one binding site and the
+     * next. // Move i to the end of the motif //i += wi; }
      * 
      * // previous = scores[i];
      * 
-     * // jump to the next base which should be the start of the next motif //
-     * or a run of zeros ++i; }
+     * // jump to the next base which should be the start of the next motif // or a
+     * run of zeros ++i; }
      * 
      * return max;
      */
   }
 
-  public static Stats enrichmentByMinError(final double[] bestScores,
-      final boolean[] goldStandard,
-      double minSensitivity,
-      double minSpecificity) {
+  public static Stats enrichmentByMinError(final double[] bestScores, final boolean[] goldStandard,
+      double minSensitivity, double minSpecificity) {
 
-    List<Double> thresholds = CollectionUtils.reverse(CollectionUtils
-        .sort(CollectionUtils.unique(Mathematics.gtZero(Mathematics
-            .floor(CollectionUtils.head(bestScores, bestScores.length / 2))))));
+    List<Double> thresholds = CollectionUtils.reverse(CollectionUtils.sort(CollectionUtils
+        .unique(Mathematics.gtZero(Mathematics.floor(CollectionUtils.head(bestScores, bestScores.length / 2))))));
 
     // LOG.debug("Min Sensitivity: {}, Min Specificity: {}",
     // minSensitivity,
@@ -347,12 +337,10 @@ public class MotifSearch {
     return stats;
   }
 
-  public static List<Stats> enrichment(final double[] bestScores,
-      final boolean[] goldStandard) {
+  public static List<Stats> enrichment(final double[] bestScores, final boolean[] goldStandard) {
 
-    List<Double> thresholds = CollectionUtils.reverse(CollectionUtils
-        .sort(CollectionUtils.unique(Mathematics.gtZero(Mathematics
-            .floor(CollectionUtils.head(bestScores, bestScores.length / 2))))));
+    List<Double> thresholds = CollectionUtils.reverse(CollectionUtils.sort(CollectionUtils
+        .unique(Mathematics.gtZero(Mathematics.floor(CollectionUtils.head(bestScores, bestScores.length / 2))))));
 
     // LOG.debug("Min Sensitivity: {}, Min Specificity: {}",
     // minSensitivity,
@@ -422,15 +410,14 @@ public class MotifSearch {
 
   /**
    * The gold standard indicates when we should see true positives in the
-   * concatenated top and bottom sequences. It is simply 1 for the top n
-   * sequences and 0 for the bottom n sequences.
+   * concatenated top and bottom sequences. It is simply 1 for the top n sequences
+   * and 0 for the bottom n sequences.
    * 
    * @param foregroundSize
    * @param backgroundSize
    * @return
    */
-  public static boolean[] createGoldStandard(int foregroundSize,
-      int backgroundSize) {
+  public static boolean[] createGoldStandard(int foregroundSize, int backgroundSize) {
     boolean[] ret = new boolean[foregroundSize + backgroundSize];
 
     CollectionUtils.copyValue(true, ret, foregroundSize, 0);
@@ -439,12 +426,8 @@ public class MotifSearch {
     return ret;
   }
 
-  public <X extends SequenceRegion> void bestScores(final Motif motif,
-      int w,
-      final List<X> seqs,
-      final List<X> revCompSeqs,
-      double threshold,
-      double[] bestScores) {
+  public <X extends SequenceRegion> void bestScores(final Motif motif, int w, final List<X> seqs,
+      final List<X> revCompSeqs, double threshold, double[] bestScores) {
     bestScores(motif, w, seqs, revCompSeqs, threshold, 0, bestScores);
   }
 
@@ -457,15 +440,10 @@ public class MotifSearch {
    * @param seqs
    * @param revCompSeqs
    * @param bestScores
-   * @param offset Offset to start writing in best scores.
+   * @param offset      Offset to start writing in best scores.
    */
-  public <X extends SequenceRegion> void bestScores(final Motif motif,
-      int w,
-      final List<X> seqs,
-      final List<X> revCompSeqs,
-      double threshold,
-      int offset,
-      double[] bestScores) {
+  public <X extends SequenceRegion> void bestScores(final Motif motif, int w, final List<X> seqs,
+      final List<X> revCompSeqs, double threshold, int offset, double[] bestScores) {
 
     double bgscore = motif.getBgPwm();
 
@@ -489,17 +467,7 @@ public class MotifSearch {
 
       int n = iSeq.length;
 
-      search(iSeq,
-          iRevCompSeq,
-          n,
-          pwm,
-          bgscore,
-          w,
-          threshold,
-          forwardScores,
-          forwardIds,
-          revScores,
-          revIds);
+      search(iSeq, iRevCompSeq, n, pwm, bgscore, w, threshold, forwardScores, forwardIds, revScores, revIds);
 
       double max = Math.max(max(forwardScores, n, w), max(revScores, n, w));
 
@@ -519,13 +487,8 @@ public class MotifSearch {
    * @param offset
    * @param bestScores
    */
-  public <X extends SequenceRegion> void bestScores(final Motif motif,
-      int w,
-      byte[][] iSeqs,
-      byte[][] iRevCompSeqs,
-      double threshold,
-      int offset,
-      double[] bestScores) {
+  public <X extends SequenceRegion> void bestScores(final Motif motif, int w, byte[][] iSeqs, byte[][] iRevCompSeqs,
+      double threshold, int offset, double[] bestScores) {
 
     double bgscore = motif.getBgPwm();
 
@@ -536,7 +499,6 @@ public class MotifSearch {
 
     double[] revScores = new double[BUFFER_SIZE];
     int[] revIds = new int[BUFFER_SIZE];
-
 
     for (int i = 0; i < iSeqs.length; ++i) {
       byte[] iSeq = iSeqs[i];
@@ -544,17 +506,7 @@ public class MotifSearch {
 
       int n = iSeq.length;
 
-      search(iSeq,
-          iRevCompSeq,
-          n,
-          pwm,
-          bgscore,
-          w,
-          threshold,
-          forwardScores,
-          forwardIds,
-          revScores,
-          revIds);
+      search(iSeq, iRevCompSeq, n, pwm, bgscore, w, threshold, forwardScores, forwardIds, revScores, revIds);
 
       double max = Math.max(max(forwardScores, n, w), max(revScores, n, w));
 
@@ -562,14 +514,9 @@ public class MotifSearch {
     }
   }
 
-  private <X extends SequenceRegion> void bestScores(final Motif motif,
-      int w,
-      byte[][] iSeqs,
-      Map<Integer, Map<Integer, Collection<Integer>>> tripletMap,
-      byte[][] iRevCompSeqs,
-      Map<Integer, Map<Integer, Collection<Integer>>> revTripletMap,
-      double threshold,
-      int offset,
+  private <X extends SequenceRegion> void bestScores(final Motif motif, int w, byte[][] iSeqs,
+      Map<Integer, Map<Integer, Collection<Integer>>> tripletMap, byte[][] iRevCompSeqs,
+      Map<Integer, Map<Integer, Collection<Integer>>> revTripletMap, double threshold, int offset,
       double[] bestScores) {
 
     double bgscore = motif.getBgPwm();
@@ -581,7 +528,6 @@ public class MotifSearch {
 
     double[] revScores = new double[BUFFER_SIZE];
     int[] revIds = new int[BUFFER_SIZE];
-
 
     for (int triplet : motif.getTriplets()) {
       if (tripletMap.containsKey(triplet)) {
@@ -596,15 +542,7 @@ public class MotifSearch {
 
           int n = iSeq.length;
 
-          search(iSeq,
-              startLocations,
-              n,
-              pwm,
-              bgscore,
-              w,
-              threshold,
-              forwardScores,
-              forwardIds);
+          search(iSeq, startLocations, n, pwm, bgscore, w, threshold, forwardScores, forwardIds);
 
           double max = max(forwardScores, n, w);
 
@@ -615,8 +553,7 @@ public class MotifSearch {
 
     for (int triplet : motif.getTriplets()) {
       if (revTripletMap.containsKey(triplet)) {
-        Map<Integer, Collection<Integer>> seqIndexMap = revTripletMap
-            .get(triplet);
+        Map<Integer, Collection<Integer>> seqIndexMap = revTripletMap.get(triplet);
 
         for (int i : seqIndexMap.keySet()) {
           byte[] iRevCompSeq = iRevCompSeqs[i];
@@ -625,15 +562,7 @@ public class MotifSearch {
 
           int n = iRevCompSeq.length;
 
-          search(iRevCompSeq,
-              startLocations,
-              n,
-              pwm,
-              bgscore,
-              w,
-              threshold,
-              revScores,
-              revIds);
+          search(iRevCompSeq, startLocations, n, pwm, bgscore, w, threshold, revScores, revIds);
 
           // Need to reverse llkrr so it is in the forward direction, since
           // the buffer may exceed the sequence length, only reverse the
@@ -665,11 +594,9 @@ public class MotifSearch {
      */
   }
 
-  public static IterMap<Integer, IterMap<Integer, Set<Integer>>> mapTriplets(
-      byte[][] seqs) {
+  public static IterMap<Integer, IterMap<Integer, Set<Integer>>> mapTriplets(byte[][] seqs) {
     IterMap<Integer, IterMap<Integer, Set<Integer>>> ret = DefaultHashMap
-        .create(new DefaultHashMapCreator<Integer, Set<Integer>>(
-            new TreeSetCreator<Integer>()));
+        .create(new DefaultHashMapCreator<Integer, Set<Integer>>(new TreeSetCreator<Integer>()));
 
     for (int i = 0; i < seqs.length; ++i) {
       byte[] seq = seqs[i];
@@ -688,8 +615,8 @@ public class MotifSearch {
   }
 
   /**
-   * Get the best scores on one set of strands, e.g. if we only want to search
-   * the forward strands.
+   * Get the best scores on one set of strands, e.g. if we only want to search the
+   * forward strands.
    * 
    * @param motif
    * @param n
@@ -698,11 +625,7 @@ public class MotifSearch {
    * @param bestScores
    * @param offset
    */
-  private void bestScores(final Motif motif,
-      int w,
-      final List<Sequence> sequences,
-      double threshold,
-      int offset,
+  private void bestScores(final Motif motif, int w, final List<Sequence> sequences, double threshold, int offset,
       double[] bestScores) {
 
     double bgscore = motif.getBgPwm(); // Mathematics.repeatArray(m.getBgPwm(),
@@ -712,7 +635,6 @@ public class MotifSearch {
 
     double[] forwardScores = new double[BUFFER_SIZE];
     int[] forwardIds = new int[BUFFER_SIZE];
-
 
     for (int i = 0; i < sequences.size(); ++i) {
       char[] seq = sequences.get(i).toArray();
@@ -736,12 +658,7 @@ public class MotifSearch {
     // return bestScores;
   }
 
-  private double bestScores(Motif motif,
-      int w,
-      final byte[] sequence,
-      final byte[] revComp,
-      int n,
-      double threshold) {
+  private double bestScores(Motif motif, int w, final byte[] sequence, final byte[] revComp, int n, double threshold) {
 
     double bgscore = motif.getBgPwm();
 
@@ -751,18 +668,7 @@ public class MotifSearch {
     double[] revScores = new double[BUFFER_SIZE];
     int[] revIds = new int[BUFFER_SIZE];
 
-
-    search(sequence,
-        revComp,
-        n,
-        motif.getPwm(),
-        bgscore,
-        w,
-        threshold,
-        forwardScores,
-        forwardIds,
-        revScores,
-        revIds);
+    search(sequence, revComp, n, motif.getPwm(), bgscore, w, threshold, forwardScores, forwardIds, revScores, revIds);
 
     double max = Math.max(max(forwardScores, n, w), max(revScores, n, w));
 
@@ -779,26 +685,14 @@ public class MotifSearch {
    * @param threshold
    * @return
    */
-  private double bestScores(Motif motif,
-      int w,
-      final byte[] sequence,
-      int n,
-      double threshold) {
+  private double bestScores(Motif motif, int w, final byte[] sequence, int n, double threshold) {
 
-    double bgscore = motif.getBgPwm(); 
+    double bgscore = motif.getBgPwm();
 
     double[] forwardScores = new double[BUFFER_SIZE];
     int[] forwardIds = new int[BUFFER_SIZE];
 
-    search(sequence,
-        n,
-        motif.getPwm(),
-        bgscore,
-        w,
-        threshold,
-        true,
-        forwardScores,
-        forwardIds);
+    search(sequence, n, motif.getPwm(), bgscore, w, threshold, true, forwardScores, forwardIds);
 
     double max = max(forwardScores, n, w);
 
@@ -812,15 +706,11 @@ public class MotifSearch {
    * @param bestScore
    * @param forwardScores
    * @param revScores
-   * @param w the width of the motif.
+   * @param w             the width of the motif.
    * @return
    */
-  public static List<Integer> getBestScoreStartIndices(final char[] sequence,
-      int n,
-      double bestScore,
-      final double[] forwardScores,
-      final double[] revScores,
-      int w) {
+  public static List<Integer> getBestScoreStartIndices(final char[] sequence, int n, double bestScore,
+      final double[] forwardScores, final double[] revScores, int w) {
     List<Integer> indices = new ArrayList<Integer>();
 
     double score = 0;
@@ -856,8 +746,8 @@ public class MotifSearch {
   /**
    * Returns the number of binding sites from the score array.
    * 
-   * @param scores The score for each base.
-   * @param w The length of the motif.
+   * @param scores    The score for each base.
+   * @param w         The length of the motif.
    * @param threshold The threshold to consider a score significant.
    * @return
    */
@@ -874,32 +764,20 @@ public class MotifSearch {
   }
 
   /**
-   * Returns the list of binding sites in the given sequence from the scores at
-   * a particular threshold. Offsets are relative to the start of the sequence.
+   * Returns the list of binding sites in the given sequence from the scores at a
+   * particular threshold. Offsets are relative to the start of the sequence.
    * 
-   * @param sequence The sequence to search.
-   * @param n Length of the sequence.
+   * @param sequence      The sequence to search.
+   * @param n             Length of the sequence.
    * @param forwardScores Scores on the forward strand.
-   * @param revScores Scores on the reverse strand.
+   * @param revScores     Scores on the reverse strand.
    * 
    * @return
    */
-  public static List<BindingSite> getBindingSites(final char[] sequence,
-      int n,
-      int w,
-      double threshold,
-      double[] forwardScores,
-      int[] forwardIds,
-      double[] revScores,
-      int[] revIds) {
+  public static List<BindingSite> getBindingSites(final char[] sequence, int n, int w, double threshold,
+      double[] forwardScores, int[] forwardIds, double[] revScores, int[] revIds) {
 
-    List<BindingSite> sites = processSite(sequence,
-        n,
-        w,
-        '+',
-        threshold,
-        forwardScores,
-        forwardIds);
+    List<BindingSite> sites = processSite(sequence, n, w, '+', threshold, forwardScores, forwardIds);
 
     // Append the reverse sequence matches
     sites.addAll(processSite(sequence, n, w, '-', threshold, revScores, revIds));
@@ -911,19 +789,14 @@ public class MotifSearch {
    * Add binding sites to list.
    * 
    * @param sequence The sequence being searched.
-   * @param w The motif length
+   * @param w        The motif length
    * @param strand
    * @param scores
    * @param sites
    * @return
    */
-  public static List<BindingSite> processSite(final char[] sequence,
-      int n,
-      int w,
-      char strand,
-      double threshold,
-      final double[] scores,
-      final int[] ids) {
+  public static List<BindingSite> processSite(final char[] sequence, int n, int w, char strand, double threshold,
+      final double[] scores, final int[] ids) {
 
     List<BindingSite> sites = new ArrayList<BindingSite>(n);
 
@@ -939,11 +812,10 @@ public class MotifSearch {
         // strand);
 
         if (scores[i] >= threshold) {
-          
-          //System.err.println(i + " " + scores[i] + " " + threshold);
-          
-          BindingSite site = new BindingSite(String.valueOf(sequence, i, w), i,
-              scores[i], strand);
+
+          // System.err.println(i + " " + scores[i] + " " + threshold);
+
+          BindingSite site = new BindingSite(String.valueOf(sequence, i, w), i, scores[i], strand);
 
           sites.add(site);
         }
@@ -960,16 +832,16 @@ public class MotifSearch {
 
   /*
    * public static void processSite(char[] sequence, int start, int w, int mid,
-   * double score, char strand, List<BindingSite> sites) { //StringBuilder
-   * buffer = new StringBuilder();
+   * double score, char strand, List<BindingSite> sites) { //StringBuilder buffer
+   * = new StringBuilder();
    * 
    * //for (int i = 0; i < w; ++i) { // buffer.append(sequence[start + i]); //}
    * 
    * Sequence seq = new Sequence(String.valueOf(sequence, start, w));
    * 
-   * //sites.add(new PotentialBindingSite(new Sequence(buffer.toString()), start
-   * - mid + 1, score)); BindingSite site = new BindingSite(seq, start - mid,
-   * score, strand);
+   * //sites.add(new PotentialBindingSite(new Sequence(buffer.toString()), start -
+   * mid + 1, score)); BindingSite site = new BindingSite(seq, start - mid, score,
+   * strand);
    * 
    * sites.add(site); }
    */
@@ -981,8 +853,7 @@ public class MotifSearch {
    * @param threshold
    * @return
    */
-  public static List<BindingSite> thresholdSites(final List<BindingSite> sites,
-      double threshold) {
+  public static List<BindingSite> thresholdSites(final List<BindingSite> sites, double threshold) {
     List<BindingSite> ret = new ArrayList<BindingSite>();
 
     for (BindingSite site : sites) {
@@ -1018,17 +889,15 @@ public class MotifSearch {
   }
 
   /**
-   * Produce a version of the sequence where the binding sites are shown in
-   * upper case and the rest of the sequence in lower case.
+   * Produce a version of the sequence where the binding sites are shown in upper
+   * case and the rest of the sequence in lower case.
    * 
-   * @param sequence The sequence.
-   * @param scores The motif score at each base.
+   * @param sequence  The sequence.
+   * @param scores    The motif score at each base.
    * @param threshold The threshold to score a score significant.
    * @return The sequence with the binding sites in upper case.
    */
-  public static Sequence showScores(final Sequence sequence,
-      final double[] llkrf,
-      final double[] llkrr,
+  public static Sequence showScores(final Sequence sequence, final double[] llkrf, final double[] llkrr,
       double threshold) {
     String s = sequence.toString();
 
@@ -1067,15 +936,8 @@ public class MotifSearch {
     return Sequence.create(buffer.toString());
   }
 
-  public void search(Sequence sequence,
-      final Sequence revCompSequence,
-      final double[][] pwm,
-      double bgscore,
-      int w,
-      double threshold,
-      final double[] forwardScores,
-      final int[] forwardIds,
-      final double[] revScores,
+  public void search(Sequence sequence, final Sequence revCompSequence, final double[][] pwm, double bgscore, int w,
+      double threshold, final double[] forwardScores, final int[] forwardIds, final double[] revScores,
       final int[] revIds) {
 
     char[] seq = sequence.toArray();
@@ -1086,24 +948,13 @@ public class MotifSearch {
 
     int n = seq.length;
 
-    search(iSeq,
-        iRevCompSeq,
-        n,
-        pwm,
-        bgscore,
-        w,
-        threshold,
-        forwardScores,
-        forwardIds,
-        revScores,
-        revIds);
+    search(iSeq, iRevCompSeq, n, pwm, bgscore, w, threshold, forwardScores, forwardIds, revScores, revIds);
   }
 
   /**
    * Search a sequence for motif binding sites. An array twice the length of the
-   * sequence is returned. The first n elements contain the scores on the
-   * forward strand, the second n elements contain the scores on the reverse
-   * strand.
+   * sequence is returned. The first n elements contain the scores on the forward
+   * strand, the second n elements contain the scores on the reverse strand.
    * 
    * @param sequence
    * @param revComp
@@ -1116,17 +967,8 @@ public class MotifSearch {
    * @param revScores
    * @param fg
    */
-  public void search(final byte[] sequence,
-      final byte[] revComp,
-      int n,
-      double[][] pwm,
-      double bgscore,
-      int w,
-      double threshold,
-      double[] forwardScores,
-      int[] forwardIds,
-      double[] revScores,
-      int[] revIds) {
+  public void search(final byte[] sequence, final byte[] revComp, int n, double[][] pwm, double bgscore, int w,
+      double threshold, double[] forwardScores, int[] forwardIds, double[] revScores, int[] revIds) {
 
     search(sequence, n, pwm, bgscore, w, threshold, true, forwardScores, forwardIds);
 
@@ -1135,8 +977,8 @@ public class MotifSearch {
     // Need to reverse llkrr so it is in the forward direction, since
     // the buffer may exceed the sequence length, only reverse the
     // first n bases.
-    //.reverse(revScores, 0, n);
-    //CollectionUtils.reverse(revIds, 0, n);
+    // .reverse(revScores, 0, n);
+    // CollectionUtils.reverse(revIds, 0, n);
   }
 
   /**
@@ -1149,15 +991,8 @@ public class MotifSearch {
    * @param scores
    * @param threshold
    */
-  private void search(final byte[] sequence,
-      int n,
-      final double[][] pwm,
-      double bgscore,
-      int w,
-      double threshold,
-      boolean forward,
-      double[] scores,
-      int[] ids) {
+  private void search(final byte[] sequence, int n, final double[][] pwm, double bgscore, int w, double threshold,
+      boolean forward, double[] scores, int[] ids) {
     // double[] fg = fglk(sequence, motif, w);
     motifSeqScore(sequence, n, pwm, w, forward, mFg, ids);
 
@@ -1173,15 +1008,8 @@ public class MotifSearch {
     }
   }
 
-  private void search(byte[] sequence,
-      Collection<Integer> starts,
-      int n,
-      double[][] pwm,
-      double bgscore,
-      int w,
-      double threshold,
-      double[] scores,
-      int[] ids) {
+  private void search(byte[] sequence, Collection<Integer> starts, int n, double[][] pwm, double bgscore, int w,
+      double threshold, double[] scores, int[] ids) {
     // double[] fg = fglk(sequence, motif, w);
     motifSeqScore(sequence, starts, n, pwm, w, mFg);
 
@@ -1218,19 +1046,14 @@ public class MotifSearch {
    * Calculates the log odds ratio of a motif score being higher than a random
    * background.
    * 
-   * @param n The sequence length.
-   * @param w The width of the motif.
-   * @param fg Motif scores.
-   * @param bgscore The random background score for the motif
+   * @param n         The sequence length.
+   * @param w         The width of the motif.
+   * @param fg        Motif scores.
+   * @param bgscore   The random background score for the motif
    * @param threshold The log odds ratio threshold to consider
-   * @param scores Score array that will be updated.
+   * @param scores    Score array that will be updated.
    */
-  private static void logRatio(int n,
-      int w,
-      final double[] fg,
-      final int[] ids,
-      double bgscore,
-      double threshold,
+  private static void logRatio(int n, int w, final double[] fg, final int[] ids, double bgscore, double threshold,
       double[] scores) {
     // Reset scores
     CollectionUtils.fill(scores, 0, n);
@@ -1246,7 +1069,7 @@ public class MotifSearch {
     int i2;
 
     // The number of bases to copy
-    //int w2;
+    // int w2;
 
     double score;
 
@@ -1269,29 +1092,29 @@ public class MotifSearch {
 
         // The length of the motif, or portion of motif, for copying the
         // log ratio.
-        //w2 = Math.min(w, i2 - i + 1);
+        // w2 = Math.min(w, i2 - i + 1);
 
         // The maximum score in a continuous block
         score = fg[i]; // Mathematics.max(fg, i, w2);
 
         ratio = score / bgscore; // bg[i];
 
-        //System.err.println("rat " + score +  " " + bgscore + " " + ratio);
+        // System.err.println("rat " + score + " " + bgscore + " " + ratio);
 
         if (ratio > 1.0) {
           // Could use Math.log(ratio) to be like Homer
           double logratio = Mathematics.log2(ratio);
 
-          //System.err.println("rat2 " + logratio + " " + threshold);
+          // System.err.println("rat2 " + logratio + " " + threshold);
 
           // score must exceed a threshold to count
-          //if (logratio >= threshold) {
+          // if (logratio >= threshold) {
           // scores[i] = logratio;
 
-          //System.err.println("rat3 " + logratio + " " + threshold);
+          // System.err.println("rat3 " + logratio + " " + threshold);
 
           Arrays.fill(scores, i, i2, logratio);
-          //}
+          // }
         }
 
         // move i to end of motif or portion of motif
@@ -1313,16 +1136,11 @@ public class MotifSearch {
    * @param sequence
    * @param n
    * @param motif
-   * @param w The motif width.
+   * @param w        The motif width.
    * @return
    */
-  private static void motifSeqScore(final byte[] sequence,
-      int n,
-      final double[][] pwm,
-      int w,
-      boolean forward,
-      double[] fg,
-      int[] ids) {
+  private static void motifSeqScore(final byte[] sequence, int n, final double[][] pwm, int w, boolean forward,
+      double[] fg, int[] ids) {
 
     // double[] ret = Mathematics.zerosArray(n);
 
@@ -1393,12 +1211,8 @@ public class MotifSearch {
     }
   }
 
-  private static void motifSeqScore(final byte[] sequence,
-      final Collection<Integer> starts,
-      int n,
-      final double[][] pwm,
-      int w,
-      double[] fg) {
+  private static void motifSeqScore(final byte[] sequence, final Collection<Integer> starts, int n,
+      final double[][] pwm, int w, double[] fg) {
 
     // double[] ret = Mathematics.zerosArray(n);
 
@@ -1440,20 +1254,15 @@ public class MotifSearch {
         Arrays.fill(fg, i, i + w, p);
 
         /*
-         * for (int j = i; j < i + w; ++j) { // Record the maximum score found
-         * fg[j] += p; }
+         * for (int j = i; j < i + w; ++j) { // Record the maximum score found fg[j] +=
+         * p; }
          */
       }
     }
   }
 
-  public static List<SearchRegion> getSearchRegions(Genome genome,
-      Group group,
-      int ext5p,
-      int ext3p,
-      boolean mainVariants,
-      boolean peakWidths,
-      GenesDB genesDb) throws IOException {
+  public static List<SearchRegion> getSearchRegions(Genome genome, Group group, int ext5p, int ext3p,
+      boolean mainVariants, boolean peakWidths, GenesDB genesDb) throws IOException {
     List<SearchRegion> regions = new ArrayList<SearchRegion>();
 
     for (String id : group) {

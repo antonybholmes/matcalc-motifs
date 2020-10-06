@@ -44,10 +44,8 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
    * @param minSensitivity
    * @param minSpecificity
    */
-  public MotifEnrichmentGCHistTask(MainMatCalcWindow parent, Genome genome,
-      SequenceReader assembly, List<Motif> motifs,
-      MainMatCalcWindow foregroundSeqWindow, double threshold,
-      double minSensitivity, double minSpecificity) {
+  public MotifEnrichmentGCHistTask(MainMatCalcWindow parent, Genome genome, SequenceReader assembly, List<Motif> motifs,
+      MainMatCalcWindow foregroundSeqWindow, double threshold, double minSensitivity, double minSpecificity) {
     mParent = parent;
     mGenome = genome;
     mAssembly = assembly;
@@ -76,8 +74,8 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
   private DataFrame motifs() throws Exception {
     System.err.println("Searching for motifs in foreground regions...");
 
-    List<SearchSequence> foregroundSequences = SequenceUtils
-        .matrixToSequences(mGenome, mForegroundSeqWindow.getCurrentMatrix());
+    List<SearchSequence> foregroundSequences = SequenceUtils.matrixToSequences(mGenome,
+        mForegroundSeqWindow.getCurrentMatrix());
 
     //
     // Determine the GC content of the sequences
@@ -112,8 +110,7 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
     // content of our foreground sequnces.
     //
 
-    MotifsModule.LOG
-        .info("Creating GC matched distribution of random sequences...");
+    MotifsModule.LOG.info("Creating GC matched distribution of random sequences...");
 
     // Index foreground reads
     BinaryGapSearch<SearchSequence> foregroundGapped = new BinaryGapSearch<SearchSequence>();
@@ -139,16 +136,14 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
 
       while (j < gcHist.get(i).getCount()) {
         // Get a random sequence
-        SequenceRegion rs = Sequence
-            .getRandomSequence(mGenome, mAssembly, sequenceLength);
+        SequenceRegion rs = Sequence.getRandomSequence(mGenome, mAssembly, sequenceLength);
 
         //
         // Make sure random sequence does not overlap the
         // foreground sequences
         //
 
-        List<SearchSequence> checkSequences = foregroundGapped
-            .getClosestFeatures(rs);
+        List<SearchSequence> checkSequences = foregroundGapped.getClosestFeatures(rs);
 
         if (checkSequences != null) {
           boolean overlap = false;
@@ -190,11 +185,7 @@ public class MotifEnrichmentGCHistTask extends SwingWorker<Void, Void> {
       }
     }
 
-    return MotifEnrichmentTask.enrichmentMotifs(mThreshold,
-        mMinSpecificity,
-        mMinSensitivity,
-        mMotifs,
-        foregroundSequences,
-        mBackgroundSequences);
+    return MotifEnrichmentTask.enrichmentMotifs(mThreshold, mMinSpecificity, mMinSensitivity, mMotifs,
+        foregroundSequences, mBackgroundSequences);
   }
 }

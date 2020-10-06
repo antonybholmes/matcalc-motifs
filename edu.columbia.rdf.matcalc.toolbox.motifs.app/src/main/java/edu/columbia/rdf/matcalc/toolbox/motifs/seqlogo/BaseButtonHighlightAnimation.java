@@ -24,14 +24,13 @@ public class BaseButtonHighlightAnimation extends ButtonFillAnimation {
     // setFadeColor("fill", Color.WHITE);
 
     // When color changes, change with it
-    SequenceService.getInstance().addChangeListener(button.getBase(),
-        new ChangeListener() {
+    SequenceService.getInstance().addChangeListener(button.getBase(), new ChangeListener() {
 
-          @Override
-          public void changed(ChangeEvent e) {
-            setFadeColor();
-          }
-        });
+      @Override
+      public void changed(ChangeEvent e) {
+        setFadeColor();
+      }
+    });
 
     setFadeColor();
   }
@@ -55,8 +54,7 @@ public class BaseButtonHighlightAnimation extends ButtonFillAnimation {
       // UIDrawService.getInstance().get("circle-fill").draw(g2, x, y, w,
       // w, SequenceService.getInstance().getBaseColor(mButton.getBase()));
 
-      DrawUIService.getInstance().getRenderer("circle-fill")
-          .draw(g2, new IntRect(x, y, w, w), getFadeColor("fill"));
+      DrawUIService.getInstance().getRenderer("circle-fill").draw(g2, new IntRect(x, y, w, w), getFadeColor("fill"));
     }
   }
 }

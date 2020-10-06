@@ -69,10 +69,10 @@ public class BaseColorRibbonSection extends RibbonSection {
   /**
    * Instantiates a new genomic region ribbon section.
    *
-   * @param model the model
+   * @param model       the model
    * @param genomeModel the genome model
-   * @param sizes the sizes
-   * @param genes the genes
+   * @param sizes       the sizes
+   * @param genes       the genes
    */
   public BaseColorRibbonSection(ModernRibbonWindow parent) {
     super(parent.getRibbon(), "Base Color");
@@ -89,8 +89,7 @@ public class BaseColorRibbonSection extends RibbonSection {
 
     mColorNButton = new BaseButton(parent, 'N');
 
-    mDefaultsButton = new RibbonLargeButton("Defaults",
-        AssetService.getInstance().loadIcon("reset", 24), "Defaults",
+    mDefaultsButton = new RibbonLargeButton("Defaults", AssetService.getInstance().loadIcon("reset", 24), "Defaults",
         "Reset colors to their defaults.");
 
     // Box box = new RibbonStripContainer();
@@ -133,8 +132,7 @@ public class BaseColorRibbonSection extends RibbonSection {
   }
 
   private void resetToDefaults() {
-    ModernDialogStatus status = ModernMessageDialog.createOkCancelWarningDialog(
-        mParent,
+    ModernDialogStatus status = ModernMessageDialog.createOkCancelWarningDialog(mParent,
         "The base colors will be reset to their default values.");
 
     if (status == ModernDialogStatus.OK) {

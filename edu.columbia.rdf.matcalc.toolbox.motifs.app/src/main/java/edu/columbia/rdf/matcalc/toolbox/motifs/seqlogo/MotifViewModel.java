@@ -16,10 +16,8 @@ public class MotifViewModel extends ItemModel<MotifView> {
   private boolean mRevComp;
 
   public MotifViewModel() {
-    update(MotifView.parse(SettingsService.getInstance()
-        .getString("org.matcalc.toolbox.bio.seqlogo.motif-view")));
-    setRevComp(SettingsService.getInstance()
-        .getBool("org.matcalc.toolbox.bio.seqlogo.rev-comp"));
+    update(MotifView.parse(SettingsService.getInstance().getString("org.matcalc.toolbox.bio.seqlogo.motif-view")));
+    setRevComp(SettingsService.getInstance().getBool("org.matcalc.toolbox.bio.seqlogo.rev-comp"));
   }
 
   @Override
@@ -27,9 +25,7 @@ public class MotifViewModel extends ItemModel<MotifView> {
     super.update(view);
 
     // Store the setting
-    SettingsService.getInstance().update(
-        "org.matcalc.toolbox.bio.seqlogo.motif-view",
-        view.toString().toLowerCase());
+    SettingsService.getInstance().update("org.matcalc.toolbox.bio.seqlogo.motif-view", view.toString().toLowerCase());
   }
 
   public void setRevComp(boolean selected) {
@@ -41,8 +37,7 @@ public class MotifViewModel extends ItemModel<MotifView> {
   public void updateRevComp(boolean revComp) {
     mRevComp = revComp;
 
-    SettingsService.getInstance()
-        .update("org.matcalc.toolbox.bio.seqlogo.rev-comp", revComp);
+    SettingsService.getInstance().update("org.matcalc.toolbox.bio.seqlogo.rev-comp", revComp);
   }
 
   public boolean getRevComp() {

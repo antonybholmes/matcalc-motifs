@@ -46,8 +46,7 @@ public class BackgroundDialog extends ModernDialogTaskWindow {
 
   private ColorSwatchButton mColorButton;
 
-  private ModernTextField mNameField = new ModernClipboardTextField(
-      UI.ASSET_NAME);
+  private ModernTextField mNameField = new ModernClipboardTextField(UI.ASSET_NAME);
 
   private RegionsTextArea mTextArea = new RegionsTextArea();
 

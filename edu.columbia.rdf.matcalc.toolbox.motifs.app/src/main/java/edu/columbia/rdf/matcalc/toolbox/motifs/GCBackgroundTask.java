@@ -39,8 +39,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
    * @param minSensitivity
    * @param minSpecificity
    */
-  public GCBackgroundTask(MainMatCalcWindow parent, Genome genome,
-      SequenceReader assembly) {
+  public GCBackgroundTask(MainMatCalcWindow parent, Genome genome, SequenceReader assembly) {
     mParent = parent;
     mGenome = genome;
     mAssembly = assembly;
@@ -64,8 +63,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
   private DataFrame motifs(Genome genome) throws Exception {
     MotifsModule.LOG.info("Searching for motifs in foreground regions...");
 
-    List<SearchSequence> foregroundSequences = SequenceUtils
-        .matrixToSequences(genome, mParent.getCurrentMatrix());
+    List<SearchSequence> foregroundSequences = SequenceUtils.matrixToSequences(genome, mParent.getCurrentMatrix());
 
     //
     // Determine the GC content of the sequences
@@ -100,8 +98,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
     // content of our foreground sequences.
     //
 
-    MotifsModule.LOG
-        .info("Creating GC matched distribution of random sequences...");
+    MotifsModule.LOG.info("Creating GC matched distribution of random sequences...");
 
     // Index foreground reads
     BinaryGapSearch<SearchSequence> foregroundGapped = new BinaryGapSearch<SearchSequence>();
@@ -109,8 +106,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
     int l = 0;
 
     for (int i = 0; i < foregroundSequences.size(); ++i) {
-      foregroundGapped.add(foregroundSequences.get(i).getRegion(),
-          foregroundSequences.get(i));
+      foregroundGapped.add(foregroundSequences.get(i).getRegion(), foregroundSequences.get(i));
 
       l += foregroundSequences.get(i).getDna().length();
     }
@@ -125,10 +121,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
         continue;
       }
 
-      MotifsModule.LOG.info(
-          "Creating GC matched sequences for bin {}, size {}...",
-          i,
-          gcHist.get(i).getCount());
+      MotifsModule.LOG.info("Creating GC matched sequences for bin {}, size {}...", i, gcHist.get(i).getCount());
 
       double refGC = i * d;
 
@@ -165,8 +158,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
           // foreground sequences
           //
 
-          List<SearchSequence> checkSequences = foregroundGapped
-              .getClosestFeatures(rs);
+          List<SearchSequence> checkSequences = foregroundGapped.getClosestFeatures(rs);
 
           boolean overlap = false;
 
@@ -220,8 +212,7 @@ public class GCBackgroundTask extends SwingWorker<Void, Void> {
           if (crsNoOverlap != null) {
             // Preferentially add the sequence that was not
             // overlapping
-            MotifsModule.LOG
-                .info("GC wrong, no overlap: {} {}...", refGC, minGC);
+            MotifsModule.LOG.info("GC wrong, no overlap: {} {}...", refGC, minGC);
 
             backgroundSequences.add(crsNoOverlap);
           } else {

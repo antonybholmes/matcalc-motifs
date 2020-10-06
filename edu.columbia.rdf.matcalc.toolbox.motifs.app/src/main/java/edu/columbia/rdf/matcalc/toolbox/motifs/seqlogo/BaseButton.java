@@ -24,7 +24,7 @@ public class BaseButton extends RibbonLargeColorSwatchButton2 {
    * Instantiates a new color swatch button.
    *
    * @param parent the parent
-   * @param color the color
+   * @param color  the color
    */
   public BaseButton(ModernWindow parent, char base) {
     super(parent, SequenceService.getInstance().getBaseColor(base));
@@ -50,9 +50,7 @@ public class BaseButton extends RibbonLargeColorSwatchButton2 {
 
   @Override
   public void setCompactSize() {
-    UI.setSize(this,
-        Ribbon.COMPACT_BUTTON_HEIGHT,
-        Ribbon.COMPACT_BUTTON_HEIGHT);
+    UI.setSize(this, Ribbon.COMPACT_BUTTON_HEIGHT, Ribbon.COMPACT_BUTTON_HEIGHT);
   }
 
   /*

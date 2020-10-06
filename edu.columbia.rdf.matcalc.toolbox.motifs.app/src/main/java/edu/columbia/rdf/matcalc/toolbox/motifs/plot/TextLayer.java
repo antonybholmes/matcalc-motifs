@@ -26,12 +26,7 @@ public class TextLayer extends PlotLayer {
   }
 
   @Override
-  public void plotLayer(Graphics2D g2,
-      DrawingContext context,
-      Figure figure,
-      SubFigure subFigure,
-      Axes axes,
-      Plot plot,
+  public void plotLayer(Graphics2D g2, DrawingContext context, Figure figure, SubFigure subFigure, Axes axes, Plot plot,
       DataFrame m) {
 
     int nameCol = DataFrame.findColumn(m, "Motif Name");

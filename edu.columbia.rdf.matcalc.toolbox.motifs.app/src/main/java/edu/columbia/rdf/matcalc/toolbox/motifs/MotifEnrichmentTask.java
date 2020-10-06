@@ -58,10 +58,9 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
    * @param minSensitivity
    * @param minSpecificity
    */
-  public MotifEnrichmentTask(MainMatCalcWindow parent, Genome genome,
-      List<Motif> motifs, MainMatCalcWindow foregroundGroup,
-      MainMatCalcWindow backgroundGroup, double threshold,
-      double minSensitivity, double minSpecificity) {
+  public MotifEnrichmentTask(MainMatCalcWindow parent, Genome genome, List<Motif> motifs,
+      MainMatCalcWindow foregroundGroup, MainMatCalcWindow backgroundGroup, double threshold, double minSensitivity,
+      double minSpecificity) {
     mParent = parent;
     mGenome = genome;
     mMotifs = motifs;
@@ -81,8 +80,7 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
     if (mNewModel != null && mNewModel.getRows() > 0) {
       mParent.openMatrices().open(mNewModel);
     } else {
-      ModernMessageDialog.createWarningDialog(mParent,
-          "There were no enriched motifs.");
+      ModernMessageDialog.createWarningDialog(mParent, "There were no enriched motifs.");
     }
 
     return null;
@@ -91,31 +89,21 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
   private DataFrame motifs() {
     System.err.println("Search for motifs in foreground regions...");
 
-    List<SearchSequence> foregroundSequences = SequenceUtils
-        .matrixToSequences(mGenome, mForegroundGroup.getCurrentMatrix());
+    List<SearchSequence> foregroundSequences = SequenceUtils.matrixToSequences(mGenome,
+        mForegroundGroup.getCurrentMatrix());
 
-    List<SearchSequence> backgroundSequences = SequenceUtils
-        .matrixToSequences(mGenome, mBackgroundGroup.getCurrentMatrix());
+    List<SearchSequence> backgroundSequences = SequenceUtils.matrixToSequences(mGenome,
+        mBackgroundGroup.getCurrentMatrix());
 
-    return enrichmentMotifs(mThreshold,
-        mMinSpecificity,
-        mMinSensitivity,
-        mMotifs,
-        foregroundSequences,
+    return enrichmentMotifs(mThreshold, mMinSpecificity, mMinSensitivity, mMotifs, foregroundSequences,
         backgroundSequences);
   }
 
-  public static DataFrame enrichmentMotifs(double threshold,
-      double minSpecificity,
-      double minSensitivity,
-      List<Motif> motifs,
-      List<SearchSequence> foregroundSequences,
-      List<SearchSequence> backgroundSequences) {
-    List<SearchSequence> foregroundRevCompSeqs = SearchSequence
-        .reverseComplement(foregroundSequences);
+  public static DataFrame enrichmentMotifs(double threshold, double minSpecificity, double minSensitivity,
+      List<Motif> motifs, List<SearchSequence> foregroundSequences, List<SearchSequence> backgroundSequences) {
+    List<SearchSequence> foregroundRevCompSeqs = SearchSequence.reverseComplement(foregroundSequences);
 
-    List<SearchSequence> backgroundRevCompSeqs = SearchSequence
-        .reverseComplement(backgroundSequences);
+    List<SearchSequence> backgroundRevCompSeqs = SearchSequence.reverseComplement(backgroundSequences);
 
     byte[][] iSeqs = SearchSequence.toIndex(foregroundSequences);
     byte[][] iRevCompSeqs = SearchSequence.toIndex(foregroundRevCompSeqs);
@@ -137,9 +125,7 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
 
     MotifsModule.LOG.info("Calculating enrichment...");
 
-    boolean[] goldStandard = MotifSearch.createGoldStandard(
-        foregroundSequences.size(),
-        backgroundSequences.size());
+    boolean[] goldStandard = MotifSearch.createGoldStandard(foregroundSequences.size(), backgroundSequences.size());
 
     int numSequences = foregroundSequences.size() + backgroundSequences.size();
 
@@ -165,46 +151,34 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
       ms.bestScores(m, w, iSeqs, iRevCompSeqs, t, 0, bestScores);
 
       /*
-       * MotifSearch.bestScores(m, w, iSeqs, tripletMap, iRevCompSeqs,
-       * revTripletMap, t, 0, bestScores);
+       * MotifSearch.bestScores(m, w, iSeqs, tripletMap, iRevCompSeqs, revTripletMap,
+       * t, 0, bestScores);
        */
 
       /*
-       * MotifSearch.bestScores(m, w, foregroundSequences,
-       * foregroundRevCompSeqs, t, 0, bestScores);
+       * MotifSearch.bestScores(m, w, foregroundSequences, foregroundRevCompSeqs, t,
+       * 0, bestScores);
        */
 
-      ms.bestScores(m,
-          w,
-          iBackSeqs,
-          iBackRevCompSeqs,
-          t,
-          foregroundSequences.size(),
-          bestScores);
+      ms.bestScores(m, w, iBackSeqs, iBackRevCompSeqs, t, foregroundSequences.size(), bestScores);
 
       /*
-       * MotifSearch.bestScores(m, w, iBackSeqs, tripletMapBack,
-       * iBackRevCompSeqs, revTripletMapBack, t, foregroundSequences.size(),
-       * bestScores);
+       * MotifSearch.bestScores(m, w, iBackSeqs, tripletMapBack, iBackRevCompSeqs,
+       * revTripletMapBack, t, foregroundSequences.size(), bestScores);
        */
 
       /*
-       * MotifSearch.bestScores(m, w, backgroundSequences,
-       * backgroundRevCompSeqs, t, foregroundSequences.size(), bestScores);
+       * MotifSearch.bestScores(m, w, backgroundSequences, backgroundRevCompSeqs, t,
+       * foregroundSequences.size(), bestScores);
        */
 
-      Stats stats = MotifSearch.enrichmentByMinError(bestScores,
-          goldStandard,
-          minSensitivity,
-          minSpecificity);
+      Stats stats = MotifSearch.enrichmentByMinError(bestScores, goldStandard, minSensitivity, minSpecificity);
 
       // Once the error has been minimized, we can calculate the rest of the
       // stats
       if (stats.error < 1) {
-        double p = hyg.cdfOneTail(stats.truePositive,
-            foregroundSequences.size(),
-            stats.truePositive + stats.falsePositive,
-            numSequences);
+        double p = hyg.cdfOneTail(stats.truePositive, foregroundSequences.size(),
+            stats.truePositive + stats.falsePositive, numSequences);
 
         SearchResult sr = new SearchResult();
 
@@ -236,8 +210,7 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
     DataFrame matrix = DataFrame.createDataFrame(results.size(), 12);
 
     // The header
-    matrix.setColumnName(0,
-        "Motif Name (threshold=" + Double.toString(threshold) + ")");
+    matrix.setColumnName(0, "Motif Name (threshold=" + Double.toString(threshold) + ")");
     matrix.setColumnName(1, "Motif ID");
     matrix.setColumnName(2, "Motif Database");
     matrix.setColumnName(3, "-Log10(P (X >= TP))");
@@ -246,10 +219,8 @@ public class MotifEnrichmentTask extends SwingWorker<Void, Void> {
     matrix.setColumnName(6, "False Negative");
     matrix.setColumnName(7, "False Positive");
     matrix.setColumnName(8, "True Negative");
-    matrix.setColumnName(9,
-        "Sensitivity (min=" + Double.toString(minSensitivity) + ")");
-    matrix.setColumnName(10,
-        "Specificity (min=" + Double.toString(minSpecificity) + ")");
+    matrix.setColumnName(9, "Sensitivity (min=" + Double.toString(minSensitivity) + ")");
+    matrix.setColumnName(10, "Specificity (min=" + Double.toString(minSpecificity) + ")");
     matrix.setColumnName(11, "Error");
 
     int r = 0;

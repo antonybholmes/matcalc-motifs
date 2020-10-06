@@ -76,8 +76,7 @@ public class PlotDialog extends ModernDialogTaskWindow {
       mSelectedMap.put(mutation, check);
     }
 
-    ModernScrollPane scrollPane = new ModernScrollPane(box)
-        .setHorizontalScrollBarPolicy(ScrollBarPolicy.NEVER);
+    ModernScrollPane scrollPane = new ModernScrollPane(box).setHorizontalScrollBarPolicy(ScrollBarPolicy.NEVER);
 
     setCard(scrollPane);
   }

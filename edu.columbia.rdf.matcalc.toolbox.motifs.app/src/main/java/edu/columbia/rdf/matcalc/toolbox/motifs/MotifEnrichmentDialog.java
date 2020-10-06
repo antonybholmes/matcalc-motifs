@@ -45,11 +45,10 @@ public class MotifEnrichmentDialog extends ModernDialogHelpWindow {
   // private static final Dimension MOTIF_CHECKBOX_SIZE =
   // new Dimension(200, ModernWidget.WIDGET_HEIGHT);
 
-  private ModernRadioButton mCheckVs = new ModernRadioButton(
-      "Foreground vs Background", true, ModernWidget.EXTRA_LARGE_SIZE);
+  private ModernRadioButton mCheckVs = new ModernRadioButton("Foreground vs Background", true,
+      ModernWidget.EXTRA_LARGE_SIZE);
 
-  private ModernRadioButton mCheckRandomBackground = new ModernRadioButton(
-      "Random Background");
+  private ModernRadioButton mCheckRandomBackground = new ModernRadioButton("Random Background");
 
   // private ModernTextField mExt5pField =
   // new
@@ -60,21 +59,17 @@ public class MotifEnrichmentDialog extends ModernDialogHelpWindow {
   // ModernNumericalTextField(SettingsService.getInstance().getInt("motifs.search.3p-extension"));
 
   private ModernCompactSpinner mSensField = new ModernCompactSpinner(0, 1,
-      SettingsService.getInstance().getDouble("motifs.minimum-sensitivity"),
-      0.1);
+      SettingsService.getInstance().getDouble("motifs.minimum-sensitivity"), 0.1);
 
   private ModernCompactSpinner mSpecField = new ModernCompactSpinner(0, 1,
-      SettingsService.getInstance().getDouble("motifs.minimum-specificity"),
-      0.1);
+      SettingsService.getInstance().getDouble("motifs.minimum-specificity"), 0.1);
 
   private ModernCompactSpinner mThresholdField = new ModernCompactSpinner(0, 1,
       SettingsService.getInstance().getDouble("motifs.motif-threshold"), 0.1);
 
-  private ModernCheckBox mCheckMainVariants = new ModernCheckBox(
-      "Main gene variants");
+  private ModernCheckBox mCheckMainVariants = new ModernCheckBox("Main gene variants");
 
-  private ModernCheckBox mCheckPeakWidths = new ModernCheckBox(
-      "Peak widths only");
+  private ModernCheckBox mCheckPeakWidths = new ModernCheckBox("Peak widths only");
 
   // private ModernCheckBox mCheckAll = new ModernCheckBox("Select All");
 
@@ -170,8 +165,8 @@ public class MotifEnrichmentDialog extends ModernDialogHelpWindow {
 
     mCanvasPanel = new SeqLogoCanvas();
 
-    ModernScrollPane scrollPane = new ModernScrollPane(new FigurePanel(
-        new Figure("Seq Logo Canvas").addSubFigure(mCanvasPanel)))
+    ModernScrollPane scrollPane = new ModernScrollPane(
+        new FigurePanel(new Figure("Seq Logo Canvas").addSubFigure(mCanvasPanel)))
             .setVerticalScrollBarPolicy(ScrollBarPolicy.NEVER);
 
     UI.setSize(scrollPane, 800, 180);
@@ -235,26 +230,14 @@ public class MotifEnrichmentDialog extends ModernDialogHelpWindow {
       try {
         // Validation.validateAsInt("5' extension", mExt5pField.getText());
         // Validation.validateAsInt("3' extension", mExt3pField.getText());
-        Validation.validateAsDouble("Minimum sensitivity",
-            mSensField.getText(),
-            0,
-            1);
-        Validation.validateAsDouble("Minimum specificity",
-            mSpecField.getText(),
-            0,
-            1);
-        Validation.validateAsDouble("Motif threshold",
-            mThresholdField.getText(),
-            0,
-            1);
+        Validation.validateAsDouble("Minimum sensitivity", mSensField.getText(), 0, 1);
+        Validation.validateAsDouble("Minimum specificity", mSpecField.getText(), 0, 1);
+        Validation.validateAsDouble("Motif threshold", mThresholdField.getText(), 0, 1);
         Validation.validateSelection("motifs", getMotifs());
 
-        SettingsService.getInstance().update("motifs.minimum-sensitivity",
-            mSensField.getText());
-        SettingsService.getInstance().update("motifs.minimum-specificity",
-            mSpecField.getText());
-        SettingsService.getInstance().update("motifs.motif-threshold",
-            mThresholdField.getText());
+        SettingsService.getInstance().update("motifs.minimum-sensitivity", mSensField.getText());
+        SettingsService.getInstance().update("motifs.minimum-specificity", mSpecField.getText());
+        SettingsService.getInstance().update("motifs.motif-threshold", mThresholdField.getText());
         // SettingsService.getInstance().update("motifs.search.5p-extension",
         // mExt5pField.getText());
         // SettingsService.getInstance().update("motifs.search.3p-extension",
@@ -304,8 +287,8 @@ public class MotifEnrichmentDialog extends ModernDialogHelpWindow {
   }
 
   /*
-   * public boolean getUseMainVariants() { return
-   * mCheckMainVariants.isSelected(); }
+   * public boolean getUseMainVariants() { return mCheckMainVariants.isSelected();
+   * }
    */
 
   // public MainMatCalcWindow getForegroundGroup() {
@@ -314,8 +297,7 @@ public class MotifEnrichmentDialog extends ModernDialogHelpWindow {
   // }
 
   public MainMatCalcWindow getBackgroundGroup() {
-    return (MainMatCalcWindow) WindowService.getInstance()
-        .findByName(mBackgroundCombo.getText());
+    return (MainMatCalcWindow) WindowService.getInstance().findByName(mBackgroundCombo.getText());
   }
 
   /*

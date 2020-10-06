@@ -65,8 +65,7 @@ import org.xml.sax.SAXException;
  * @author Antony Holmes
  *
  */
-public class MainSeqLogoWindow extends ModernRibbonWindow
-    implements ModernClickListener {
+public class MainSeqLogoWindow extends ModernRibbonWindow implements ModernClickListener {
   private static final long serialVersionUID = 1L;
 
   private OpenRibbonPanel mOpenPanel = new OpenRibbonPanel();
@@ -212,13 +211,11 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
     getRibbonMenu().addSeparator();
 
     menuItem = new RibbonMenuItem(UI.MENU_INFO);
-    getRibbonMenu().addTabbedMenuItem(menuItem,
-        new RibbonPanelProductInfo(getAppInfo()));
+    getRibbonMenu().addTabbedMenuItem(menuItem, new RibbonPanelProductInfo(getAppInfo()));
     // getRibbonMenu().addTabbedMenuItem(menuItem);
 
     menuItem = new RibbonMenuItem(UI.MENU_OPTIONS);
-    getRibbonMenu().addTabbedMenuItem(menuItem,
-        new ModernOptionsRibbonPanel(getAppInfo()));
+    getRibbonMenu().addTabbedMenuItem(menuItem, new ModernOptionsRibbonPanel(getAppInfo()));
 
     getRibbonMenu().setDefaultIndex(1);
 
@@ -229,15 +226,13 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
     // Ribbon2 ribbon = new Ribbon2();
     getRibbon().setHelpButtonEnabled(getAppInfo());
 
-    button = new QuickAccessButton(
-        AssetService.getInstance().loadIcon(QuickOpenVectorIcon.class, 16));
+    button = new QuickAccessButton(AssetService.getInstance().loadIcon(QuickOpenVectorIcon.class, 16));
     button.setClickMessage(UI.MENU_OPEN);
     button.setToolTip(new ModernToolTip("Open", "Open peak files."));
     button.addClickListener(this);
     addQuickAccessButton(button);
 
-    button = new QuickAccessButton(
-        AssetService.getInstance().loadIcon(QuickSaveVectorIcon.class, 16));
+    button = new QuickAccessButton(AssetService.getInstance().loadIcon(QuickSaveVectorIcon.class, 16));
     button.setClickMessage(UI.MENU_SAVE);
     button.setToolTip(new ModernToolTip("Save", "Save the current image."));
     button.addClickListener(this);
@@ -256,8 +251,7 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
 
     // Ui.setSize(mButtonRevComp, Ribbon2.MEDIUM_TEXT_BUTTON_SIZE);
 
-    getRibbon().getToolbar("Plot")
-        .add(new MotifViewRibbonSection(getRibbon(), mViewModel));
+    getRibbon().getToolbar("Plot").add(new MotifViewRibbonSection(getRibbon(), mViewModel));
 
     // mButtonRevComp = new ModernCheckBox("Reverse Complement");
     // toolbarContainer.add(new RibbonStripContainer(mButtonRevComp));
@@ -301,8 +295,7 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
     ModernScrollPane scrollPane = new ModernScrollPane(canvas);
 
     scrollPane.getVScrollBar().setScroller(new FixedIncScroller(200));
-    scrollPane.setScrollBarLocation(ScrollBarLocation.FLOATING)
-        .setScrollBarPolicy(ScrollBarPolicy.AUTO_SHOW);
+    scrollPane.setScrollBarLocation(ScrollBarLocation.FLOATING).setScrollBarPolicy(ScrollBarPolicy.AUTO_SHOW);
 
     setCard(new ModernComponent(scrollPane, ModernWidget.BORDER));
 
@@ -326,18 +319,14 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
       return;
     }
 
-    tabsPane().tabs().right().add("Format Plot",
-        new CloseableHTab("Format Plot", mFormatPanel, tabsPane()),
-        300,
-        200,
+    tabsPane().tabs().right().add("Format Plot", new CloseableHTab("Format Plot", mFormatPanel, tabsPane()), 300, 200,
         500);
 
   }
 
   @Override
   public final void clicked(ModernClickEvent e) {
-    if (e.getMessage().equals(UI.MENU_OPEN)
-        || e.getMessage().equals(UI.MENU_BROWSE)
+    if (e.getMessage().equals(UI.MENU_OPEN) || e.getMessage().equals(UI.MENU_BROWSE)
         || e.getMessage().startsWith("Other...")) {
       try {
         browseForFile();
@@ -393,13 +382,11 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
     }
   }
 
-  private void browseForFile()
-      throws IOException, SAXException, ParserConfigurationException {
+  private void browseForFile() throws IOException, SAXException, ParserConfigurationException {
     browseForFile(RecentFilesService.getInstance().getPwd());
   }
 
-  private void browseForFile(Path workingDirectory)
-      throws IOException, SAXException, ParserConfigurationException {
+  private void browseForFile(Path workingDirectory) throws IOException, SAXException, ParserConfigurationException {
     openFile(BioInfDialog.openMotifFile(this, workingDirectory));
   }
 
@@ -490,8 +477,7 @@ public class MainSeqLogoWindow extends ModernRibbonWindow
     }
 
     if (FileUtils.exists(file)) {
-      ModernMessageDialog
-          .createFileReplaceDialog(this, file, new ExportCallBack(file, pwd));
+      ModernMessageDialog.createFileReplaceDialog(this, file, new ExportCallBack(file, pwd));
     } else {
       save(file);
     }
